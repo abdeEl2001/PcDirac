@@ -1,0 +1,198 @@
+.loginCard{
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(217, 217, 217, 0.29);
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+.loginCard .loginCardInfo {
+    width: 950px;
+    height:600px;
+    background-color: red;
+    display: flex;
+}
+
+/*###############################################
+############# connexionSide #####################
+#################################################*/
+
+.loginCard .loginCardInfo .connexionSide{
+    width: 475px;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 1);
+    padding-top: 40px;
+}
+
+.loginCard .loginCardInfo .connexionSide h1{
+    width: 100%;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    padding-left: 30px;
+    font-family: "Cairo", system-ui;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.loginCard .loginCardInfo .connexionSide .emailSectionLogin,.passwordSectionLogin{
+    width: 100%;
+  height: 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 30px;
+  margin-bottom: 20px;
+}
+.loginCard .loginCardInfo .connexionSide .emailSectionLogin label{
+    font-family: "Kanit", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+.loginCard .loginCardInfo .connexionSide .emailSectionLogin  input{
+    width: 400px;
+    height: 40px;
+    padding-left: 10px;
+    border: 1px solid rgba(152, 152, 152, 0.17);
+    outline: 0px;
+    border-radius: 30px;
+    background: rgba(152, 152, 152, 0.15);
+
+}
+.loginCard .loginCardInfo .connexionSide .passwordSectionLogin label{
+    font-family: "Kanit", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+.loginCard .loginCardInfo .connexionSide .passwordSectionLogin  input{
+    width: 400px;
+    height: 40px;
+    padding-left: 10px;
+    border: 1px solid rgba(152, 152, 152, 0.17);
+    outline: 0px;
+    border-radius: 30px;
+    background: rgba(152, 152, 152, 0.15);
+
+}
+.loginCard .loginCardInfo .connexionSide .emailSectionLogin,.passwordSectionLogin input::placeholder{
+    font-family: "Inria Sans", sans-serif;
+  font-weight: 400;
+  font-style: normal; 
+}
+.loginCard .loginCardInfo .connexionSide .submitButton{
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.loginCard .loginCardInfo .connexionSide .submitButton button{
+    width: 200px;
+    height: 50px;
+    background: #202531;
+    border-radius: 40px;
+    color: white;
+    border: 0px;
+    font-family: "Cairo", system-ui;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.loginCard .loginCardInfo .connexionSide .submitButton button:hover{
+    background: White;
+    color: #202531;
+    border: 2px solid #202531;
+    font-weight: 900;
+    transition: 0.2s;
+}
+.loginCard .loginCardInfo .connexionSide .optionsToAdd{
+    width: 100%;
+    height: fit-content;
+    display: flex;
+}
+.loginCard .loginCardInfo .connexionSide .optionsToAdd .rememberMeSection{
+    width: 50%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+    font-size: 13px;
+    font-family: "Inria Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+.loginCard .loginCardInfo .connexionSide .optionsToAdd .rememberMeSection input{
+    margin-right: 5px;
+}
+.loginCard .loginCardInfo .connexionSide .optionsToAdd .forgotPassword{
+    width: 50%;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.loginCard .loginCardInfo .connexionSide .optionsToAdd .forgotPassword a{
+    font-size: 13px;
+    font-family: "Inria Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    color: black;
+    text-decoration: none;
+}
+/*###############################################
+############# inscriptionSide ###################
+#################################################*/
+.loginCard .loginCardInfo .inscriptionSide{
+    width: 475px;
+    height: 100%;
+    background-color: rgba(32, 37, 49, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.loginCard .loginCardInfo .inscriptionSide h2{
+    color: white;
+    font-family: "Inria Sans", sans-serif;
+    font-weight: 900;
+    font-style: normal;
+    font-size: 30px;
+}
+.loginCard .loginCardInfo .inscriptionSide p{
+    width: 100%;
+    font-family: "Inria Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    color: white;
+    display: flex;
+    justify-content: center;
+    font-size: 13px;
+    margin-top: 10px;
+}
+.loginCard .loginCardInfo .inscriptionSide .buttonInscription{
+    width: 200px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    background: #202531;
+    border: 2px solid white;
+    border-radius: 40px;
+    cursor: pointer;
+    font-family: "Inria Sans", sans-serif;
+    font-weight: 900;
+    font-style: normal;
+    color: white;
+    text-decoration: none;
+    transition: 0.2s;
+}
+.loginCard .loginCardInfo .inscriptionSide .buttonInscription:hover{
+    background: white;
+    border: 0px;
+    color: #202531;
+    transition: 0.2s;
+}

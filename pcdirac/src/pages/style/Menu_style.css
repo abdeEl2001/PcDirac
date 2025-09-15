@@ -1,0 +1,221 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
+
+/* General layout */
+.mainPage {
+  display: flex;
+  flex-direction: column; 
+  min-height: 100vh;
+  font-family: 'Cairo', sans-serif;
+  background: linear-gradient(to right, #f0f0f0, #e2e2ff);
+}
+
+/* Top header navbar */
+.headerNavbar {
+  position: fixed;      
+  top: 0;               
+  left: 0;
+  width: 100%;          
+  z-index: 1000;  
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 40px;
+  background-color: #f9fafb;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+/* Logo */
+.logoSection .logo {
+  height: 50px;
+}
+
+.logoText {
+  font-family: 'Montserrat', sans-serif; 
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e1e2f;
+  display: flex;
+  align-items: center;
+}
+
+.orangeDot {
+  color: orange;
+  margin-left: 4px;
+  font-size: 2rem;
+  line-height: 0.8;
+}
+
+/* Menu links */
+/* Default desktop menu */
+.menuComposition {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Hamburger hidden on desktop */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 28px;
+  height: 22px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1100;
+}
+
+.hamburger .bar {
+  height: 3px;
+  width: 100%;
+  background-color: #1e1e2f;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  color: #1e1e2f;
+  text-decoration: none;
+  font-weight: 500;
+  font-family: 'Montserrat', sans-serif;
+  padding: 5px 10px;
+  border-radius: 8px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.menuItem img.iconsMenu {
+  width: 24px;
+  margin-right: 8px;
+}
+
+.menuItem:hover {
+  color: #4b6cb7;
+}
+
+/* Social icons */
+.social-media {
+  display: flex;
+  gap: 15px;
+}
+
+.social-icon {
+  color: #1e1e2f;
+  font-size: 18px;
+  transition: color 0.2s;
+}
+
+.social-icon:hover {
+  color: #ff6b6b;
+}
+
+/* Main content */
+.acceuilContent {
+  flex: 1;
+  padding: 120px 30px 60px; /* space below header */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.acceuilContent h2 {
+  font-size: 2.2rem;
+  line-height: 1.4;
+}
+
+.acceuilContent h2 span {
+  color: #4b6cb7;
+}
+
+/* ------------------- Responsive ------------------- */
+
+/* Tablet */
+@media screen and (max-width: 992px) {
+  .menuComposition {
+    gap: 15px;
+  }
+
+  .acceuilContent h2 {
+    font-size: 1.8rem;
+  }
+}
+
+/* Mobile */
+@media screen and (max-width: 600px) {
+  .headerNavbar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px 20px;
+  }
+
+  .logoText {
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+  }
+
+  .menuComposition {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .social-media {
+    margin-top: 10px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .acceuilContent {
+    padding: 100px 20px 40px;
+  }
+
+  .acceuilContent h2 {
+    font-size: 1.4rem;
+  }
+}
+/* Mobile styles */
+@media screen and (max-width: 768px) {
+  .menuComposition {
+    flex-direction: column;
+    gap: 15px;
+    position: absolute;
+    top: 80px;
+    right: 0px;
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 15px 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.4s ease, opacity 0.4s ease;
+    width: 100%;
+
+    /* hidden by default */
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.4s ease, opacity 0.4s ease;
+  }
+
+  /* open state */
+  .menuComposition.open {
+    max-height: 500px; /* large enough for all links */
+    opacity: 1;
+  }
+
+  /* Hamburger visible */
+  .hamburger {
+    display: flex;
+  }
+
+  /* optional: hide social icons */
+  .social-media {
+    display: none;
+  }
+}

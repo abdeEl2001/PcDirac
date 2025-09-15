@@ -1,0 +1,80 @@
+*{
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+.mainPage{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    background-color: rgba(217, 217, 217, 0.29);
+}
+.sideMenuSection {
+    width: 300px;
+    height: 100%;
+    background: #202531;
+}
+.sideMenuSection .logoSection {
+    width: 100%;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.sideMenuSection .logoSection img{
+    width: 200px;
+    height: 200px;
+}
+.sideMenuSection .menuComposition{
+    width: 100%;
+    height: 72.6vh;
+    display: flex;
+    flex-direction: column;
+
+    overflow: scroll;
+}
+.sideMenuSection .menuComposition .coursTitle,.activitiesTitle,.dashboardTitle{
+    width: 100%;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    cursor: pointer;
+
+}
+.sideMenuSection .menuComposition .iconsMenu{
+    width: 25px;
+    height: 25px;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+.sideMenuSection .menuComposition  a{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    color: white;
+    font-family: "Inria Sans", sans-serif;
+    font-weight: bold;
+    font-style: normal;
+    font-size: 17px;
+    text-decoration: none;
+}
+.sideMenuSection .menuComposition p {
+    width: 170px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    color: white;
+    font-family: "Inria Sans", sans-serif;
+    font-weight: bold;
+    font-style: normal;
+    font-size: 17px;
+}
+.sideMenuSection .menuComposition .coursSection,.dashboardSection,.profilSection{
+    width: 100%;
+    height: fit-content;
+    margin-bottom: 25px;
+}
+
+  

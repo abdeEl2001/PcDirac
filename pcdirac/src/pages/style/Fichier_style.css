@@ -1,0 +1,197 @@
+/* Content Page */
+.contentPage {
+  font-family: Arial, sans-serif;
+  padding: 90px 8%;
+  background-color: #f9fafb;
+}
+
+.pageTitle {
+  text-align: center;
+  font-size: 2.2rem;
+  margin-bottom: 30px;
+  color: #1f2937;
+}
+
+/* Filters Section */
+.filtersSection {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.filterSelect {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  font-size: 0.95rem;
+  min-width: 160px;
+  transition: all 0.3s ease;
+}
+
+.filterSelect:hover {
+  border-color: #3b82f6;
+}
+
+/* Items Grid */
+.itemsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+/* Item Card */
+.itemCard {
+  background-color: white;
+  padding: 18px;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+  transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.itemCard:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+}
+
+.itemTitle {
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+  color: #1f2937;
+}
+
+.itemInfo {
+  font-size: 0.95rem;
+  color: #4b5563;
+  margin-bottom: 6px;
+}
+
+.itemDescription {
+  margin-top: 8px;
+  font-style: italic;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.itemThumbnail {
+  width: 100%;
+  height: 140px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  object-fit: cover;
+}
+
+/* Action Button */
+.btnAction {
+  margin-top: 12px;
+  padding: 8px 16px;
+  border-radius: 25px;
+  border: none;
+  background-color: #3b82f6;
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btnAction:hover {
+  background-color: #2563eb;
+}
+
+/* Loading & No Items Text */
+.loadingText,
+.noItemsText {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #4b5563;
+  margin-top: 15px;
+}
+
+/* 📱 Responsive Breakpoints */
+
+/* Tablets */
+@media (max-width: 1024px) {
+
+  .pageTitle {
+    font-size: 2rem;
+  }
+
+  .itemsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+  .itemThumbnail {
+    height: 130px;
+  }
+}
+
+/* Mobiles */
+@media (max-width: 768px) {
+  
+
+  .pageTitle {
+    font-size: 1.8rem;
+    margin-bottom: 25px;
+  }
+
+  .filtersSection {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filterSelect {
+    width: 100%;
+  }
+
+  .itemsGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+  }
+
+  .itemCard {
+    padding: 15px;
+  }
+
+  .itemThumbnail {
+    height: 120px;
+  }
+}
+
+/* Small Mobiles */
+@media (max-width: 480px) {
+  .pageTitle {
+    font-size: 1.6rem;
+  }
+
+  .itemsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .itemCard {
+    padding: 12px;
+  }
+
+  .itemTitle {
+    font-size: 1.1rem;
+  }
+
+  .itemInfo {
+    font-size: 0.85rem;
+  }
+
+  .btnAction {
+    width: 100%;
+    font-size: 0.85rem;
+    padding: 8px;
+  }
+  .itemThumbnail {
+    display: none;
+    height: 120px;
+  }
+}

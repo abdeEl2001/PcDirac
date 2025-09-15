@@ -1,0 +1,208 @@
+/* --- Global --- */
+.accueilPage {
+  font-family: Arial, sans-serif;
+  color: #333;
+  line-height: 1.6;
+  background-color: #f9fafb;
+  margin: 0;
+}
+
+/* --- Hero Section --- */
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 120px 20px;
+  color: white;
+  background-image: url('/public/images/physics.png'); /* background */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 0;
+}
+
+.heroTitle,
+.heroText,
+.heroButtons {
+  position: relative;
+  z-index: 1;
+}
+
+.heroTitle {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+}
+
+.highlight {
+  color: #f97316;
+}
+
+.heroText {
+  font-size: 1.2rem;
+  max-width: 700px;
+  margin-bottom: 30px;
+}
+
+.heroButtons {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn {
+  font-weight: 600;
+  padding: 12px 30px;
+  border-radius: 30px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+
+.btnOrange {
+  background-color: #f97316;
+  color: white;
+  text-decoration: none;
+}
+
+.btnOrange:hover {
+  background-color: #ea580c;
+}
+
+/* --- Sections --- */
+.section {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+  padding: 50px 5%;
+}
+
+.sectionImage {
+  flex: 1;
+  max-width: 500px;
+  width: 100%;
+  border-radius: 20px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.sectionContent {
+  flex: 1;
+}
+
+.section h2 {
+  font-size: 2.2rem;
+  margin-bottom: 20px;
+}
+
+.section p {
+  font-size: 1.1rem;
+  color: #4b5563;
+}
+
+/* Alternate background */
+.courses,
+.activities {
+  background-color: #f3f4f6;
+}
+
+/* --- Footer --- */
+.footer {
+  background-color: #111827;
+  color: #d1d5db;
+  text-align: center;
+  padding: 30px 10px;
+}
+
+/* --- Responsive Design --- */
+@media screen and (max-width: 1024px) {
+  .heroTitle {
+    font-size: 2.5rem;
+  }
+
+  .heroText {
+    font-size: 1.1rem;
+  }
+
+  .section {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .sectionContent {
+    margin-top: 20px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .hero {
+    padding: 80px 15px;
+  }
+
+  .heroTitle {
+    font-size: 2rem;
+  }
+
+  .heroText {
+    font-size: 1rem;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    font-size: 0.95rem;
+  }
+
+  .section h2 {
+    font-size: 1.8rem;
+  }
+
+  .section p {
+    font-size: 1rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .hero {
+    padding: 60px 10px;
+  }
+
+  .heroTitle {
+    font-size: 1.6rem;
+  }
+
+  .heroText {
+    font-size: 0.9rem;
+  }
+
+  .btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .section h2 {
+    font-size: 1.5rem;
+  }
+
+  .section p {
+    font-size: 0.9rem;
+  }
+
+  .sectionImage {
+    max-width: 100%;
+    border-radius: 12px;
+  }
+}

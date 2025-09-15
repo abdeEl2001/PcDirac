@@ -1,0 +1,156 @@
+/* Conteneur global du tableau de bord */
+.dashboard-container {
+    display: flex;
+    width: 80%; /* Largeur réduite de l'ensemble du conteneur */
+    max-width: 1200px; /* Limite la largeur maximale du conteneur */
+    margin: 20px auto; /* Centrer le conteneur et ajouter un espace en haut/bas */
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Conteneur principal du contenu */
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    margin: 20px; /* Ajouter un espacement interne */
+    max-width: 1000px; /* Limite la largeur du contenu principal */
+}
+
+/* Style des cartes de statistiques */
+.stats-cards {
+    display: flex;
+    justify-content: space-around; /* Espace autour des cartes */
+    align-items: center;
+    flex-wrap: wrap; /* Les cartes se déplacent sur plusieurs lignes si nécessaire */
+    margin: 0 auto; /* Centrer la section des cartes */
+    width: 80%; /* Limiter la largeur de la section des cartes */
+    margin-top: 40px;
+}
+
+.card {
+    background-color: #1ABC9C;
+    color: white;
+    width: 220px; /* Largeur fixe pour chaque carte */
+    height: 130px; /* Hauteur fixe pour chaque carte */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+    margin: 10px; /* Espace entre les cartes */
+}
+.stats-cards div:nth-child(1){
+    background-color: #5956D6;
+}
+.stats-cards div:nth-child(2){
+    background-color: #ECAD21;
+}
+.stats-cards div:nth-child(3){
+    background-color: #349AFF;
+}
+.card h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-family: "Inria Sans", sans-serif;
+    font-weight: bold;
+    font-style: normal;
+}
+
+.card p {
+    font-size: 20px;
+    margin-top: 10px;
+    font-family: "Inria Sans", sans-serif;
+    font-weight: bold;
+    font-style: normal;
+}
+
+/* Style du tableau de données */
+.data-table {
+    width: 90%; /* Limite la largeur du tableau */
+    margin: 20px auto; /* Centrer le tableau */
+    font-family: "Inria Sans", sans-serif;
+    font-weight: bold;
+    font-style: normal;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: "Inria Sans", sans-serif;
+    font-weight: bold;
+    font-style: normal;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 12px !important;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Boutons d'action */
+.btn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn.editDashboard {
+    background-color: #3498db;
+    color: white;
+    margin-right: 10px; 
+}
+
+.btn.editDashboard:hover {
+    background-color: #2980b9;
+}
+
+.btn.deleteDashboard {
+    background-color: #e74c3c;
+    color: white;
+    margin-left: 10px; 
+}
+
+.btn.deleteDashboard:hover {
+    background-color: #c0392b;
+}
+
+/* Responsive design pour les petits écrans */
+@media (max-width: 768px) {
+    .dashboard-container {
+        width: 95%;
+    }
+
+    .stats-cards {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .card {
+        width: 90%;
+        margin: 10px auto;
+    }
+
+    .data-table {
+        width: 95%;
+    }
+}

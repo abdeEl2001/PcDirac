@@ -1,0 +1,197 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+.coursFormContent{
+    width: 100%;
+    height: 100%;
+}
+/* Style général */
+body, h1, label, input, select, button {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f4f4f4;
+}
+
+/* Conteneur principal */
+.container_Form_cours {
+    width: 50%;
+    margin: 40px auto;
+    padding: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Style de l'en-tête */
+.container_Form_cours header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.container_Form_cours header h1 {
+    font-size: 26px;
+    color: #333333;
+}
+
+/* Style du formulaire */
+.container_Form_cours form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+/* Groupe de formulaire */
+.container_Form_cours .form-group {
+    margin-bottom: 20px;
+}
+
+/* Style des labels */
+.container_Form_cours label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 16px;
+    color: #555555;
+}
+
+/* Style des champs de saisie */
+.container_Form_cours .inputAddCourse[type="text"], .inputAddCourse[type="file"], select {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    transition: border-color 0.3s;
+}
+
+/* Effet focus pour les champs de saisie */
+.container_Form_cours input[type="text"]:focus, input[type="file"]:focus, select:focus {
+    border-color: #4CAF50;
+    outline: none;
+}
+
+/* Style des boutons */
+.container_Form_cours button.add-course-btn {
+    display: inline-block;
+    padding: 14px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+/* Effet hover et active pour les boutons */
+.container_Form_cours button.add-course-btn:hover {
+    background-color: #45a049;
+}
+
+.container_Form_cours button.add-course-btn:active {
+    transform: scale(0.98);
+}
+
+/* Espacement entre les éléments */
+.container_Form_cours .form-group label,
+.form-group input,
+.form-group select {
+    margin-bottom: 8px;
+}
+
+/* Style pour les erreurs de validation (facultatif) */
+.container_Form_cours input:invalid {
+    border-color: #e74c3c;
+}
+
+/* Style pour le champ de téléchargement de fichier */
+.container_Form_cours input[type="file"] {
+    border: none;
+    background-color: #f9f9f9;
+    padding: 12px 0;
+}
+
+.container_Form_cours input[type="file"]::file-selector-button {
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* Style du bouton pour télécharger le fichier */
+.container_Form_cours input[type="file"]::file-selector-button:hover {
+    background-color: #45a049;
+}
+
+/* Style responsive pour les petits écrans */
+@media (max-width: 768px) {
+    .container_Form_cours {
+        width: 90%;
+    }
+
+    .container_Form_cours header h1 {
+        font-size: 22px;
+    }
+
+    .container_Form_cours button.add-course-btn {
+        width: 100%;
+    }
+}
+/* Style pour le champ de téléchargement d'image miniature */
+.container_Form_cours .form-group input[type="file"] {
+    border: none;
+    background-color: #f9f9f9;
+    padding: 12px 0;
+}
+
+.container_Form_cours input[type="file"]::file-selector-button {
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.container_Form_cours input[type="file"]::file-selector-button:hover {
+    background-color: #45a049;
+}
+
+/* Espacement supplémentaire pour le champ d'image */
+.container_Form_cours .form-group label[for="miniature"] {
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+/* Largeur maximale de l'image miniature dans le formulaire */
+.container_Form_cours .form-group input#thumbnail {
+    padding: 10px 0;
+}
+
+/* Style responsive pour les petits écrans */
+@media (max-width: 768px) {
+    .container_Form_cours {
+        width: 90%;
+    }
+
+    .container_Form_cours header h1 {
+        font-size: 22px;
+    }
+
+    .container_Form_cours button.add-course-btn {
+        width: 100%;
+    }
+}

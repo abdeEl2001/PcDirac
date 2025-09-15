@@ -1,0 +1,161 @@
+.inscriptionCard {
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(217, 217, 217, 0.29);
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+.inscriptionCard .inscriptionInfoCard{
+    width: 950px;
+    height: 500px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+}
+.inscriptionCard .inscriptionInfoCard h1{
+    width: 100%;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    padding-left: 30px;
+    font-family: "Cairo", system-ui;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    margin-bottom: 20px;
+
+}
+.inscriptionCard .inscriptionInfoCard .nameComplet,
+.loginInfo,.addOnes{
+    width: 100%;
+    height: 60px;
+    display: flex;
+    margin-bottom: 25px;
+} 
+.inscriptionCard .inscriptionInfoCard  .firstName,
+.lastName,.emailSection,
+.passwordSection,.passwordConfirmationSection,
+.phoneNumberSection{
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-left: 30px;
+}
+.inscriptionCard .inscriptionInfoCard .inputInscription,.inputInscriptionProfile{
+    width: 400px;
+    height: 40px;
+    border: 1px solid rgba(152, 152, 152, 0.17);
+    outline: 0px;
+    border-radius: 30px;
+    background: rgba(152, 152, 152, 0.15);
+}
+.inscriptionCard .inscriptionInfoCard .inputInscription{
+  padding-left:10px ;
+}
+.inscriptionCard .inscriptionInfoCard .inputInscriptionProfile::file-selector-button{
+  padding: 12px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.inscriptionCard .inscriptionInfoCard .inputInscriptionProfile::file-selector-button:hover{
+  background-color: #45a049;
+}
+.inscriptionCard .inscriptionInfoCard  .inputInscription::placeholder{
+  font-family: "Inria Sans", sans-serif;
+  font-weight: 400;
+  font-style: normal; 
+  padding-left: 10px;
+}
+.inscriptionCard .inscriptionInfoCard  label{
+    font-family: "Kanit", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+.inscriptionCard .inscriptionInfoCard .submitButton{
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    flex-direction: column;
+}
+.inscriptionCard .inscriptionInfoCard .submitButton button{
+    width: 200px;
+    height: 50px;
+    background: #202531;
+    border-radius: 40px;
+    color: white;
+    border: 0px;
+    font-family: "Cairo", system-ui;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.inscriptionCard .inscriptionInfoCard .submitButton button:hover{
+    background: White;
+    color: #202531;
+    border: 2px solid #202531;
+    font-weight: 900;
+    transition: 0.2s;
+}
+#error-message{
+    width: 250px;
+    height: 50px;
+    color: white;
+    background: red;
+    font-family: "Cairo", system-ui;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+.photoProfil{
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 25px;
+
+}
+.file-input {
+    display: flex;
+    align-items: center;
+  }
+  
+  .file-input__input {
+    display: none; /* Hide the default file input */
+  }
+  
+  .file-input__label {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .file-input__label:hover {
+    background-color: #45a049;
+  }
+  
+  .file-input__text {
+    color: black;
+    font-family: "Kanit", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+  margin-right: 10px;
+  }
+  
