@@ -46,6 +46,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ force Spring Security to use our CORS
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
+                                "/uploads/**",
                                 "/api/users/update/**", // <-- allow update for all user IDs
                                 "/api/users",
                                 "/api/users/check-email",
