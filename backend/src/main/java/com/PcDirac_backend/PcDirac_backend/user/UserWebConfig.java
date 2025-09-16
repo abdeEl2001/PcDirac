@@ -10,6 +10,6 @@ public class UserWebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/uploads/**")
-                .addResourceLocations("file:C:/Users/abdel/uploads/");
+                .addResourceLocations("file:/var/www/PcDirac/backend/uploads/");
     }
 }

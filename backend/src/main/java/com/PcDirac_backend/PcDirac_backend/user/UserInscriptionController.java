@@ -62,7 +62,7 @@ public class UserInscriptionController {
 
             // 5️⃣ Handle photo upload if exists
             if (photoprofile != null && !photoprofile.isEmpty()) {
-                String uploadDir = "C:/Users/abdel/uploads/profiles/";
+                String uploadDir = "/var/www/PcDirac/backend/uploads/profiles/";
                 String fileName = user.getId() + "_" + photoprofile.getOriginalFilename();
                 Path filePath = Paths.get(uploadDir + fileName);
                 Files.createDirectories(filePath.getParent());

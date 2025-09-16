@@ -14,7 +14,7 @@ public class EmailService {
     private JavaMailSender mailSender;
 
     public void sendActivationEmail(String toEmail, String token) throws MessagingException {
-        String activationLink = "http://localhost:8080/api/users/activate?token=" + token;
+        String activationLink = "https://api.pcdirac.com/api/users/activate?token=" + token;
 
         // Build HTML email with button
         String htmlContent = "<html>" +

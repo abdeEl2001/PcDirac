@@ -12,7 +12,7 @@ public class CourseWebConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // Map external folder to /uploads/**
         registry.addResourceHandler("/uploads/**")
-                .addResourceLocations("file:C:/Users/abdel/uploads/");
+                .addResourceLocations("file:/var/www/PcDirac/backend/uploads/");
     }
     @Override
     public void addCorsMappings(CorsRegistry registry) {

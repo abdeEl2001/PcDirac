@@ -18,7 +18,7 @@ public class CourseService {
         this.courseRepository = courseRepository;
     }
 
-    private final String basePath = "C:/Users/abdel/uploads/";
+    private final String basePath = "file:/var/www/PcDirac/backend/uploads/";
 
     public Course saveCourse(Course course, MultipartFile thumbnail, MultipartFile pdfFile) throws IOException {
         if (thumbnail != null) {
