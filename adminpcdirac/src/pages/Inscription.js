@@ -56,7 +56,7 @@ const InscriptionCard = () => {
       });
 
       const response = await axios.post(
-        "http://localhost:8080/api/users",
+        "https://api.pcdirac.com/api/users",
         data,
         {
           headers: { "Content-Type": "multipart/form-data" },

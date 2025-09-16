@@ -59,7 +59,7 @@ const EditCourseForm = () => {
 
     try {
 
-      await axios.put(`http://localhost:8080/api/courses/${id}`, form, {
+      await axios.put(`https://api.pcdirac.com/api/courses/${id}`, form, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
@@ -155,7 +155,7 @@ const EditCourseForm = () => {
         <label>Miniature actuelle :</label>
         {formData.miniature ? (
           <div>
-            <img src={`http://localhost:8080${formData.miniature}`} alt="Miniature" width="120" />
+            <img src={`https://api.pcdirac.com${formData.miniature}`} alt="Miniature" width="120" />
           </div>
         ) : (
           <p>Aucune miniature</p>
@@ -164,7 +164,7 @@ const EditCourseForm = () => {
 
         <label>PDF actuel :</label>
         {formData.pdf_fichier ? (
-          <a href={`http://localhost:8080${formData.pdf_fichier}`} target="_blank" rel="noopener noreferrer">
+          <a href={`https://api.pcdirac.com${formData.pdf_fichier}`} target="_blank" rel="noopener noreferrer">
             Voir PDF
           </a>
         ) : (

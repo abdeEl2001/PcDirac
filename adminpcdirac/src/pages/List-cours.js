@@ -101,7 +101,7 @@ const ListCours = () => {
                   <td>
                     {course.pdf_fichier ? (
                       <a
-                        href={`http://localhost:8080${course.pdf_fichier}`}
+                        href={`https://api.pcdirac.com${course.pdf_fichier}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="see_pdf"

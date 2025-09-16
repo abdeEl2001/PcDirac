@@ -18,7 +18,7 @@ function ResetPassword() {
       formData.append("token", token);
       formData.append("newPassword", password);
 
-      const res = await fetch("http://localhost:8080/api/auth/reset-password", {
+      const res = await fetch("https://api.pcdirac.com/api/auth/reset-password", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: formData.toString(),
