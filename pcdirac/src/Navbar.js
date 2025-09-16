@@ -44,16 +44,16 @@ const Navbar = () => {
 
       {/* Social icons */}
       <div className="social-media">
-        <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="social-icon facebook">
+        <a href="https://www.facebook.com/profile.php?id=61567798160472" target="_blank" rel="noopener noreferrer" className="social-icon facebook">
           <i className="fab fa-facebook-f"></i>
         </a>
-        <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" className="social-icon twitter">
-          <i className="fab fa-twitter"></i>
+        <a href="https://www.tiktok.com/@pcdirac?_t=ZS-8zmTJm3O75G&_r=1" target="_blank" rel="noopener noreferrer" className="social-icon twitter">
+          <i className="fab fa-tiktok"></i>
         </a>
-        <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" className="social-icon instagram">
+        <a href="https://www.instagram.com/pcdirac/?igsh=djhjd3FueDZvc29l" target="_blank" rel="noopener noreferrer" className="social-icon instagram">
           <i className="fab fa-instagram"></i>
         </a>
-        <a href="https://www.youtube.com/@PCDirac/playlists" target="_blank" rel="noopener noreferrer" className="social-icon youtube">
+        <a href="https://www.youtube.com/@PCDirac/featured" target="_blank" rel="noopener noreferrer" className="social-icon youtube">
           <i className="fab fa-youtube"></i>
         </a>
       </div>
