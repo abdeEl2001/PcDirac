@@ -53,21 +53,43 @@ public class CourseController {
             course.setOrdre(ordre);
             course.setUser(user);
 
-            // Save course and files
-            courseService.saveCourse(course, miniature, pdf_fichier);
+            // Directories
+            String miniatureDir = "/var/www/PcDirac/backend/uploads/miniature/";
+            String pdfDir = "/var/www/PcDirac/backend/uploads/courses/";
 
-            // Return simple success message
+            new File(miniatureDir).mkdirs();
+            new File(pdfDir).mkdirs();
+
+            // Save miniature
+            if (miniature != null && !miniature.isEmpty()) {
+                String miniatureFilename = System.currentTimeMillis() + "_" + miniature.getOriginalFilename();
+                String miniaturePath = miniatureDir + miniatureFilename;
+                miniature.transferTo(new File(miniaturePath));
+                course.setMiniature("/uploads/miniature/" + miniatureFilename);
+            }
+
+            // Save PDF
+            if (pdf_fichier != null && !pdf_fichier.isEmpty()) {
+                String pdfFilename = System.currentTimeMillis() + "_" + pdf_fichier.getOriginalFilename();
+                String pdfPath = pdfDir + pdfFilename;
+                pdf_fichier.transferTo(new File(pdfPath));
+                course.setPdf_fichier("/uploads/courses/" + pdfFilename);
+            }
+
+            // Save course to DB
+            courseRepository.save(course);
+
             Map<String, String> response = new HashMap<>();
             response.put("message", "Cours ajouté avec succès !");
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
             e.printStackTrace();
-            // Only return the error if the file/database saving failed
             return ResponseEntity.badRequest()
                     .body("Erreur lors de l'ajout du cours : " + e.getMessage());
         }
     }
+
 
     @GetMapping
     public ResponseEntity<?> getCoursesByUser(@RequestParam("userId") Long userId) {
