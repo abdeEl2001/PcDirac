@@ -42,7 +42,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf.disable()) //
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ force Spring Security to use our CORS
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
@@ -51,11 +51,11 @@ public class SecurityConfig {
                                 "/api/users/activate",
                                 "/api/auth/login",
                                 "/api/courses",
-                                "/api/courses/{id}",
-                                "/api/users/header/{id}",
+                                "/api/courses/**",
+                                "/api/users/header/**",
                                 "/uploads/**",
-                                "/api/users/update/{id}",
-                                "/api/users/profileInformation/{userId}",
+                                "/api/users/update/**",
+                                "/api/users/profileInformation/**",
                                 "/api/auth/forgot-password",
                                 "/api/auth/reset-password",
                                 "/api/courses/etudiant/cours",
