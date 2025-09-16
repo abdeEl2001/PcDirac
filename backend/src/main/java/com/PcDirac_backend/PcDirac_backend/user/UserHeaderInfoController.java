@@ -5,8 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/users")
-@CrossOrigin(origins = "*") // allow React
+@RequestMapping("/api/users") // allow React
 public class UserHeaderInfoController {
 
     @Autowired

@@ -4,7 +4,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Optional;
 
-@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/users/profileInformation")
 public class UserFormProfileController {
