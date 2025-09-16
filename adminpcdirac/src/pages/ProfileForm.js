@@ -79,7 +79,8 @@ const ProfileForm = () => {
       await axios.put(
         `https://api.pcdirac.com/api/users/update/${userId}`,
         data,
-        { headers: { "Content-Type": "multipart/form-data" } }
+        { headers: { "Content-Type": "multipart/form-data" } ,
+          withCredentials: true}
       );
       setSuccess("Profil mis à jour avec succès !");
     } catch (err) {
