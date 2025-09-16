@@ -27,8 +27,8 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.setAllowedOrigins(List.of(
-                "https://pcdirac.com",
-                "https://admin.pcdirac.com",
+                "http://pcdirac.com",
+                "http://admin.pcdirac.com",
                 "https://api.pcdirac.com"
         ));
         config.setAllowedHeaders(List.of("*"));
