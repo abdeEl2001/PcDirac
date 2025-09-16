@@ -10,6 +10,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -20,7 +21,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // CORS configuration for all endpoints
+    // ✅ CORS configuration for all endpoints
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
@@ -41,15 +42,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                // Disable CSRF for the update endpoint
-                .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/api/users/update/**")
-                )
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(csrf -> csrf.disable()) //
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ force Spring Security to use our CORS
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/uploads/**",
-                                "/api/users/update/**",
                                 "/api/users",
                                 "/api/users/check-email",
                                 "/api/users/activate",
@@ -57,6 +53,8 @@ public class SecurityConfig {
                                 "/api/courses",
                                 "/api/courses/{id}",
                                 "/api/users/header/{id}",
+                                "/uploads/**",
+                                "/api/users/update/{id}",
                                 "/api/users/profileInformation/{userId}",
                                 "/api/auth/forgot-password",
                                 "/api/auth/reset-password",
