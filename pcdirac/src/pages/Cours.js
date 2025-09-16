@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./style/Fichier_style.css"; // generic reusable CSS
 
-const BACKEND_URL = "http://pcdirac.com:8080";
+const BACKEND_URL = "https://api.pcdirac.com";
 
 const Cours = () => {
   const [Courses, setCourses] = useState([]); // generic name for courses/exercices

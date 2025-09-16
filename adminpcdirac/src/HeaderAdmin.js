@@ -17,7 +17,7 @@ const [headerData, setHeaderData] = useState({
   useEffect(() => {
     const fetchHeaderData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/users/header/${userId}`);
+        const response = await axios.get(`https://api.pcdirac.com/api/users/header/${userId}`);
         setHeaderData(response.data);
       } catch (err) {
         console.error("Erreur chargement header :", err);
@@ -39,7 +39,7 @@ const [headerData, setHeaderData] = useState({
       <div className="profil">
         {/* Profile Photo */}
         <div className="photoProfilHeader">
-          <img src={`http://localhost:8080/uploads/profiles/${headerData.photoprofile}`} alt="Profil" />
+          <img src={`https://api.pcdirac.com/uploads/profiles/${headerData.photoprofile}`} alt="Profil" />
         </div>
 
         {/* User Name */}

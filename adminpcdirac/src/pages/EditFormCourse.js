@@ -26,7 +26,7 @@ const EditCourseForm = () => {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/courses/${id}`);
+        const response = await axios.get(`https://api.pcdirac.com/api/courses/${id}`);
         setFormData(response.data);
       } catch (err) {
         console.error(err);

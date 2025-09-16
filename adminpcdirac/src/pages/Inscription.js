@@ -40,7 +40,7 @@ const InscriptionCard = () => {
     try {
       // 1️⃣ Check if email already exists
       const emailCheck = await axios.get(
-        `http://localhost:8080/api/users/check-email?email=${formData.email}`
+        `https://api.pcdirac.com/api/users/check-email?email=${formData.email}`
       );
 
       if (emailCheck.data === true) {

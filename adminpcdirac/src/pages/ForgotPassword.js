@@ -9,7 +9,7 @@ function ForgotPassword() {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:8080/api/auth/forgot-password?email=" + email, {
+      const res = await fetch("https://api.pcdirac.com/api/auth/forgot-password?email=" + email, {
         method: "POST",
       });
 

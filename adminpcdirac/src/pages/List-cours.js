@@ -21,7 +21,7 @@ const ListCours = () => {
       }
 
       try {
-        const response = await axios.get(`http://localhost:8080/api/courses?userId=${userId}`);
+        const response = await axios.get(`https://api.pcdirac.com/api/courses?userId=${userId}`);
         setCourses(response.data);
       } catch (err) {
         console.error(err);
@@ -46,7 +46,7 @@ const ListCours = () => {
   if (!window.confirm("Voulez-vous vraiment supprimer ce cours ?")) return;
 
   try {
-    await axios.delete(`http://localhost:8080/api/courses/${id}`);
+    await axios.delete(`https://api.pcdirac.com/api/courses/${id}`);
     setCourses(courses.filter((course) => course.id !== id)); // remove from UI
   } catch (err) {
     console.error(err);

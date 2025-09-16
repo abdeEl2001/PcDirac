@@ -15,7 +15,7 @@ const Dashboard = () => {
         if (!userId) return;
 
         const response = await axios.get(
-          `http://localhost:8080/api/courses?userId=${userId}`
+          `https://api.pcdirac.com/api/courses?userId=${userId}`
         );
         setCourses(response.data);
         setLoading(false);

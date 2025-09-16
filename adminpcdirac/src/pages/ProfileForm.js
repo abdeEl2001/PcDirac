@@ -24,7 +24,7 @@ const ProfileForm = () => {
         if (!userId) return;
 
         const response = await axios.get(
-          `http://localhost:8080/api/users/profileInformation/${userId}`
+          `https://api.pcdirac.com/api/users/profileInformation/${userId}`
         );
 
         const user = response.data;
@@ -77,7 +77,7 @@ const ProfileForm = () => {
 
     try {
       await axios.put(
-        `http://localhost:8080/api/users/update/${userId}`,
+        `https://api.pcdirac.com/api/users/update/${userId}`,
         data,
         { headers: { "Content-Type": "multipart/form-data" } }
       );

@@ -18,7 +18,7 @@ const LoginCard = () => {
     setMessage("");
 
     try {
-      const response = await axios.post("http://localhost:8080/api/auth/login", {
+      const response = await axios.post("https://api.pcdirac.com/api/auth/login", {
         email: email.trim().toLowerCase(),
         motdepasse: motdepasse.trim(),
       });

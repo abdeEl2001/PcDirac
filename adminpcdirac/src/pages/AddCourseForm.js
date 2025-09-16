@@ -64,7 +64,7 @@ const AddCourseForm = () => {
 
  try {
   const response = await axios.post(
-    `http://localhost:8080/api/courses`,
+    `https://api.pcdirac.com/api/courses`,
     data,
     { headers: { "Content-Type": "multipart/form-data" } }
   );
