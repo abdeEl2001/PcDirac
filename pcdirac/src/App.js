@@ -13,7 +13,6 @@ function App() {
     <Router>
       <header>
         <Navbar /> {/* Navbar inside header */}
-        <Footer/>
       </header>
       <main>
         <Routes>
@@ -25,6 +24,9 @@ function App() {
           <Route path="/devoirSurveille" element={<DevoirSurveille/>}/>
         </Routes>
       </main>
+      <footer>
+        <Footer />
+      </footer>
     </Router>
   );
 }
