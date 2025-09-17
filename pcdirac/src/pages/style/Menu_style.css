@@ -211,7 +211,7 @@
 
 }
 /* Mobile styles */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 800px) {
   .menuComposition {
     flex-direction: column;
     gap: 15px;
