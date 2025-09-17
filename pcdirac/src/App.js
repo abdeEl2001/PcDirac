@@ -1,6 +1,7 @@
 // App.js
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 import Acceuil from "./pages/Acceuil";
 import Cours from "./pages/Cours";
 import Exercices from "./pages/Exercices";
@@ -12,6 +13,7 @@ function App() {
     <Router>
       <header>
         <Navbar /> {/* Navbar inside header */}
+        <Footer/>
       </header>
       <main>
         <Routes>
