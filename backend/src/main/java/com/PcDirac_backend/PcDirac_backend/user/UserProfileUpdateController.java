@@ -29,36 +29,42 @@ public class UserProfileUpdateController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUserProfile(
             @PathVariable Long id,
-            @RequestParam String prenom,
-            @RequestParam String nom,
-            @RequestParam String email,
-            @RequestParam String motdepasse,
-            @RequestParam String numerotelephone,
-            @RequestParam(required = false) MultipartFile photoProfil
+            @RequestParam(required = false) String prenom,
+            @RequestParam(required = false) String nom,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String motdepasse,
+            @RequestParam(required = false) String numerotelephone,
+            @RequestPart(required = false) MultipartFile photoProfil
     ) {
         User user = userRepository.findById(id).orElse(null);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Utilisateur non trouvé");
         }
 
-        user.setPrenom(prenom);
-        user.setNom(nom);
-        user.setEmail(email);
+        // Update fields only if they are provided
+        if (prenom != null && !prenom.isEmpty()) user.setPrenom(prenom);
+        if (nom != null && !nom.isEmpty()) user.setNom(nom);
+        if (email != null && !email.isEmpty()) user.setEmail(email);
+        if (numerotelephone != null && !numerotelephone.isEmpty()) user.setNumerotelephone(numerotelephone);
 
         if (motdepasse != null && !motdepasse.isEmpty()) {
             user.setMotdepasse(passwordEncoder.encode(motdepasse));
         }
 
-        user.setNumerotelephone(numerotelephone);
-
+        // Handle photo upload
         if (photoProfil != null && !photoProfil.isEmpty()) {
+            String uploadsDir = "/var/www/PcDirac/backend/uploads/profiles/"; // your uploads directory
+            File uploadDir = new File(uploadsDir);
+            if (!uploadDir.exists()) uploadDir.mkdirs();
+
+            String filename = System.currentTimeMillis() + "_" + photoProfil.getOriginalFilename();
+            File file = new File(uploadDir, filename);
             try {
-                String path = "/var/www/PcDirac/backend/uploads/photos/" + photoProfil.getOriginalFilename();
-                photoProfil.transferTo(new File(path));
-                user.setPhotoprofile("/uploads/photos/" + photoProfil.getOriginalFilename());
+                photoProfil.transferTo(file); // save file
+                user.setPhotoprofile(filename);
             } catch (IOException e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body("Erreur lors de l'enregistrement de la photo: " + e.getMessage());
+                        .body("Erreur lors de l'enregistrement de l'image");
             }
         }
 
