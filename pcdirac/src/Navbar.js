@@ -40,6 +40,9 @@ const Navbar = () => {
         <Link to="/activities" className="menuItem" onClick={() => setIsOpen(false)}>
           <span>Activities</span>
         </Link>
+        <Link to="devoirSurveille" className="menuItem" onClick={()=>setIsOpen(false)}>
+          <span>Devoirs surveillés</span>        
+        </Link>
       </nav>
 
       {/* Social icons */}

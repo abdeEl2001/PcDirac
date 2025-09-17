@@ -123,6 +123,7 @@ const EditCourseForm = () => {
             <option value="Cours">Cours</option>
             <option value="Exercice">Exercice</option>
             <option value="Activité">Activité</option>
+            <option value="Devoirs surveillés">Devoirs surveillés</option>
           </select>
         </div>
 

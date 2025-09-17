@@ -154,6 +154,7 @@ const AddCourseForm = () => {
             <option value="Cours">Cours</option>
             <option value="Exercices">Exercices</option>
             <option value="Activités">Activités</option>
+            <option value="Devoirs surveillés">Devoirs surveillés</option>
           </select>
         </div>
 

@@ -253,6 +253,23 @@ public class CourseController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/etudiant/devoirSurveille")
+    public List<CourseDTO> getAllDevoirSurveille() {
+        return courseRepository.findByCategorie("Devoirs surveillés").stream()
+                .map(course -> new CourseDTO(
+                        course.getId(),
+                        course.getTitre(),
+                        course.getNiveau(),
+                        course.getCategorie(),
+                        course.getMatiere(),
+                        course.getOrdre(),
+                        course.getMiniature(),
+                        course.getPdf_fichier(),
+                        course.getUser().getPrenom() + " " + course.getUser().getNom()
+                ))
+                .collect(Collectors.toList());
+    }
+
 
 
 }

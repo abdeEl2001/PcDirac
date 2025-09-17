@@ -5,6 +5,7 @@ import Acceuil from "./pages/Acceuil";
 import Cours from "./pages/Cours";
 import Exercices from "./pages/Exercices";
 import Activities from "./pages/Activities";
+import DevoirSurveille from "./pages/DevoirSurveille";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/cours" element={<Cours />} />
           <Route path="/exercices" element={<Exercices />} />
           <Route path="/activities" element={<Activities />} />
+          <Route path="/devoirSurveille" element={<DevoirSurveille/>}/>
         </Routes>
       </main>
     </Router>

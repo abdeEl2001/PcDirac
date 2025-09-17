@@ -60,7 +60,8 @@ public class SecurityConfig {
                                 "/api/auth/reset-password",
                                 "/api/courses/etudiant/cours",
                                 "/api/courses/etudiant/exercice",
-                                "/api/courses/etudiant/activitie"
+                                "/api/courses/etudiant/activitie",
+                                "/api/courses/etudiant/devoirSurveille"
                         ).permitAll()
                         .anyRequest().authenticated()
                 );
