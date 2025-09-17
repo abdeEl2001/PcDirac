@@ -160,9 +160,12 @@
     padding: 20px 10px;
   }
   .menuComposition {
-    gap: 15px;
+    gap: 0px;
   }
-
+  .menuItem{
+    padding: 5px 5px;
+    font-size: 14px;
+  }
   .acceuilContent h2 {
     font-size: 1.8rem;
   }
@@ -246,5 +249,8 @@
   /* optional: hide social icons */
   .social-media {
     display: none;
+  }
+  .menuItem{
+    font-size: 16px;
   }
 }

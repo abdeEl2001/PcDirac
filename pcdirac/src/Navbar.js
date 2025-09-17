@@ -46,6 +46,9 @@ const Navbar = () => {
         <Link to="/documentsPedagogiques" className="menuItem" onClick={() => setIsOpen(false)}>
           <span>Documents pédagogiques</span>
         </Link>
+        <Link to="/examensNationaux" className="menuItem" onClick={() => setIsOpen(false)}>
+          <span>Examens Nationaux</span>
+        </Link>
       </nav>
 
       {/* Social icons (desktop only, hidden under 992px) */}

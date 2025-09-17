@@ -125,6 +125,7 @@ const EditCourseForm = () => {
             <option value="Activité">Activité</option>
             <option value="Devoirs surveillés">Devoirs surveillés</option>
             <option value="Documents pédagogiques">Documents pédagogiques</option>
+            <option value="Examens Nationaux">Examens Nationaux</option>
           </select>
         </div>
 

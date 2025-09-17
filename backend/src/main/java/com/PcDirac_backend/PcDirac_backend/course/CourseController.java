@@ -287,6 +287,23 @@ public class CourseController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/etudiant/examensNationaux")
+    public List<CourseDTO> getAllExamensNationaux() {
+        return courseRepository.findByCategorie("Examens Nationaux").stream()
+                .map(course -> new CourseDTO(
+                        course.getId(),
+                        course.getTitre(),
+                        course.getNiveau(),
+                        course.getCategorie(),
+                        course.getMatiere(),
+                        course.getOrdre(),
+                        course.getMiniature(),
+                        course.getPdf_fichier(),
+                        course.getUser().getPrenom() + " " + course.getUser().getNom()
+                ))
+                .collect(Collectors.toList());
+    }
+
 
 
 }

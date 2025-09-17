@@ -62,7 +62,8 @@ public class SecurityConfig {
                                 "/api/courses/etudiant/exercice",
                                 "/api/courses/etudiant/activitie",
                                 "/api/courses/etudiant/devoirSurveille",
-                                "/api/courses/etudiant/documentsPedagogiques"
+                                "/api/courses/etudiant/documentsPedagogiques",
+                                "/api/courses//etudiant/examensNationaux"
                         ).permitAll()
                         .anyRequest().authenticated()
                 );
