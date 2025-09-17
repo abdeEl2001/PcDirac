@@ -10,6 +10,11 @@ import java.io.File;
 import java.io.IOException;
 
 @RestController
+@CrossOrigin(
+        origins = {"https://pcdirac.com", "https://admin.pcdirac.com", "https://api.pcdirac.com"},
+        allowCredentials = "true"
+)
+
 @RequestMapping("/api/users/update")
 public class UserProfileUpdateController {
 
