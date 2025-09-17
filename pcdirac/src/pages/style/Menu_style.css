@@ -132,17 +132,47 @@
 .acceuilContent h2 span {
   color: #4b6cb7;
 }
+/* ------------------- Footer ------------------- */
+
+.footerSection {
+  padding: 20px;
+  text-align: center;
+  background: #f9fafb;
+  box-shadow: 0 -2px 6px rgba(0,0,0,0.08);
+}
+
+.footerText {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #666;
+}
+
+/* Hide footer icons by default */
+.footerSection .footer-icons {
+  display: none;
+}
 
 /* ------------------- Responsive ------------------- */
 
 /* Tablet */
 @media screen and (max-width: 992px) {
+  .headerNavbar{
+    padding: 20px 10px;
+  }
   .menuComposition {
     gap: 15px;
   }
 
   .acceuilContent h2 {
     font-size: 1.8rem;
+  }
+  .navbar-icons {
+    display: none; /* hide in header */
+  }
+  .footerSection .footer-icons {
+    display: flex; /* show in footer */
+    justify-content: center;
+    gap: 15px;
   }
 }
 
@@ -175,6 +205,7 @@
   .acceuilContent h2 {
     font-size: 1.4rem;
   }
+
 }
 /* Mobile styles */
 @media screen and (max-width: 768px) {

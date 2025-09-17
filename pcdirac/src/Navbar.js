@@ -40,13 +40,13 @@ const Navbar = () => {
         <Link to="/activities" className="menuItem" onClick={() => setIsOpen(false)}>
           <span>Activities</span>
         </Link>
-        <Link to="devoirSurveille" className="menuItem" onClick={()=>setIsOpen(false)}>
-          <span>Devoirs surveillés</span>        
+        <Link to="/devoirSurveille" className="menuItem" onClick={() => setIsOpen(false)}>
+          <span>Devoirs surveillés</span>
         </Link>
       </nav>
 
-      {/* Social icons */}
-      <div className="social-media">
+      {/* Social icons (desktop only, hidden under 992px) */}
+      <div className="social-media navbar-icons">
         <a href="https://www.facebook.com/profile.php?id=61567798160472" target="_blank" rel="noopener noreferrer" className="social-icon facebook">
           <i className="fab fa-facebook-f"></i>
         </a>
