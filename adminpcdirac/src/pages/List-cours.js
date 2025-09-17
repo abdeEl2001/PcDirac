@@ -79,6 +79,7 @@ const ListCours = () => {
             <option value="exercices">Exercices</option>
             <option value="activities">Activités</option>
             <option value="Devoirs surveillés">Devoirs surveillés</option>
+            <option value="Documents pédagogiques">Documents pédagogiques</option>
           </select>
         </div>
 

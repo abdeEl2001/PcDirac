@@ -43,6 +43,9 @@ const Navbar = () => {
         <Link to="/devoirSurveille" className="menuItem" onClick={() => setIsOpen(false)}>
           <span>Devoirs surveillés</span>
         </Link>
+        <Link to="/documentsPedagogiques" className="menuItem" onClick={() => setIsOpen(false)}>
+          <span>Documents pédagogiques</span>
+        </Link>
       </nav>
 
       {/* Social icons (desktop only, hidden under 992px) */}

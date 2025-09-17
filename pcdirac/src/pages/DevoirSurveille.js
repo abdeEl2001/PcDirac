@@ -95,13 +95,13 @@ const DevoirSurveille = () => {
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          <button className="btnAction">Voir le Devoirs surveillés</button>
+                          <button className="btnAction">Voir le Devoir surveillé</button>
                         </a>
                       )}
                     </div>
                   ))
                 ) : (
-                  <p className="noItemsText">Aucun Devoirs surveillés trouvé pour ces filtres.</p>
+                  <p className="noItemsText">Aucun Devoir surveillé trouvé pour ces filtres.</p>
                 )}
               </div>
             </>

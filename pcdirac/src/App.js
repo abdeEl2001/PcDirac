@@ -7,6 +7,7 @@ import Cours from "./pages/Cours";
 import Exercices from "./pages/Exercices";
 import Activities from "./pages/Activities";
 import DevoirSurveille from "./pages/DevoirSurveille";
+import DocumentsPedagogiques from "./pages/DocumentsPedagogiques";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/exercices" element={<Exercices />} />
           <Route path="/activities" element={<Activities />} />
           <Route path="/devoirSurveille" element={<DevoirSurveille/>}/>
+          <Route path="/documentsPedagogiques" element={<DocumentsPedagogiques/>}/>
         </Routes>
       </main>
       <footer>
