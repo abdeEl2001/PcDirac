@@ -37,8 +37,8 @@ public class CourseController {
             @RequestParam("categorie") String categorie,
             @RequestParam("matiere") String matiere,
             @RequestParam("ordre") String ordre,
-            @RequestParam("unite") String unite,
             @RequestParam("miniature") MultipartFile miniature,
+            @RequestParam("unite") String unite,
             @RequestParam("pdf_fichier") MultipartFile pdf_fichier,
             @RequestParam("userId") Long userId
     ) {
@@ -52,24 +52,46 @@ public class CourseController {
             course.setCategorie(categorie);
             course.setMatiere(matiere);
             course.setOrdre(ordre);
-            course.setUnite(unite);
             course.setUser(user);
+            course.setUnite(unite);
 
-            // Save course and files
-            courseService.saveCourse(course, miniature, pdf_fichier);
+            // Directories
+            String miniatureDir = "/var/www/PcDirac/backend/uploads/miniature/";
+            String pdfDir = "/var/www/PcDirac/backend/uploads/courses/";
 
-            // Return simple success message
+            new File(miniatureDir).mkdirs();
+            new File(pdfDir).mkdirs();
+
+            // Save miniature
+            if (miniature != null && !miniature.isEmpty()) {
+                String miniatureFilename = System.currentTimeMillis() + "_" + miniature.getOriginalFilename();
+                String miniaturePath = miniatureDir + miniatureFilename;
+                miniature.transferTo(new File(miniaturePath));
+                course.setMiniature("/uploads/miniature/" + miniatureFilename);
+            }
+
+            // Save PDF
+            if (pdf_fichier != null && !pdf_fichier.isEmpty()) {
+                String pdfFilename = System.currentTimeMillis() + "_" + pdf_fichier.getOriginalFilename();
+                String pdfPath = pdfDir + pdfFilename;
+                pdf_fichier.transferTo(new File(pdfPath));
+                course.setPdf_fichier("/uploads/courses/" + pdfFilename);
+            }
+
+            // Save course to DB
+            courseRepository.save(course);
+
             Map<String, String> response = new HashMap<>();
             response.put("message", "Cours ajouté avec succès !");
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
             e.printStackTrace();
-            // Only return the error if the file/database saving failed
             return ResponseEntity.badRequest()
                     .body("Erreur lors de l'ajout du cours : " + e.getMessage());
         }
     }
+
 
     @GetMapping
     public ResponseEntity<?> getCoursesByUser(@RequestParam("userId") Long userId) {
@@ -101,6 +123,7 @@ public class CourseController {
             @RequestParam("categorie") String categorie,
             @RequestParam("matiere") String matiere,
             @RequestParam("ordre") String ordre,
+            @RequestParam("unite") String unite,
             @RequestParam(value = "miniature", required = false) MultipartFile miniature,
             @RequestParam(value = "pdf_fichier", required = false) MultipartFile pdfFile
     ) throws IOException {
@@ -113,12 +136,13 @@ public class CourseController {
         course.setCategorie(categorie);
         course.setMatiere(matiere);
         course.setOrdre(ordre);
+        course.setUnite(unite);
 
         // ✅ Handle miniature update
         if (miniature != null && !miniature.isEmpty()) {
             // delete old miniature
             if (course.getMiniature() != null) {
-                File oldMiniature = new File("/var/www/PcDirac/backend" + course.getMiniature());
+                File oldMiniature = new File("/var/www/PcDirac/backend/" + course.getMiniature());
                 if (oldMiniature.exists()) {
                     oldMiniature.delete();
                 }
@@ -289,7 +313,6 @@ public class CourseController {
                 ))
                 .collect(Collectors.toList());
     }
-
 
 
 
