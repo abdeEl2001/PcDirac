@@ -20,7 +20,7 @@ public class CourseController {
     private final CourseService courseService;
     private final UserRepository userRepository;
     private final CourseRepository courseRepository;
-    private final String basePath = "C:/Users/abdel/uploads/";
+    private final String basePath = "/var/www/PcDirac/backend/uploads/";
 
     public CourseController(CourseService courseService,
                             UserRepository userRepository,
@@ -118,13 +118,13 @@ public class CourseController {
         if (miniature != null && !miniature.isEmpty()) {
             // delete old miniature
             if (course.getMiniature() != null) {
-                File oldMiniature = new File("C:/Users/abdel" + course.getMiniature());
+                File oldMiniature = new File("/var/www/PcDirac/backend" + course.getMiniature());
                 if (oldMiniature.exists()) {
                     oldMiniature.delete();
                 }
             }
             // save new miniature
-            String miniaturePath = "C:/Users/abdel/uploads/miniature/" + miniature.getOriginalFilename();
+            String miniaturePath = "/var/www/PcDirac/backend/uploads/miniature/" + miniature.getOriginalFilename();
             miniature.transferTo(new File(miniaturePath));
             course.setMiniature("/uploads/miniature/" + miniature.getOriginalFilename());
         }
@@ -133,13 +133,13 @@ public class CourseController {
         if (pdfFile != null && !pdfFile.isEmpty()) {
             // delete old pdf
             if (course.getPdf_fichier() != null) {
-                File oldPdf = new File("C:/Users/abdel" + course.getPdf_fichier());
+                File oldPdf = new File("/var/www/PcDirac/backend" + course.getPdf_fichier());
                 if (oldPdf.exists()) {
                     oldPdf.delete();
                 }
             }
             // save new pdf
-            String pdfPath = "C:/Users/abdel/uploads/courses/" + pdfFile.getOriginalFilename();
+            String pdfPath = "/var/www/PcDirac/backend/uploads/courses/" + pdfFile.getOriginalFilename();
             pdfFile.transferTo(new File(pdfPath));
             course.setPdf_fichier("/uploads/courses/" + pdfFile.getOriginalFilename());
         }
@@ -155,7 +155,7 @@ public class CourseController {
 
             // ✅ Delete miniature if exists
             if (course.getMiniature() != null) {
-                File miniatureFile = new File("C:/Users/abdel" + course.getMiniature());
+                File miniatureFile = new File("/var/www/PcDirac/backend" + course.getMiniature());
                 if (miniatureFile.exists()) {
                     miniatureFile.delete();
                 }
@@ -163,7 +163,7 @@ public class CourseController {
 
             // ✅ Delete pdf if exists
             if (course.getPdf_fichier() != null) {
-                File pdfFile = new File("C:/Users/abdel" + course.getPdf_fichier());
+                File pdfFile = new File("/var/www/PcDirac/backend" + course.getPdf_fichier());
                 if (pdfFile.exists()) {
                     pdfFile.delete();
                 }
