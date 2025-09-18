@@ -110,6 +110,9 @@
 
 /* === Responsive === */
 @media (max-width: 900px) {
+  .headerAdmin {
+    background-color: #202531;
+  }
   /* Hamburger visible */
   .hamburger {
     display: block;
