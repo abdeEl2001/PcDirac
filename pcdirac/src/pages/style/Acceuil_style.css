@@ -127,6 +127,10 @@
   text-align: center;
   padding: 30px 10px;
 }
+.footerSection{
+  display: none;
+}
+
 
 /* --- Responsive Design --- */
 @media screen and (max-width: 1024px) {
