@@ -111,7 +111,7 @@
 /* === Responsive === */
 @media (max-width: 900px) {
   .headerAdmin {
-    background-color: #202531;
+    background-color: #202531 !important;
   }
   /* Hamburger visible */
   .hamburger {
