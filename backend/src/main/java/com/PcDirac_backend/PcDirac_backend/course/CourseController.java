@@ -20,7 +20,7 @@ public class CourseController {
     private final CourseService courseService;
     private final UserRepository userRepository;
     private final CourseRepository courseRepository;
-    private final String basePath = "/var/www/PcDirac/backend/uploads/";
+    private final String basePath = "C:/Users/abdel/uploads/";
 
     public CourseController(CourseService courseService,
                             UserRepository userRepository,
@@ -37,6 +37,7 @@ public class CourseController {
             @RequestParam("categorie") String categorie,
             @RequestParam("matiere") String matiere,
             @RequestParam("ordre") String ordre,
+            @RequestParam("unite") String unite,
             @RequestParam("miniature") MultipartFile miniature,
             @RequestParam("pdf_fichier") MultipartFile pdf_fichier,
             @RequestParam("userId") Long userId
@@ -51,45 +52,24 @@ public class CourseController {
             course.setCategorie(categorie);
             course.setMatiere(matiere);
             course.setOrdre(ordre);
+            course.setUnite(unite);
             course.setUser(user);
 
-            // Directories
-            String miniatureDir = "/var/www/PcDirac/backend/uploads/miniature/";
-            String pdfDir = "/var/www/PcDirac/backend/uploads/courses/";
+            // Save course and files
+            courseService.saveCourse(course, miniature, pdf_fichier);
 
-            new File(miniatureDir).mkdirs();
-            new File(pdfDir).mkdirs();
-
-            // Save miniature
-            if (miniature != null && !miniature.isEmpty()) {
-                String miniatureFilename = System.currentTimeMillis() + "_" + miniature.getOriginalFilename();
-                String miniaturePath = miniatureDir + miniatureFilename;
-                miniature.transferTo(new File(miniaturePath));
-                course.setMiniature("/uploads/miniature/" + miniatureFilename);
-            }
-
-            // Save PDF
-            if (pdf_fichier != null && !pdf_fichier.isEmpty()) {
-                String pdfFilename = System.currentTimeMillis() + "_" + pdf_fichier.getOriginalFilename();
-                String pdfPath = pdfDir + pdfFilename;
-                pdf_fichier.transferTo(new File(pdfPath));
-                course.setPdf_fichier("/uploads/courses/" + pdfFilename);
-            }
-
-            // Save course to DB
-            courseRepository.save(course);
-
+            // Return simple success message
             Map<String, String> response = new HashMap<>();
             response.put("message", "Cours ajouté avec succès !");
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
             e.printStackTrace();
+            // Only return the error if the file/database saving failed
             return ResponseEntity.badRequest()
                     .body("Erreur lors de l'ajout du cours : " + e.getMessage());
         }
     }
-
 
     @GetMapping
     public ResponseEntity<?> getCoursesByUser(@RequestParam("userId") Long userId) {
@@ -138,13 +118,13 @@ public class CourseController {
         if (miniature != null && !miniature.isEmpty()) {
             // delete old miniature
             if (course.getMiniature() != null) {
-                File oldMiniature = new File("/var/www/PcDirac/backend/" + course.getMiniature());
+                File oldMiniature = new File("C:/Users/abdel" + course.getMiniature());
                 if (oldMiniature.exists()) {
                     oldMiniature.delete();
                 }
             }
             // save new miniature
-            String miniaturePath = "/var/www/PcDirac/backend/uploads/miniature/" + miniature.getOriginalFilename();
+            String miniaturePath = "C:/Users/abdel/uploads/miniature/" + miniature.getOriginalFilename();
             miniature.transferTo(new File(miniaturePath));
             course.setMiniature("/uploads/miniature/" + miniature.getOriginalFilename());
         }
@@ -153,13 +133,13 @@ public class CourseController {
         if (pdfFile != null && !pdfFile.isEmpty()) {
             // delete old pdf
             if (course.getPdf_fichier() != null) {
-                File oldPdf = new File("/var/www/PcDirac/backend" + course.getPdf_fichier());
+                File oldPdf = new File("C:/Users/abdel" + course.getPdf_fichier());
                 if (oldPdf.exists()) {
                     oldPdf.delete();
                 }
             }
             // save new pdf
-            String pdfPath = "/var/www/PcDirac/backend/uploads/courses/" + pdfFile.getOriginalFilename();
+            String pdfPath = "C:/Users/abdel/uploads/courses/" + pdfFile.getOriginalFilename();
             pdfFile.transferTo(new File(pdfPath));
             course.setPdf_fichier("/uploads/courses/" + pdfFile.getOriginalFilename());
         }
@@ -175,7 +155,7 @@ public class CourseController {
 
             // ✅ Delete miniature if exists
             if (course.getMiniature() != null) {
-                File miniatureFile = new File("/var/www/PcDirac/backend" + course.getMiniature());
+                File miniatureFile = new File("C:/Users/abdel" + course.getMiniature());
                 if (miniatureFile.exists()) {
                     miniatureFile.delete();
                 }
@@ -183,7 +163,7 @@ public class CourseController {
 
             // ✅ Delete pdf if exists
             if (course.getPdf_fichier() != null) {
-                File pdfFile = new File("/var/www/PcDirac/backend" + course.getPdf_fichier());
+                File pdfFile = new File("C:/Users/abdel" + course.getPdf_fichier());
                 if (pdfFile.exists()) {
                     pdfFile.delete();
                 }
@@ -213,6 +193,7 @@ public class CourseController {
                         course.getMatiere(),
                         course.getOrdre(),
                         course.getMiniature(),
+                        course.getUnite(),
                         course.getPdf_fichier(),
                         course.getUser().getPrenom() + " " + course.getUser().getNom()
                 ))
@@ -230,6 +211,7 @@ public class CourseController {
                         course.getMatiere(),
                         course.getOrdre(),
                         course.getMiniature(),
+                        course.getUnite(),
                         course.getPdf_fichier(),
                         course.getUser().getPrenom() + " " + course.getUser().getNom()
                 ))
@@ -247,6 +229,7 @@ public class CourseController {
                         course.getMatiere(),
                         course.getOrdre(),
                         course.getMiniature(),
+                        course.getUnite(),
                         course.getPdf_fichier(),
                         course.getUser().getPrenom() + " " + course.getUser().getNom()
                 ))
@@ -264,6 +247,7 @@ public class CourseController {
                         course.getMatiere(),
                         course.getOrdre(),
                         course.getMiniature(),
+                        course.getUnite(),
                         course.getPdf_fichier(),
                         course.getUser().getPrenom() + " " + course.getUser().getNom()
                 ))
@@ -281,6 +265,7 @@ public class CourseController {
                         course.getMatiere(),
                         course.getOrdre(),
                         course.getMiniature(),
+                        course.getUnite(),
                         course.getPdf_fichier(),
                         course.getUser().getPrenom() + " " + course.getUser().getNom()
                 ))
@@ -298,11 +283,13 @@ public class CourseController {
                         course.getMatiere(),
                         course.getOrdre(),
                         course.getMiniature(),
+                        course.getUnite(),
                         course.getPdf_fichier(),
                         course.getUser().getPrenom() + " " + course.getUser().getNom()
                 ))
                 .collect(Collectors.toList());
     }
+
 
 
 

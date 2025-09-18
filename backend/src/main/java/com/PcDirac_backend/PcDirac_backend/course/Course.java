@@ -23,6 +23,7 @@ public class Course {
     private String ordre;
     private String miniature;
     private String pdf_fichier;
+    private String unite;
 
     private LocalDateTime cree_le = LocalDateTime.now();
     private LocalDateTime mise_a_jour_le = LocalDateTime.now();
@@ -39,6 +40,7 @@ public class Course {
                   String ordre,
                   String miniature,
                   String pdf_fichier,
+                  String unite,
                   LocalDateTime cree_le,
                   LocalDateTime mise_a_jour_le) {
         this.id = id;
@@ -49,6 +51,7 @@ public class Course {
         this.matiere = matiere;
         this.ordre = ordre;
         this.miniature = miniature;
+        this.unite=unite;
         this.pdf_fichier = pdf_fichier;
         this.cree_le = cree_le;
         this.mise_a_jour_le = mise_a_jour_le;
@@ -61,6 +64,7 @@ public class Course {
                   String matiere,
                   String ordre,
                   String miniature,
+                  String unite,
                   String pdf_fichier,
                   LocalDateTime cree_le,
                   LocalDateTime mise_a_jour_le) {
@@ -71,6 +75,7 @@ public class Course {
         this.matiere = matiere;
         this.ordre = ordre;
         this.miniature = miniature;
+        this.unite=unite;
         this.pdf_fichier = pdf_fichier;
         this.cree_le = cree_le;
         this.mise_a_jour_le = mise_a_jour_le;
@@ -162,6 +167,14 @@ public class Course {
 
     public void setMise_a_jour_le(LocalDateTime mise_a_jour_le) {
         this.mise_a_jour_le = mise_a_jour_le;
+    }
+
+    public String getUnite() {
+        return unite;
+    }
+
+    public void setUnite(String unite) {
+        this.unite = unite;
     }
 }
 

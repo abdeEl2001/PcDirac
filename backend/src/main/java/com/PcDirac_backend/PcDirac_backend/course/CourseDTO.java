@@ -9,11 +9,12 @@ public class CourseDTO {
     private String matiere;
     private String ordre;
     private String miniature;
+    private String unite;
     private String pdf_fichier;
     private String professeur; // from User
 
     public CourseDTO(Long id, String titre, String niveau, String categorie, String matiere,
-                     String ordre, String miniature, String pdf_fichier, String professeur) {
+                     String ordre, String miniature, String unite, String pdf_fichier, String professeur) {
         this.id = id;
         this.titre = titre;
         this.niveau = niveau;
@@ -21,9 +22,11 @@ public class CourseDTO {
         this.matiere = matiere;
         this.ordre = ordre;
         this.miniature = miniature;
+        this.unite = unite;         // ✅ correct place
         this.pdf_fichier = pdf_fichier;
         this.professeur = professeur;
     }
+
 
     // Getters
     public Long getId() { return id; }
@@ -35,4 +38,8 @@ public class CourseDTO {
     public String getMiniature() { return miniature; }
     public String getPdf_fichier() { return pdf_fichier; }
     public String getProfesseur() { return professeur; }
+
+    public String getUnite() {
+        return unite;
+    }
 }
