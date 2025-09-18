@@ -73,7 +73,6 @@ const coursesData = {
         "Suivi d'une transformation chimique",
         "Mesure des quantités de matière en solution par conductimétrie",
         "Les réactions acido-basiques",
-        "Les réactions d'oxydo-réduction",
         "Les dosages (ou titrages) directs"
       ],
       "Chimie organique": [
@@ -255,30 +254,46 @@ const AddCourseForm = () => {
         </div>
 
         {/* Matière */}
-        <div className="form-group">
-          <label htmlFor="matiere">Matière :</label>
-          <select id="matiere" name="matiere" value={formData.matiere} onChange={handleChange} required>
-            <option value="">-- Choisir une matière --</option>
-            {matieres.map(m => <option key={m} value={m}>{m}</option>)}
-          </select>
-        </div>
+        {formData.categorie !== "Examens Nationaux" && (
+          <div className="form-group">
+            <label htmlFor="matiere">Matière :</label>
+            <select id="matiere" name="matiere" value={formData.matiere} onChange={handleChange} required>
+              <option value="">-- Choisir une matière --</option>
+              {matieres.map(m => <option key={m} value={m}>{m}</option>)}
+            </select>
+          </div>
+        )}
 
         {/* Unité */}
-        <div className="form-group">
-          <label htmlFor="unite">Unité :</label>
-          <select id="unite" name="unite" value={formData.unite} onChange={handleChange} required>
-            <option value="">-- Choisir une unité --</option>
-            {unites.map(u => <option key={u} value={u}>{u}</option>)}
-          </select>
-        </div>
+        {formData.categorie !== "Examens Nationaux" && (
+          <div className="form-group">
+            <label htmlFor="unite">Unité :</label>
+            <select id="unite" name="unite" value={formData.unite} onChange={handleChange} required>
+              <option value="">-- Choisir une unité --</option>
+              {unites.map(u => <option key={u} value={u}>{u}</option>)}
+            </select>
+          </div>
+        )}
 
         {/* Titre du cours */}
         <div className="form-group">
           <label htmlFor="titre">Titre du Cours :</label>
-          <select id="titre" name="titre" value={formData.titre} onChange={handleChange} required>
-            <option value="">-- Choisir un titre --</option>
-            {titresCours.map((t, idx) => <option key={idx} value={t}>{t}</option>)}
-          </select>
+          {formData.categorie === "Examens Nationaux" ? (
+            <input
+              type="text"
+              id="titre"
+              name="titre"
+              value={formData.titre}
+              onChange={handleChange}
+              required
+              className="inputAddCourse"
+            />
+          ) : (
+            <select id="titre" name="titre" value={formData.titre} onChange={handleChange} required>
+              <option value="">-- Choisir un titre --</option>
+              {titresCours.map((t, idx) => <option key={idx} value={t}>{t}</option>)}
+            </select>
+          )}
         </div>
 
         {/* Ordre */}
@@ -291,7 +306,7 @@ const AddCourseForm = () => {
         <div className="form-group">
           <label htmlFor="miniature">Image Miniature :</label>
           <input type="file" id="miniature" name="miniature" accept="image/*" onChange={handleFileChange} required />
-          {thumbnailPreview && <img src={thumbnailPreview} alt="Aperçu miniatura" style={{ marginTop: "10px", maxWidth: "200px" }} />}
+          {thumbnailPreview && <img src={thumbnailPreview} alt="Aperçu miniature" style={{ marginTop: "10px", maxWidth: "200px" }} />}
         </div>
 
         {/* PDF */}
