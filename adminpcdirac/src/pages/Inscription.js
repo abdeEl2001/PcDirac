@@ -199,7 +199,7 @@ const InscriptionCard = () => {
         </div>
       </form>
 
-      <img src="/images/Navy Minimalist Letter D Logo.png" alt="Logo" />
+      <img className="logoInscription" src="/images/Navy Minimalist Letter D Logo.png" alt="Logo" />
     </div>
   );
 };
