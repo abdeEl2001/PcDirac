@@ -9,7 +9,6 @@
 .loginCard .loginCardInfo {
     width: 950px;
     height:600px;
-    background-color: red;
     display: flex;
 }
 
@@ -87,6 +86,7 @@
     justify-content: center;
     align-items: center;
     margin-bottom: 20px;
+    gap: 10px;
 }
 .loginCard .loginCardInfo .connexionSide .submitButton button{
     width: 200px;
@@ -110,8 +110,10 @@
 }
 .loginCard .loginCardInfo .connexionSide .optionsToAdd{
     width: 100%;
-    height: fit-content;
+    height: 100px;
     display: flex;
+    align-items: center;
+
 }
 .loginCard .loginCardInfo .connexionSide .optionsToAdd .rememberMeSection{
     width: 50%;
@@ -190,9 +192,102 @@
     text-decoration: none;
     transition: 0.2s;
 }
-.loginCard .loginCardInfo .inscriptionSide .buttonInscription:hover{
+.loginCard .loginCardInfo .inscriptionSide .buttonInscription,.buttonInscriptionMobile:hover{
     background: white;
     border: 0px;
     color: #202531;
     transition: 0.2s;
+}
+.buttonInscriptionMobile{
+    width: 200px;
+    height: 50px;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background: #202531;
+    border: 2px solid white;
+    border-radius: 40px;
+    cursor: pointer;
+    font-family: "Cairo", system-ui;
+    font-style: normal;
+    color: white;
+    text-decoration: none;
+    transition: 0.2s;
+}
+.buttonInscriptionMobile:hover{
+        border: 2px solid #202531;
+        font-weight: 900;
+}
+@media (max-width: 992px) {
+    .loginCard .loginCardInfo{
+        width: auto;
+        height: auto;
+        flex-direction: column;
+        border-radius: 10px;
+    }
+    .loginCard .loginCardInfo .connexionSide{
+        border-radius: 10px;
+    }
+    .loginCard .loginCardInfo .inscriptionSide {
+        display: none;
+    }
+    .buttonInscriptionMobile{
+        display: flex;
+    }
+}
+@media (max-width: 560px){
+    .loginCard {
+        padding: 10px;
+    }
+
+    .loginCard .loginCardInfo {
+        width: 95%;
+        height: auto;
+        border-radius: 10px;
+    }
+
+    .loginCard .loginCardInfo .connexionSide {
+        width: 100%;
+        padding: 20px 15px;
+        border-radius: 10px;
+    }
+
+    .loginCard .loginCardInfo .connexionSide h1 {
+        font-size: 20px;
+        padding-left: 10px;
+        height: auto;
+    }
+
+    .loginCard .loginCardInfo .connexionSide .emailSectionLogin,
+    .loginCard .loginCardInfo .connexionSide .passwordSectionLogin {
+        padding-left: 0;
+        margin-bottom: 15px;
+    }
+
+    .loginCard .loginCardInfo .connexionSide input {  /* full width on mobile */
+        max-width: 100%;
+    }
+
+    .loginCard .loginCardInfo .connexionSide .submitButton button,
+    .buttonInscriptionMobile {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .loginCard .loginCardInfo .connexionSide .optionsToAdd {
+        align-items: flex-start;
+        gap: 10px;
+        height: auto;
+    }
+
+    .loginCard .loginCardInfo .connexionSide .optionsToAdd .rememberMeSection,
+    .loginCard .loginCardInfo .connexionSide .optionsToAdd .forgotPassword {
+        width: 100%;
+        justify-content: flex-start;
+        padding-left: 0px;
+    }
+
+    .loginCard .loginCardInfo .connexionSide .optionsToAdd .forgotPassword {
+        justify-content: flex-end;
+    }
 }

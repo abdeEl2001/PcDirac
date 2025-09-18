@@ -1,62 +1,138 @@
-*{
-    padding: 0px;
-    margin: 0px;
-    box-sizing: border-box;
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
-.bodyContent {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
-.headerAdmin {
-    width: 100%;
-    height: 60px;
-    display: flex;
-    justify-content: end;
-}
-.headerAdmin .profil{
-    width: 300px;
-    height: 100%;
-    display: flex;
-    justify-content: start;
-    align-items: start;
-}
-.headerAdmin .profil .nameProfil,.photoProfilHeader,.logout{
-    height: 100%;
-    width: fit-content;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: 5px;
-    margin-right: 5px;
-}
-.headerAdmin .profil .nameProfil h4{
-    font-size: 13px;
-    font-family: "Inria Sans", sans-serif;
-    font-weight: bold;
-    font-style: normal;
-}
-.headerAdmin .profil .photoProfilHeader img{
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    border: 2px solid white;
-}
-.headerAdmin .profil .logout button{
-    width: 90px;
-    height: 40px;
-    border: 0px;
-    background-color: #212121;
-    color: white;
-    border-radius: 4px;
-    font-family: "Inria Sans", sans-serif;
-    font-weight: bold;
-    font-style: normal;
-    margin-left: 14px;
-}
-.logout button a{
-    text-decoration: none;
-    color: white;
 
+.headerAdmin {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #202531;
+  padding: 0 20px;
+  position: relative;
+}
+
+/* Logo */
+.logoHeader{
+    display: block;
+}
+.logoHeader img {
+  display: none;
+  height: 80px;
+  width: auto;
+}
+
+/* Hamburger */
+.hamburger {
+  display: none;
+  font-size: 26px;
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Right side desktop */
+.headerRight {
+  display: flex;
+  align-items: center;
+}
+
+.profilDesktop {
+  display: flex;
+  align-items: center;
+}
+
+.profilDesktop .photoProfilHeader img {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 2px solid white;
+  margin-right: 10px;
+}
+
+.profilDesktop .nameProfil h4 {
+  font-size: 14px;
+  font-family: "Inria Sans", sans-serif;
+  font-weight: bold;
+  color: black;
+  margin-right: 10px;
+}
+
+.profilDesktop .logout button {
+  width: 90px;
+  height: 40px;
+  border: none;
+  background-color: #212121;
+  color: white;
+  border-radius: 4px;
+  font-family: "Inria Sans", sans-serif;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Mobile Menu (hidden by default) */
+.mobileMenu {
+  display: none;
+  flex-direction: column;
+  background-color: #202531;
+  position: absolute;
+  top: 60px;
+  right: 0;
+  width: 200px;
+  padding: 10px 0;
+  border-left: 1px solid #444;
+  z-index: 1000;
+}
+
+.mobileMenu a, .mobileMenu .logoutMobile {
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  font-weight: bold;
+  display: block;
+  font-family: "Inria Sans", sans-serif;
+}
+
+.mobileMenu a:hover, .mobileMenu .logoutMobile:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.logoutMobile {
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* === Responsive === */
+@media (max-width: 900px) {
+  /* Hamburger visible */
+  .hamburger {
+    display: block;
+  }
+
+  /* Hide desktop profile */
+  .profilDesktop {
+    display: none;
+  }
+
+  /* Show mobile menu when active */
+  .headerRight.active .mobileMenu {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    border: 0px;
+    transition: max-height .4s ease,opacity .4s ease;
+  }
+  .logoHeader{
+    width: 80%;
+  }
+  .logoHeader img{
+    display: block;
+  }
 }

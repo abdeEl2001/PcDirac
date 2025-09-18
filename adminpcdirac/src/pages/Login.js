@@ -96,6 +96,9 @@ const LoginCard = () => {
 
             <div className="submitButton">
               <button type="submit">Se Connecter</button>
+              <Link to="/inscription" className="buttonInscriptionMobile">
+                Inscription
+              </Link>
             </div>
 
             <div className="optionsToAdd">
