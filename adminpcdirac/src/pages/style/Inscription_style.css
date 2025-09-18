@@ -158,4 +158,40 @@
   font-style: normal;
   margin-right: 10px;
   }
-  
+  @media (max-width: 992px) {
+    .inscriptionCard{
+      height: auto;
+      padding: 30px 20px;
+    }
+    .inscriptionCard .inscriptionInfoCard {
+      width: 95%;
+      height: auto;
+      border-radius: 10px;
+    }
+    .logoInscription{
+      display: none;
+    }
+    .inscriptionCard .inscriptionInfoCard .nameComplet, .loginInfo, .addOnes{
+      flex-direction: column;
+      height: auto;
+      margin-bottom: 0px;
+    }
+    .inscriptionCard .inscriptionInfoCard .firstName, .lastName, .emailSection, .passwordSection, .passwordConfirmationSection, .phoneNumberSection{
+      margin-bottom: 20px;
+    }
+    .photoProfil{
+      flex-direction: column;
+      justify-content: start;
+      align-items: start;
+      padding-left: 30px;
+    }
+    .inscriptionCard .inscriptionInfoCard .firstName, .lastName, .emailSection, .passwordSection, .passwordConfirmationSection, .phoneNumberSection {
+      width: 100%;
+    }
+    .inscriptionCard .inscriptionInfoCard .inputInscription, .inputInscriptionProfile{
+      width: 90%;
+    }
+    .inscriptionCard .inscriptionInfoCard .submitButton button {
+      width: 80%;
+    }
+  }
