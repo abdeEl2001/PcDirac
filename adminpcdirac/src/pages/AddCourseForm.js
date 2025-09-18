@@ -158,7 +158,17 @@ const AddCourseForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => {
+    setFormData(prev => {
+      if (name === "categorie") {
+        return {
+          ...prev,
+          categorie: value,
+          matiere: "",
+          unite: "",
+          titre: "",
+          niveau: value === "Examens Nationaux" ? "" : "1ère Année Bac",
+        };
+      }
       if (name === "niveau") return { ...prev, niveau: value, matiere: "", unite: "", titre: "" };
       if (name === "matiere") return { ...prev, matiere: value, unite: "", titre: "" };
       if (name === "unite") return { ...prev, unite: value, titre: "" };
@@ -186,7 +196,12 @@ const AddCourseForm = () => {
     }
 
     const data = new FormData();
-    Object.entries(formData).forEach(([key, value]) => data.append(key, value));
+    Object.entries(formData).forEach(([key, value]) => {
+      // Only append fields that are visible / relevant
+      if (!(formData.categorie === "Examens Nationaux" && ["niveau","matiere","unite"].includes(key))) {
+        data.append(key, value);
+      }
+    });
     data.append("userId", userId);
 
     try {
@@ -217,9 +232,11 @@ const AddCourseForm = () => {
     }
   };
 
-  const matieres = formData.niveau ? Object.keys(coursesData[formData.niveau]) : [];
+  const matieres = formData.niveau && coursesData[formData.niveau] ? Object.keys(coursesData[formData.niveau]) : [];
   const unites = formData.matiere ? Object.keys(coursesData[formData.niveau][formData.matiere]) : [];
   const titresCours = formData.unite ? coursesData[formData.niveau][formData.matiere][formData.unite] : [];
+
+  const isExamensNationaux = formData.categorie === "Examens Nationaux";
 
   return (
     <div className="container_Form_cours">
@@ -233,12 +250,14 @@ const AddCourseForm = () => {
       <form onSubmit={handleSubmit}>
 
         {/* Niveau */}
-        <div className="form-group">
-          <label htmlFor="niveau">Niveau :</label>
-          <select id="niveau" name="niveau" value={formData.niveau} onChange={handleChange} required>
-            {Object.keys(coursesData).map(lvl => <option key={lvl} value={lvl}>{lvl}</option>)}
-          </select>
-        </div>
+        {!isExamensNationaux && (
+          <div className="form-group">
+            <label htmlFor="niveau">Niveau :</label>
+            <select id="niveau" name="niveau" value={formData.niveau} onChange={handleChange} required>
+              {Object.keys(coursesData).map(lvl => <option key={lvl} value={lvl}>{lvl}</option>)}
+            </select>
+          </div>
+        )}
 
         {/* Catégorie */}
         <div className="form-group">
@@ -254,7 +273,7 @@ const AddCourseForm = () => {
         </div>
 
         {/* Matière */}
-        {formData.categorie !== "Examens Nationaux" && (
+        {!isExamensNationaux && (
           <div className="form-group">
             <label htmlFor="matiere">Matière :</label>
             <select id="matiere" name="matiere" value={formData.matiere} onChange={handleChange} required>
@@ -265,7 +284,7 @@ const AddCourseForm = () => {
         )}
 
         {/* Unité */}
-        {formData.categorie !== "Examens Nationaux" && (
+        {!isExamensNationaux && (
           <div className="form-group">
             <label htmlFor="unite">Unité :</label>
             <select id="unite" name="unite" value={formData.unite} onChange={handleChange} required>
@@ -278,7 +297,7 @@ const AddCourseForm = () => {
         {/* Titre du cours */}
         <div className="form-group">
           <label htmlFor="titre">Titre du Cours :</label>
-          {formData.categorie === "Examens Nationaux" ? (
+          {isExamensNationaux ? (
             <input
               type="text"
               id="titre"
@@ -324,3 +343,4 @@ const AddCourseForm = () => {
 };
 
 export default AddCourseForm;
+
