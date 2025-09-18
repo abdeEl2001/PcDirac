@@ -2,34 +2,32 @@ package com.PcDirac_backend.PcDirac_backend.course;
 
 import com.PcDirac_backend.PcDirac_backend.user.User;
 import com.PcDirac_backend.PcDirac_backend.user.UserRepository;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/courses")
-@CrossOrigin(origins = "https://admin.pcdirac.com") // ✅ Allow frontend domain
 public class CourseController {
 
     private final CourseService courseService;
     private final UserRepository userRepository;
     private final CourseRepository courseRepository;
-
-    @Value("${file.upload-dir}")
-    private String uploadDir; // ✅ Configurable path from application.properties
+    private final String basePath = "/var/www/PcDirac/backend/uploads/";
 
     public CourseController(CourseService courseService,
                             UserRepository userRepository,
                             CourseRepository courseRepository) {
         this.courseService = courseService;
         this.userRepository = userRepository;
-        this.courseRepository = courseRepository;
+        this.courseRepository=courseRepository;
     }
 
     @PostMapping
@@ -57,15 +55,17 @@ public class CourseController {
             course.setUnite(unite);
             course.setUser(user);
 
-            // ✅ Save course and files via service
+            // Save course and files
             courseService.saveCourse(course, miniature, pdf_fichier);
 
+            // Return simple success message
             Map<String, String> response = new HashMap<>();
             response.put("message", "Cours ajouté avec succès !");
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
             e.printStackTrace();
+            // Only return the error if the file/database saving failed
             return ResponseEntity.badRequest()
                     .body("Erreur lors de l'ajout du cours : " + e.getMessage());
         }
@@ -101,43 +101,47 @@ public class CourseController {
             @RequestParam("categorie") String categorie,
             @RequestParam("matiere") String matiere,
             @RequestParam("ordre") String ordre,
-            @RequestParam(value = "unite", required = false) String unite,
             @RequestParam(value = "miniature", required = false) MultipartFile miniature,
             @RequestParam(value = "pdf_fichier", required = false) MultipartFile pdfFile
     ) throws IOException {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
 
-        // ✅ Update text fields
+        // update text fields
         course.setTitre(titre);
         course.setNiveau(niveau);
         course.setCategorie(categorie);
         course.setMatiere(matiere);
         course.setOrdre(ordre);
-        if (unite != null) course.setUnite(unite);
 
         // ✅ Handle miniature update
         if (miniature != null && !miniature.isEmpty()) {
+            // delete old miniature
             if (course.getMiniature() != null) {
-                File oldMiniature = new File(uploadDir + course.getMiniature());
-                if (oldMiniature.exists()) oldMiniature.delete();
+                File oldMiniature = new File("/var/www/PcDirac/backend" + course.getMiniature());
+                if (oldMiniature.exists()) {
+                    oldMiniature.delete();
+                }
             }
-            String uniqueMiniature = UUID.randomUUID() + "_" + miniature.getOriginalFilename();
-            File newMiniatureFile = new File(uploadDir + "/miniature/" + uniqueMiniature);
-            miniature.transferTo(newMiniatureFile);
-            course.setMiniature("/uploads/miniature/" + uniqueMiniature);
+            // save new miniature
+            String miniaturePath = "/var/www/PcDirac/backend/uploads/miniature/" + miniature.getOriginalFilename();
+            miniature.transferTo(new File(miniaturePath));
+            course.setMiniature("/uploads/miniature/" + miniature.getOriginalFilename());
         }
 
         // ✅ Handle pdf update
         if (pdfFile != null && !pdfFile.isEmpty()) {
+            // delete old pdf
             if (course.getPdf_fichier() != null) {
-                File oldPdf = new File(uploadDir + course.getPdf_fichier());
-                if (oldPdf.exists()) oldPdf.delete();
+                File oldPdf = new File("/var/www/PcDirac/backend" + course.getPdf_fichier());
+                if (oldPdf.exists()) {
+                    oldPdf.delete();
+                }
             }
-            String uniquePdf = UUID.randomUUID() + "_" + pdfFile.getOriginalFilename();
-            File newPdfFile = new File(uploadDir + "/courses/" + uniquePdf);
-            pdfFile.transferTo(newPdfFile);
-            course.setPdf_fichier("/uploads/courses/" + uniquePdf);
+            // save new pdf
+            String pdfPath = "/var/www/PcDirac/backend/uploads/courses/" + pdfFile.getOriginalFilename();
+            pdfFile.transferTo(new File(pdfPath));
+            course.setPdf_fichier("/uploads/courses/" + pdfFile.getOriginalFilename());
         }
 
         return ResponseEntity.ok(courseRepository.save(course));
@@ -149,16 +153,23 @@ public class CourseController {
             Course course = courseRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("Course not found"));
 
+            // ✅ Delete miniature if exists
             if (course.getMiniature() != null) {
-                File miniatureFile = new File(uploadDir + course.getMiniature());
-                if (miniatureFile.exists()) miniatureFile.delete();
+                File miniatureFile = new File("/var/www/PcDirac/backend" + course.getMiniature());
+                if (miniatureFile.exists()) {
+                    miniatureFile.delete();
+                }
             }
 
+            // ✅ Delete pdf if exists
             if (course.getPdf_fichier() != null) {
-                File pdfFile = new File(uploadDir + course.getPdf_fichier());
-                if (pdfFile.exists()) pdfFile.delete();
+                File pdfFile = new File("/var/www/PcDirac/backend" + course.getPdf_fichier());
+                if (pdfFile.exists()) {
+                    pdfFile.delete();
+                }
             }
 
+            // ✅ Delete course from DB
             courseRepository.delete(course);
 
             Map<String, String> response = new HashMap<>();
@@ -171,9 +182,9 @@ public class CourseController {
         }
     }
 
-    // ✅ Generic reusable method
-    private List<CourseDTO> getCoursesByCategorie(String categorie) {
-        return courseRepository.findByCategorie(categorie).stream()
+    @GetMapping("/etudiant/cours")
+    public List<CourseDTO> getAllCourses() {
+        return courseRepository.findByCategorie("Cours").stream()
                 .map(course -> new CourseDTO(
                         course.getId(),
                         course.getTitre(),
@@ -189,34 +200,97 @@ public class CourseController {
                 .collect(Collectors.toList());
     }
 
-    // ✅ Student endpoints using the generic method
-    @GetMapping("/etudiant/cours")
-    public List<CourseDTO> getAllCourses() {
-        return getCoursesByCategorie("Cours");
-    }
-
     @GetMapping("/etudiant/exercice")
     public List<CourseDTO> getAllExercices() {
-        return getCoursesByCategorie("Exercices");
+        return courseRepository.findByCategorie("Exercices").stream()
+                .map(course -> new CourseDTO(
+                        course.getId(),
+                        course.getTitre(),
+                        course.getNiveau(),
+                        course.getCategorie(),
+                        course.getMatiere(),
+                        course.getOrdre(),
+                        course.getMiniature(),
+                        course.getUnite(),
+                        course.getPdf_fichier(),
+                        course.getUser().getPrenom() + " " + course.getUser().getNom()
+                ))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/etudiant/activitie")
     public List<CourseDTO> getAllActivities() {
-        return getCoursesByCategorie("Activités");
+        return courseRepository.findByCategorie("Activités").stream()
+                .map(course -> new CourseDTO(
+                        course.getId(),
+                        course.getTitre(),
+                        course.getNiveau(),
+                        course.getCategorie(),
+                        course.getMatiere(),
+                        course.getOrdre(),
+                        course.getMiniature(),
+                        course.getUnite(),
+                        course.getPdf_fichier(),
+                        course.getUser().getPrenom() + " " + course.getUser().getNom()
+                ))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/etudiant/devoirSurveille")
     public List<CourseDTO> getAllDevoirSurveille() {
-        return getCoursesByCategorie("Devoirs surveillés");
+        return courseRepository.findByCategorie("Devoirs surveillés").stream()
+                .map(course -> new CourseDTO(
+                        course.getId(),
+                        course.getTitre(),
+                        course.getNiveau(),
+                        course.getCategorie(),
+                        course.getMatiere(),
+                        course.getOrdre(),
+                        course.getMiniature(),
+                        course.getUnite(),
+                        course.getPdf_fichier(),
+                        course.getUser().getPrenom() + " " + course.getUser().getNom()
+                ))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/etudiant/documentsPedagogiques")
     public List<CourseDTO> getAllDocumentsPedagogiques() {
-        return getCoursesByCategorie("Documents pédagogiques");
+        return courseRepository.findByCategorie("Documents pédagogiques").stream()
+                .map(course -> new CourseDTO(
+                        course.getId(),
+                        course.getTitre(),
+                        course.getNiveau(),
+                        course.getCategorie(),
+                        course.getMatiere(),
+                        course.getOrdre(),
+                        course.getMiniature(),
+                        course.getUnite(),
+                        course.getPdf_fichier(),
+                        course.getUser().getPrenom() + " " + course.getUser().getNom()
+                ))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/etudiant/examensNationaux")
     public List<CourseDTO> getAllExamensNationaux() {
-        return getCoursesByCategorie("Examens Nationaux");
+        return courseRepository.findByCategorie("Examens Nationaux").stream()
+                .map(course -> new CourseDTO(
+                        course.getId(),
+                        course.getTitre(),
+                        course.getNiveau(),
+                        course.getCategorie(),
+                        course.getMatiere(),
+                        course.getOrdre(),
+                        course.getMiniature(),
+                        course.getUnite(),
+                        course.getPdf_fichier(),
+                        course.getUser().getPrenom() + " " + course.getUser().getNom()
+                ))
+                .collect(Collectors.toList());
     }
+
+
+
+
 }
