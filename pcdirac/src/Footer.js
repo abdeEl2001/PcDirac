@@ -20,7 +20,7 @@ const Footer = () => {
           <i className="fab fa-youtube"></i>
         </a>
       </div>
-      <p className="footerText">© {new Date().getFullYear()} PcDirac. All rights reserved.</p>
+      <p className="footerText">© {new Date().getFullYear()}  PcDirac. Tous droits réservés.</p>
     </footer>
   );
 };

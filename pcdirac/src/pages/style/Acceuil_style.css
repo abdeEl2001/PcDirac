@@ -122,14 +122,13 @@
 
 /* --- Footer --- */
 .footer {
+  display: none;
   background-color: #111827;
   color: #d1d5db;
   text-align: center;
   padding: 30px 10px;
 }
-.footerSection{
-  display: none;
-}
+
 
 
 /* --- Responsive Design --- */
