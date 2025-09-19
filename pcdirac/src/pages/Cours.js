@@ -214,14 +214,14 @@ const Cours = () => {
 
   // Titres: from backend given niveau + matiere + unite
   const titresFromBackend = uniqueSorted(
-    Courses
-      .filter(c =>
-        (!niveauFilter || normalize(c.niveau) === normalize(niveauFilter)) &&
-        (!matiereFilter || normalize(c.matiere) === normalize(matiereFilter)) &&
-        (!uniteFilter || normalize(c.unite) === normalize(uniteFilter))
-      )
-      .map(c => c.cours_titre)
-  );
+  Courses
+    .filter(c =>
+      (!niveauFilter || normalize(c.niveau) === normalize(niveauFilter)) &&
+      (!matiereFilter || normalize(c.matiere) === normalize(matiereFilter)) &&
+      (!uniteFilter || normalize(c.unite) === normalize(uniteFilter))
+    )
+    .map(c => c.titre)   // <-- change cours_titre → titre
+);
 
   const titresStatic =
     niveauFilter && matiereFilter && uniteFilter &&
