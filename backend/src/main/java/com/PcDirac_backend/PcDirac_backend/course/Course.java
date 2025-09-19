@@ -17,12 +17,15 @@ public class Course {
     private User user;
 
     private String titre;
+    @Column(nullable = true)
     private String niveau;
     private String categorie;
+    @Column(nullable = true)
     private String matiere;
     private String ordre;
     private String miniature;
     private String pdf_fichier;
+    @Column(nullable = true)
     private String unite;
 
     private LocalDateTime cree_le = LocalDateTime.now();

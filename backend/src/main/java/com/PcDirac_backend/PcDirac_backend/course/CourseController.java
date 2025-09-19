@@ -119,11 +119,11 @@ public class CourseController {
     public ResponseEntity<Course> updateCourse(
             @PathVariable Long id,
             @RequestParam("titre") String titre,
-            @RequestParam("niveau") String niveau,
+            @RequestParam(value = "niveau", required = false) String niveau,
             @RequestParam("categorie") String categorie,
-            @RequestParam("matiere") String matiere,
+            @RequestParam(value = "matiere", required = false) String matiere,
             @RequestParam("ordre") String ordre,
-            @RequestParam("unite") String unite,
+            @RequestParam(value = "unite", required = false) String unite,
             @RequestParam(value = "miniature", required = false) MultipartFile miniature,
             @RequestParam(value = "pdf_fichier", required = false) MultipartFile pdfFile
     ) throws IOException {
