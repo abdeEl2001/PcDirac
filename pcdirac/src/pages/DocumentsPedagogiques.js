@@ -156,7 +156,7 @@ const DocumentsPedagogiques = () => {
   useEffect(() => {
     const fetchDocumentsPedagogiques = async () => {
       try {
-        const response = await fetch(`${BACKEND_URL}/api/courses/etudiant/activitie`);
+        const response = await fetch(`${BACKEND_URL}/api/courses/etudiant/documentsPedagogiques`);
         if (!response.ok) throw new Error("Erreur réseau");
         const data = await response.json();
         setDocumentsPedagogiques(Array.isArray(data) ? data : []);
