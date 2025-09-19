@@ -44,8 +44,6 @@ const ExamensNationaux = () => {
                   />
                 )}
                 <h3 className="itemTitle">{item.titre}</h3>
-                <p className="itemInfo"><strong>Niveau:</strong> {item.niveau}</p>
-                <p className="itemInfo"><strong>Professeur:</strong> {item.professeur}</p>
                 <p className="itemDescription">{item.description}</p>
                 {item.pdf_fichier && (
                   <a
