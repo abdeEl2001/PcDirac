@@ -199,8 +199,9 @@ const AddCourseForm = () => {
     Object.entries(formData).forEach(([key, value]) => {
       // Only append fields that are visible / relevant
       if (!(formData.categorie === "Examens Nationaux" && ["niveau","matiere","unite"].includes(key))) {
-        data.append(key, value);
+          data.append(key, value);
       }
+
     });
     data.append("userId", userId);
 

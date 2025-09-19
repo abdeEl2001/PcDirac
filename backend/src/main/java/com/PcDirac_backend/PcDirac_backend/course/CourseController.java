@@ -33,12 +33,12 @@ public class CourseController {
     @PostMapping
     public ResponseEntity<?> addCourse(
             @RequestParam("titre") String titre,
-            @RequestParam("niveau") String niveau,
+            @RequestParam(value = "niveau", required = false) String niveau,
             @RequestParam("categorie") String categorie,
-            @RequestParam("matiere") String matiere,
+            @RequestParam(value = "matiere", required = false) String matiere,
             @RequestParam("ordre") String ordre,
             @RequestParam("miniature") MultipartFile miniature,
-            @RequestParam("unite") String unite,
+            @RequestParam(value = "unite", required = false) String unite,
             @RequestParam("pdf_fichier") MultipartFile pdf_fichier,
             @RequestParam("userId") Long userId
     ) {
