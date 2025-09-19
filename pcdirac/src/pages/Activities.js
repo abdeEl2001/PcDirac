@@ -143,7 +143,7 @@ const uniqueSorted = (arr) =>
   Array.from(new Set(arr.filter(Boolean).map((s) => (typeof s === "string" ? s.trim() : s))))
     .sort((a, b) => a.localeCompare(b));
 
-const Cours = () => {
+const Activities = () => {
   const [Activities, setActivities] = useState([]);
   const [niveauFilter, setNiveauFilter] = useState("");
   const [matiereFilter, setMatiereFilter] = useState("");
@@ -220,7 +220,7 @@ const Cours = () => {
         (!matiereFilter || normalize(c.matiere) === normalize(matiereFilter)) &&
         (!uniteFilter || normalize(c.unite) === normalize(uniteFilter))
       )
-      .map(c => c.exercice_titre)
+      .map(c => c.activitie_titre)
   );
 
   const titresStatic =
@@ -380,4 +380,4 @@ const Cours = () => {
   );
 };
 
-export default Cours;
+export default Activities;

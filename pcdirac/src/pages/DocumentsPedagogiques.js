@@ -220,7 +220,7 @@ const DocumentsPedagogiques = () => {
         (!matiereFilter || normalize(c.matiere) === normalize(matiereFilter)) &&
         (!uniteFilter || normalize(c.unite) === normalize(uniteFilter))
       )
-      .map(c => c.exercice_titre)
+      .map(c => c.documentPedagogique_titre)
   );
 
   const titresStatic =

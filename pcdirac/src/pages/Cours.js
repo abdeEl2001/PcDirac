@@ -244,7 +244,7 @@ const Cours = () => {
       (niveauFilter === "" || normalize(item.niveau) === normalize(niveauFilter)) &&
       (matiereFilter === "" || normalize(item.matiere) === normalize(matiereFilter)) &&
       (uniteFilter === "" || normalize(item.unite) === normalize(uniteFilter)) &&
-      (coursTitreFilter === "" || normalize(item.cours_titre) === normalize(coursTitreFilter)) &&
+      (coursTitreFilter === "" || normalize(item.titre) === normalize(coursTitreFilter)) &&
       (professeurFilter === "" || normalize(item.professeur) === normalize(professeurFilter))
     );
   });
