@@ -364,6 +364,7 @@ const Cours = () => {
                       href={`${BACKEND_URL}${item.pdf_fichier}`}
                       target="_blank"
                       rel="noopener noreferrer"
+                      className="linkAction"
                     >
                       <button className="btnAction">Voir le cours</button>
                     </a>

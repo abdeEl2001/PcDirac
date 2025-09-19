@@ -41,6 +41,11 @@
   gap: 20px;
   align-items: stretch; /* ensure all cards stretch to same height */
 }
+.linkAction{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 
 /* Item Card */
