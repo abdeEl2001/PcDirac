@@ -80,7 +80,6 @@
 
 .itemThumbnail {
   width: 100%;
-  height: 140px;
   border-radius: 8px;
   margin-bottom: 12px;
   object-fit: cover;
@@ -125,10 +124,6 @@
   .itemsGrid {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
-
-  .itemThumbnail {
-    height: 130px;
-  }
 }
 
 /* Mobiles */
@@ -158,9 +153,6 @@
     padding: 15px;
   }
 
-  .itemThumbnail {
-    height: 120px;
-  }
 }
 
 /* Small Mobiles */
