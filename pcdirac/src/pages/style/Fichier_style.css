@@ -39,20 +39,23 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 20px;
+  align-items: stretch; /* ensure all cards stretch to same height */
 }
+
 
 /* Item Card */
 .itemCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* push content up, button to bottom */
+  height: 100%; /* make all cards equal height in the grid */
   background-color: white;
   padding: 18px;
   border-radius: 12px;
   box-shadow: 0 6px 15px rgba(0,0,0,0.08);
   transition: transform 0.3s, box-shadow 0.3s;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
+
 
 .itemCard:hover {
   transform: translateY(-6px);
