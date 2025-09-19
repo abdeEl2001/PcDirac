@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./style/Fichier_style.css"; // generic reusable CSS
 
-const BACKEND_URL = "http://api.pcdirac.com";
+const BACKEND_URL = "https://api.pcdirac.com";
 const activitiesData = {
   "Tronc Commun": {
     Physique: {
@@ -148,7 +148,7 @@ const Activities = () => {
   const [niveauFilter, setNiveauFilter] = useState("");
   const [matiereFilter, setMatiereFilter] = useState("");
   const [uniteFilter, setUniteFilter] = useState("");
-  const [ActivitiesTitreFilter, setActivitiesTitreFilter] = useState("");
+  const [activitiesTitreFilter, setActivitiesTitreFilter] = useState("");
   const [professeurFilter, setProfesseurFilter] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -214,14 +214,14 @@ const Activities = () => {
 
   // Titres: from backend given niveau + matiere + unite
   const titresFromBackend = uniqueSorted(
-    Activities
-      .filter(c =>
-        (!niveauFilter || normalize(c.niveau) === normalize(niveauFilter)) &&
-        (!matiereFilter || normalize(c.matiere) === normalize(matiereFilter)) &&
-        (!uniteFilter || normalize(c.unite) === normalize(uniteFilter))
-      )
-      .map(c => c.activitie_titre)
-  );
+  Activities
+    .filter(c =>
+      (!niveauFilter || normalize(c.niveau) === normalize(niveauFilter)) &&
+      (!matiereFilter || normalize(c.matiere) === normalize(matiereFilter)) &&
+      (!uniteFilter || normalize(c.unite) === normalize(uniteFilter))
+    )
+    .map(c => c.titre)   // <-- change cours_titre → titre
+);
 
   const titresStatic =
     niveauFilter && matiereFilter && uniteFilter &&
@@ -244,7 +244,7 @@ const Activities = () => {
       (niveauFilter === "" || normalize(item.niveau) === normalize(niveauFilter)) &&
       (matiereFilter === "" || normalize(item.matiere) === normalize(matiereFilter)) &&
       (uniteFilter === "" || normalize(item.unite) === normalize(uniteFilter)) &&
-      (ActivitiesTitreFilter === "" || normalize(item.titre) === normalize(ActivitiesTitreFilter)) &&
+      (activitiesTitreFilter === "" || normalize(item.titre) === normalize(activitiesTitreFilter)) &&
       (professeurFilter === "" || normalize(item.professeur) === normalize(professeurFilter))
     );
   });
@@ -318,11 +318,11 @@ const Activities = () => {
 
             {/* Titre spécifique (dependent) */}
             <select
-              value={ActivitiesTitreFilter}
+              value={activitiesTitreFilter}
               onChange={(e) => setActivitiesTitreFilter(e.target.value)}
               className="filterSelect"
             >
-              <option value="">Titre d'Activité</option>
+              <option value="">Titre d'activité</option>
               {titresOptions.map((t, idx) => (
                 <option key={idx} value={t}>{t}</option>
               ))}
@@ -365,7 +365,7 @@ const Activities = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <button className="btnAction">Voir l'Activité</button>
+                      <button className="btnAction">Voir l'activité</button>
                     </a>
                   )}
                 </div>

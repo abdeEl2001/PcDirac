@@ -38,7 +38,7 @@ const Navbar = () => {
           <span>Exercices</span>
         </Link>
         <Link to="/activities" className="menuItem" onClick={() => setIsOpen(false)}>
-          <span>Activities</span>
+          <span>Activités</span>
         </Link>
         <Link to="/devoirSurveille" className="menuItem" onClick={() => setIsOpen(false)}>
           <span>Devoirs surveillés</span>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./style/Fichier_style.css"; // generic reusable CSS
 
-const BACKEND_URL = "http://api.pcdirac.com";
+const BACKEND_URL = "https://api.pcdirac.com";
 const documentsPedagogiquesData = {
   "Tronc Commun": {
     Physique: {
@@ -148,7 +148,7 @@ const DocumentsPedagogiques = () => {
   const [niveauFilter, setNiveauFilter] = useState("");
   const [matiereFilter, setMatiereFilter] = useState("");
   const [uniteFilter, setUniteFilter] = useState("");
-  const [DocumentsPedagogiquesTitreFilter, setDocumentsPedagogiquesTitreFilter] = useState("");
+  const [documentsPedagogiquesTitreFilter, setDocumentsPedagogiquesTitreFilter] = useState("");
   const [professeurFilter, setProfesseurFilter] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -156,7 +156,7 @@ const DocumentsPedagogiques = () => {
   useEffect(() => {
     const fetchDocumentsPedagogiques = async () => {
       try {
-        const response = await fetch(`${BACKEND_URL}/api/courses/etudiant/documentsPedagogiques`);
+        const response = await fetch(`${BACKEND_URL}/api/courses/etudiant/activitie`);
         if (!response.ok) throw new Error("Erreur réseau");
         const data = await response.json();
         setDocumentsPedagogiques(Array.isArray(data) ? data : []);
@@ -214,14 +214,14 @@ const DocumentsPedagogiques = () => {
 
   // Titres: from backend given niveau + matiere + unite
   const titresFromBackend = uniqueSorted(
-    DocumentsPedagogiques
-      .filter(c =>
-        (!niveauFilter || normalize(c.niveau) === normalize(niveauFilter)) &&
-        (!matiereFilter || normalize(c.matiere) === normalize(matiereFilter)) &&
-        (!uniteFilter || normalize(c.unite) === normalize(uniteFilter))
-      )
-      .map(c => c.documentPedagogique_titre)
-  );
+  DocumentsPedagogiques
+    .filter(c =>
+      (!niveauFilter || normalize(c.niveau) === normalize(niveauFilter)) &&
+      (!matiereFilter || normalize(c.matiere) === normalize(matiereFilter)) &&
+      (!uniteFilter || normalize(c.unite) === normalize(uniteFilter))
+    )
+    .map(c => c.titre)   // <-- change cours_titre → titre
+);
 
   const titresStatic =
     niveauFilter && matiereFilter && uniteFilter &&
@@ -244,7 +244,7 @@ const DocumentsPedagogiques = () => {
       (niveauFilter === "" || normalize(item.niveau) === normalize(niveauFilter)) &&
       (matiereFilter === "" || normalize(item.matiere) === normalize(matiereFilter)) &&
       (uniteFilter === "" || normalize(item.unite) === normalize(uniteFilter)) &&
-      (DocumentsPedagogiquesTitreFilter === "" || normalize(item.titre) === normalize(DocumentsPedagogiquesTitreFilter)) &&
+      (documentsPedagogiquesTitreFilter === "" || normalize(item.titre) === normalize(documentsPedagogiquesTitreFilter)) &&
       (professeurFilter === "" || normalize(item.professeur) === normalize(professeurFilter))
     );
   });
@@ -268,10 +268,10 @@ const DocumentsPedagogiques = () => {
 
   return (
     <div className="contentPage">
-      <h1 className="pageTitle">Nos Documents pédagogiques</h1>
+      <h1 className="pageTitle">Nos Documents Pédagogiques</h1>
 
       {loading ? (
-        <p className="loadingText">Chargement des documents pédagogiques...</p>
+        <p className="loadingText">Chargement des Documents pédagogiques...</p>
       ) : (
         <>
           {/* Filters Section */}
@@ -318,11 +318,11 @@ const DocumentsPedagogiques = () => {
 
             {/* Titre spécifique (dependent) */}
             <select
-              value={DocumentsPedagogiquesTitreFilter}
+              value={documentsPedagogiquesTitreFilter}
               onChange={(e) => setDocumentsPedagogiquesTitreFilter(e.target.value)}
               className="filterSelect"
             >
-              <option value="">Titre de document pédagogique</option>
+              <option value="">Titre du document pédagogique</option>
               {titresOptions.map((t, idx) => (
                 <option key={idx} value={t}>{t}</option>
               ))}
