@@ -2,9 +2,143 @@ import React, { useState, useEffect } from "react";
 import "./style/Fichier_style.css"; // generic reusable CSS
 
 const BACKEND_URL = "https://api.pcdirac.com";
+const coursesData = {
+  "Tronc Commun": {
+    Physique: {
+      "Mécanique": [
+        "Gravitation universelle",
+        "Actions mécaniques",
+        "Mouvement",
+        "Principe d'inertie",
+        "Equilibre d'un corps sous l'action de deux forces",
+        "Equilibre d'un corps sous l'action de trois forces non parallèles",
+        "Equilibre d'un corps solide en rotation autour d’un axe fixe"
+      ],
+      "Électricité": [
+        "Courant électrique continu",
+        "Tension électrique",
+        "Associations de conducteurs ohmiques",
+        "Caractéristiques de dipôles passifs",
+        "Caractéristiques de dipôles actifs"
+      ]
+    },
+    Chimie: {
+      "La chimie autour de nous": [
+        "Espèces chimiques",
+        "Extraction, séparation et identification des espèces chimiques",
+        "Synthèse des espèces chimiques"
+      ],
+      "Constitution de la matière": [
+        "Le modèle de l'atome",
+        "La géométrie de quelques molécules",
+        "Classification périodique des éléments chimiques",
+        "La mole",
+        "La concentration molaire"
+      ],
+      "Transformations de la matière": [
+        "Modélisation des transformations chimiques - Bilan de la matière"
+      ]
+    }
+  },
+  "1ère Année Bac": {
+    Physique: {
+      "Mécanique": [
+        "Rotation d'un solide indéformable autour d'un axe fixe",
+        "Travail et puissance d'une force",
+        "Travail et énergie cinétique",
+        "Travail et énergie potentielle de pesanteur - Énergie mécanique",
+        "Travail et énergie interne (Sciences Maths)",
+        "Énergie thermique et transfert thermique (Sciences Maths)"
+      ],
+      "Électricité": [
+        "Champ électrostatique",
+        "Énergie potentielle d'une charge électrique dans un champ électrique uniforme",
+        "Transfert d'énergie dans un circuit électrique - Comportement global d'un circuit électrique",
+        "Le champ magnétique",
+        "Le champ magnétique crée par un courant électrique",
+        "Les forces électromagnétiques - La loi de Laplace"
+      ],
+      "Optique": [
+        "Visibilité d'un objet",
+        "Les images formées par un miroir plan",
+        "Les images formées par une lentille mince convergente"
+      ]
+    },
+    Chimie: {
+      "Mesure en chimie": [
+        "Importance de la mesure en chimie",
+        "Grandeurs physiques liées à la quantité de matière",
+        "La concentration et les solutions électrolytiques",
+        "Suivi d'une transformation chimique",
+        "Mesure des quantités de matière en solution par conductimétrie",
+        "Les réactions acido-basiques",
+        "Les réactions d'oxydo-réduction",
+        "Les dosages (ou titrages) directs"
+      ],
+      "Chimie organique": [
+        "Expansion de la chimie organique",
+        "Les molécules organiques et les squelettes carbonés",
+        "Modification du squelette carboné",
+        "Les groupes caractéristiques en chimie organique"
+      ]
+    }
+  },
+  "2éme Année Bac": {
+    Physique: {
+      "Ondes": [
+        "Ondes mécaniques progressives",
+        "Ondes mécaniques progressives périodiques",
+        "Propagation des ondes lumineuses"
+      ],
+      "Physique nucléaire": [
+        "Décroissance radioactive",
+        "Noyaux, masse et énergie"
+      ],
+      "Electricité": [
+        "Dipôle RC",
+        "Dipôle RL",
+        "Oscillations libres d'un circuit RLC série",
+        "Circuit RLC série en régime sinusoïdal forcé",
+        "Ondes électromagnétiques",
+        "Modulation d'amplitude"
+      ],
+      "Mécanique": [
+        "Lois de Newton",
+        "Chute libre verticale d’un solide",
+        "Mouvements plans",
+        "Mouvement des satellites et des planètes",
+        "Mouvement de rotation d’un solide autour d’un axe fixe",
+        "Systèmes mécaniques oscillants",
+        "Aspects énergétiques des oscillations mécaniques",
+        "Atome et mécanique de Newton"
+      ]
+    },
+    Chimie: {
+      "Transformations lentes et transformations rapides": [
+        "Transformations lentes et transformations rapides",
+        "Suivi temporel d'une transformation chimique - Vitesse de réaction"
+      ],
+      "Transformations non totales d’un système": [
+        "Transformations chimiques s'effectuant dans les 2 sens",
+        "État d'équilibre d'un système chimique",
+        "Transformations liées à des réactions acide-base",
+        "Dosage acido-basique"
+      ],
+      "Sens d’évolution d’un système chimique": [
+        "Évolution spontanée d'un système chimique",
+        "Transformations spontanées dans les piles et production d'énergie",
+        "Transformations forcées (Électrolyse)"
+      ],
+      "Méthodes de contrôle de l’évolution des systèmes chimique": [
+        "Réactions d'estérification et d'hydrolyse",
+        "Contrôle de l'évolution d'un système"
+      ]
+    }
+  }
+};
 
-// ✅ Utility functions
 const normalize = (s) => (s ? String(s).trim().toLowerCase() : "");
+
 const uniqueSorted = (arr) =>
   Array.from(new Set(arr.filter(Boolean).map((s) => (typeof s === "string" ? s.trim() : s))))
     .sort((a, b) => a.localeCompare(b));
@@ -18,14 +152,13 @@ const Cours = () => {
   const [professeurFilter, setProfesseurFilter] = useState("");
   const [loading, setLoading] = useState(true);
 
-  // ✅ Fetch from API
+  // Fetch from API
   useEffect(() => {
     const fetchCourses = async () => {
       try {
         const response = await fetch(`${BACKEND_URL}/api/courses/etudiant/cours`);
         if (!response.ok) throw new Error("Erreur réseau");
         const data = await response.json();
-        console.log("Fetched courses:", data); // Debug
         setCourses(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error("Erreur lors du chargement des données:", error);
@@ -39,51 +172,84 @@ const Cours = () => {
   }, []);
 
   // ----------------------------
-  // Build dropdown options
+  // Build dropdown options:
+  // prefer backend values (from Courses) but fallback to static coursesData if backend has none
   // ----------------------------
 
-  // Matieres
-  const matieresOptions = uniqueSorted(
-    Courses.filter((c) => !niveauFilter || normalize(c.niveau) === normalize(niveauFilter)).map(
-      (c) => c.matiere
-    )
+  // Matieres: from backend given selected niveau
+  const matieresFromBackend = uniqueSorted(
+    Courses
+      .filter(c => !niveauFilter || normalize(c.niveau) === normalize(niveauFilter))
+      .map(c => c.matiere)
   );
 
-  // Unites
-  const unitesOptions = uniqueSorted(
-    Courses.filter(
-      (c) =>
+  const matieresStatic = niveauFilter && coursesData[niveauFilter]
+    ? Object.keys(coursesData[niveauFilter])
+    : [];
+
+  const matieresOptions = uniqueSorted([
+  ...matieresFromBackend,
+  ...matieresStatic
+]);
+
+  // Unites: from backend given selected niveau + matiere
+  const unitesFromBackend = uniqueSorted(
+    Courses
+      .filter(c =>
         (!niveauFilter || normalize(c.niveau) === normalize(niveauFilter)) &&
         (!matiereFilter || normalize(c.matiere) === normalize(matiereFilter))
-    ).map((c) => c.unite)
+      )
+      .map(c => c.unite)
   );
 
-  // Titres (✅ use cours_titre || titre)
-  const titresOptions = uniqueSorted(
-    Courses.filter(
-      (c) =>
-        (!niveauFilter || normalize(c.niveau) === normalize(niveauFilter)) &&
-        (!matiereFilter || normalize(c.matiere) === normalize(matiereFilter)) &&
-        (!uniteFilter || normalize(c.unite) === normalize(uniteFilter))
-    ).map((c) => c.cours_titre || c.titre)
-  );
+  const unitesStatic =
+    niveauFilter && matiereFilter && coursesData[niveauFilter] && coursesData[niveauFilter][matiereFilter]
+      ? Object.keys(coursesData[niveauFilter][matiereFilter])
+      : [];
+
+  const unitesOptions = uniqueSorted([
+    ...unitesFromBackend ,
+    ...unitesStatic
+  ])
+
+  // Titres: from backend given niveau + matiere + unite
+  const titresFromBackend = uniqueSorted(
+  Courses
+    .filter(c =>
+      (!niveauFilter || normalize(c.niveau) === normalize(niveauFilter)) &&
+      (!matiereFilter || normalize(c.matiere) === normalize(matiereFilter)) &&
+      (!uniteFilter || normalize(c.unite) === normalize(uniteFilter))
+    )
+    .map(c => c.titre)   // <-- change cours_titre → titre
+);
+
+  const titresStatic =
+    niveauFilter && matiereFilter && uniteFilter &&
+    coursesData[niveauFilter] &&
+    coursesData[niveauFilter][matiereFilter] &&
+    coursesData[niveauFilter][matiereFilter][uniteFilter]
+      ? coursesData[niveauFilter][matiereFilter][uniteFilter]
+      : [];
+
+  const titresOptions = titresFromBackend.length ? titresFromBackend : uniqueSorted(titresStatic);
+  
+
 
   // Professors
-  const uniqueProfs = uniqueSorted(Courses.map((c) => c.professeur));
+  const uniqueProfs = uniqueSorted(Courses.map(c => c.professeur));
 
-  // ✅ Filter displayed items
-  const displayedItems = Courses.filter((item) => {
-    const titre = item.cours_titre || item.titre;
+  // Filter displayed items — use normalized compare to avoid spaces/case mismatch
+  const displayedItems = Courses.filter(item => {
     return (
       (niveauFilter === "" || normalize(item.niveau) === normalize(niveauFilter)) &&
       (matiereFilter === "" || normalize(item.matiere) === normalize(matiereFilter)) &&
       (uniteFilter === "" || normalize(item.unite) === normalize(uniteFilter)) &&
-      (coursTitreFilter === "" || normalize(titre) === normalize(coursTitreFilter)) &&
+      (coursTitreFilter === "" || normalize(item.titre) === normalize(coursTitreFilter)) &&
       (professeurFilter === "" || normalize(item.professeur) === normalize(professeurFilter))
     );
   });
 
-  // ✅ Reset dependent filters
+  // handlers that reset dependent filters (like AddCourseForm)
   const handleNiveauChange = (val) => {
     setNiveauFilter(val);
     setMatiereFilter("");
@@ -108,21 +274,25 @@ const Cours = () => {
         <p className="loadingText">Chargement des cours...</p>
       ) : (
         <>
-          {/* ✅ Filters Section */}
+          {/* Filters Section */}
           <div className="filtersSection">
+            {/* Niveau (from static keys or backend if you prefer) */}
             <select
               value={niveauFilter}
               onChange={(e) => handleNiveauChange(e.target.value)}
               className="filterSelect"
             >
               <option value="">Tous les niveaux</option>
-              {uniqueSorted(Courses.map((c) => c.niveau)).map((lvl, idx) => (
-                <option key={idx} value={lvl}>
-                  {lvl}
-                </option>
+              {/* keep options consistent: use union of backend values + static keys */}
+              {[...new Set([
+                ...Courses.map(c => c.niveau).filter(Boolean).map(s => s.trim()),
+                ...Object.keys(coursesData)
+              ])].map((lvl, idx) => (
+                <option key={idx} value={lvl}>{lvl}</option>
               ))}
             </select>
 
+            {/* Matière (dependent) */}
             <select
               value={matiereFilter}
               onChange={(e) => handleMatiereChange(e.target.value)}
@@ -130,12 +300,11 @@ const Cours = () => {
             >
               <option value="">Matière</option>
               {matieresOptions.map((m, idx) => (
-                <option key={idx} value={m}>
-                  {m}
-                </option>
+                <option key={idx} value={m}>{m}</option>
               ))}
             </select>
 
+            {/* Unité (dependent) */}
             <select
               value={uniteFilter}
               onChange={(e) => handleUniteChange(e.target.value)}
@@ -143,25 +312,23 @@ const Cours = () => {
             >
               <option value="">Unité</option>
               {unitesOptions.map((u, idx) => (
-                <option key={idx} value={u}>
-                  {u}
-                </option>
+                <option key={idx} value={u}>{u}</option>
               ))}
             </select>
 
+            {/* Titre spécifique (dependent) */}
             <select
               value={coursTitreFilter}
               onChange={(e) => setCoursTitreFilter(e.target.value)}
               className="filterSelect"
             >
-              <option value="">Titre de Cours</option>
+              <option value="">Titre de Cour</option>
               {titresOptions.map((t, idx) => (
-                <option key={idx} value={t}>
-                  {t}
-                </option>
+                <option key={idx} value={t}>{t}</option>
               ))}
             </select>
 
+            {/* Professeur */}
             <select
               value={professeurFilter}
               onChange={(e) => setProfesseurFilter(e.target.value)}
@@ -169,53 +336,40 @@ const Cours = () => {
             >
               <option value="">Tous les professeurs</option>
               {uniqueProfs.map((prof, idx) => (
-                <option key={idx} value={prof}>
-                  {prof}
-                </option>
+                <option key={idx} value={prof}>{prof}</option>
               ))}
             </select>
           </div>
 
-          {/* ✅ Items Grid */}
+          {/* Items Grid */}
           <div className="itemsGrid">
             {displayedItems.length > 0 ? (
-              displayedItems.map((item) => {
-                const titre = item.cours_titre || item.titre;
-                return (
-                  <div key={item.id} className="itemCard">
-                    {item.miniature && (
-                      <img
-                        src={`${BACKEND_URL}${item.miniature}`}
-                        alt={titre}
-                        className="itemThumbnail"
-                      />
-                    )}
-                    <h3 className="itemTitle">{titre}</h3>
-                    <p className="itemInfo">
-                      <strong>Niveau:</strong> {item.niveau}
-                    </p>
-                    <p className="itemInfo">
-                      <strong>Matière:</strong> {item.matiere}
-                    </p>
-                    <p className="itemInfo">
-                      <strong>Unité:</strong> {item.unite}
-                    </p>
-                    <p className="itemInfo">
-                      <strong>Professeur:</strong> {item.professeur}
-                    </p>
-                    <p className="itemDescription">{item.description}</p>
-                    {item.pdf_fichier && (
-                      <a
-                        href={`${BACKEND_URL}${item.pdf_fichier}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <button className="btnAction">Voir le cours</button>
-                      </a>
-                    )}
-                  </div>
-                );
-              })
+              displayedItems.map((item) => (
+                <div key={item.id} className="itemCard">
+                  {item.miniature && (
+                    <img
+                      src={`${BACKEND_URL}${item.miniature}`}
+                      alt={item.titre}
+                      className="itemThumbnail"
+                    />
+                  )}
+                  <h3 className="itemTitle">{item.titre}</h3>
+                  <p className="itemInfo"><strong>Niveau:</strong> {item.niveau}</p>
+                  <p className="itemInfo"><strong>Matière:</strong> {item.matiere}</p>
+                  <p className="itemInfo"><strong>Unité:</strong> {item.unite}</p>
+                  <p className="itemInfo"><strong>Professeur:</strong> {item.professeur}</p>
+                  <p className="itemDescription">{item.description}</p>
+                  {item.pdf_fichier && (
+                    <a
+                      href={`${BACKEND_URL}${item.pdf_fichier}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <button className="btnAction">Voir le cours</button>
+                    </a>
+                  )}
+                </div>
+              ))
             ) : (
               <p className="noItemsText">Aucun cours trouvé pour ces filtres.</p>
             )}
