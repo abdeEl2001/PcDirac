@@ -322,7 +322,7 @@ const Cours = () => {
               onChange={(e) => setCoursTitreFilter(e.target.value)}
               className="filterSelect"
             >
-              <option value="">Titre de Cour</option>
+              <option value="">Titre de Cours</option>
               {titresOptions.map((t, idx) => (
                 <option key={idx} value={t}>{t}</option>
               ))}
