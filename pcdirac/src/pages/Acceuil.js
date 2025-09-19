@@ -30,7 +30,7 @@ export default function Accueil() {
       className="heroText"
     >
       Une plateforme moderne pour apprendre la <strong>Physique</strong> et la <strong>Chimie</strong> 
-       à travers des cours interactifs, des exercices pratiques et des activités engageantes.
+       &nbsp;à travers des cours interactifs, des exercices pratiques et des activités engageantes.
     </motion.p>
 
 
