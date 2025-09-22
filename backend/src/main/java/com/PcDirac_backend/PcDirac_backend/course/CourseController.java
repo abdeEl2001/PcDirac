@@ -32,13 +32,14 @@ public class CourseController {
 
     @PostMapping
     public ResponseEntity<?> addCourse(
+            @RequestParam("etape") String etape,
             @RequestParam("titre") String titre,
-            @RequestParam(value = "niveau", required = false) String niveau,
+            @RequestParam(value = "niveau",required = false) String niveau,
             @RequestParam("categorie") String categorie,
-            @RequestParam(value = "matiere", required = false) String matiere,
+            @RequestParam(value = "matiere",required = false) String matiere,
             @RequestParam("ordre") String ordre,
+            @RequestParam(value = "unite" ,required = false) String unite,
             @RequestParam("miniature") MultipartFile miniature,
-            @RequestParam(value = "unite", required = false) String unite,
             @RequestParam("pdf_fichier") MultipartFile pdf_fichier,
             @RequestParam("userId") Long userId
     ) {
@@ -47,51 +48,30 @@ public class CourseController {
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
             Course course = new Course();
+            course.setEtape(etape);
             course.setTitre(titre);
             course.setNiveau(niveau);
             course.setCategorie(categorie);
             course.setMatiere(matiere);
             course.setOrdre(ordre);
-            course.setUser(user);
             course.setUnite(unite);
+            course.setUser(user);
 
-            // Directories
-            String miniatureDir = "/var/www/PcDirac/backend/uploads/miniature/";
-            String pdfDir = "/var/www/PcDirac/backend/uploads/courses/";
+            // Save course and files
+            courseService.saveCourse(course, miniature, pdf_fichier);
 
-            new File(miniatureDir).mkdirs();
-            new File(pdfDir).mkdirs();
-
-            // Save miniature
-            if (miniature != null && !miniature.isEmpty()) {
-                String miniatureFilename = System.currentTimeMillis() + "_" + miniature.getOriginalFilename();
-                String miniaturePath = miniatureDir + miniatureFilename;
-                miniature.transferTo(new File(miniaturePath));
-                course.setMiniature("/uploads/miniature/" + miniatureFilename);
-            }
-
-            // Save PDF
-            if (pdf_fichier != null && !pdf_fichier.isEmpty()) {
-                String pdfFilename = System.currentTimeMillis() + "_" + pdf_fichier.getOriginalFilename();
-                String pdfPath = pdfDir + pdfFilename;
-                pdf_fichier.transferTo(new File(pdfPath));
-                course.setPdf_fichier("/uploads/courses/" + pdfFilename);
-            }
-
-            // Save course to DB
-            courseRepository.save(course);
-
+            // Return simple success message
             Map<String, String> response = new HashMap<>();
             response.put("message", "Cours ajouté avec succès !");
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
             e.printStackTrace();
+            // Only return the error if the file/database saving failed
             return ResponseEntity.badRequest()
                     .body("Erreur lors de l'ajout du cours : " + e.getMessage());
         }
     }
-
 
     @GetMapping
     public ResponseEntity<?> getCoursesByUser(@RequestParam("userId") Long userId) {
@@ -118,12 +98,13 @@ public class CourseController {
     @PutMapping("/{id}")
     public ResponseEntity<Course> updateCourse(
             @PathVariable Long id,
+            @RequestParam("etape") String etape,
             @RequestParam("titre") String titre,
-            @RequestParam(value = "niveau", required = false) String niveau,
+            @RequestParam(value = "niveau",required = false) String niveau,
             @RequestParam("categorie") String categorie,
-            @RequestParam(value = "matiere", required = false) String matiere,
+            @RequestParam(value = "matiere",required = false) String matiere,
             @RequestParam("ordre") String ordre,
-            @RequestParam(value = "unite", required = false) String unite,
+            @RequestParam(value = "unite" ,required = false) String unite,
             @RequestParam(value = "miniature", required = false) MultipartFile miniature,
             @RequestParam(value = "pdf_fichier", required = false) MultipartFile pdfFile
     ) throws IOException {
@@ -131,6 +112,7 @@ public class CourseController {
                 .orElseThrow(() -> new RuntimeException("Course not found"));
 
         // update text fields
+        course.setEtape(etape);
         course.setTitre(titre);
         course.setNiveau(niveau);
         course.setCategorie(categorie);
@@ -179,7 +161,7 @@ public class CourseController {
 
             // ✅ Delete miniature if exists
             if (course.getMiniature() != null) {
-                File miniatureFile = new File("/var/www/PcDirac/backend" + course.getMiniature());
+                File miniatureFile = new File("C:/Users/abdel" + course.getMiniature());
                 if (miniatureFile.exists()) {
                     miniatureFile.delete();
                 }
@@ -187,7 +169,7 @@ public class CourseController {
 
             // ✅ Delete pdf if exists
             if (course.getPdf_fichier() != null) {
-                File pdfFile = new File("/var/www/PcDirac/backend" + course.getPdf_fichier());
+                File pdfFile = new File("C:/Users/abdel" + course.getPdf_fichier());
                 if (pdfFile.exists()) {
                     pdfFile.delete();
                 }
@@ -205,115 +187,41 @@ public class CourseController {
             return ResponseEntity.badRequest().body("Erreur lors de la suppression du cours : " + e.getMessage());
         }
     }
+    private CourseDTO mapToDTO(Course course) {
+        return new CourseDTO(
+                course.getId(),
+                course.getEtape(),
+                course.getTitre(),      // ✅ This should be the course title// <-- Etape
+                course.getNiveau(),
+                course.getCategorie(),
+                course.getMatiere(),
+                course.getOrdre(),
+                course.getMiniature(),
+                course.getUnite(),
+                course.getPdf_fichier(),
+                course.getUser().getPrenom() + " " + course.getUser().getNom()
+        );
 
-    @GetMapping("/etudiant/cours")
-    public List<CourseDTO> getAllCourses() {
-        return courseRepository.findByCategorie("Cours").stream()
-                .map(course -> new CourseDTO(
-                        course.getId(),
-                        course.getTitre(),
-                        course.getNiveau(),
-                        course.getCategorie(),
-                        course.getMatiere(),
-                        course.getOrdre(),
-                        course.getMiniature(),
-                        course.getUnite(),
-                        course.getPdf_fichier(),
-                        course.getUser().getPrenom() + " " + course.getUser().getNom()
-                ))
+    }
+    public List<CourseDTO> getCoursesByEtape(String etape) {
+        return courseRepository.findByEtape(etape).stream()
+                .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
-
-    @GetMapping("/etudiant/exercice")
-    public List<CourseDTO> getAllExercices() {
-        return courseRepository.findByCategorie("Exercices").stream()
-                .map(course -> new CourseDTO(
-                        course.getId(),
-                        course.getTitre(),
-                        course.getNiveau(),
-                        course.getCategorie(),
-                        course.getMatiere(),
-                        course.getOrdre(),
-                        course.getMiniature(),
-                        course.getUnite(),
-                        course.getPdf_fichier(),
-                        course.getUser().getPrenom() + " " + course.getUser().getNom()
-                ))
-                .collect(Collectors.toList());
+    @GetMapping("/etudiant/lycee")
+    public List<CourseDTO> getAllLyceeCourses() {
+        return getCoursesByEtape("Lycée"); // you can change "Lycée" dynamically
     }
 
-    @GetMapping("/etudiant/activitie")
-    public List<CourseDTO> getAllActivities() {
-        return courseRepository.findByCategorie("Activités").stream()
-                .map(course -> new CourseDTO(
-                        course.getId(),
-                        course.getTitre(),
-                        course.getNiveau(),
-                        course.getCategorie(),
-                        course.getMatiere(),
-                        course.getOrdre(),
-                        course.getMiniature(),
-                        course.getUnite(),
-                        course.getPdf_fichier(),
-                        course.getUser().getPrenom() + " " + course.getUser().getNom()
-                ))
-                .collect(Collectors.toList());
+    @GetMapping("/etudiant/agregation")
+    public List<CourseDTO> getAllCollegeCourses() {
+        return getCoursesByEtape("Agrégation"); // you can change "Lycée" dynamically
     }
 
-    @GetMapping("/etudiant/devoirSurveille")
-    public List<CourseDTO> getAllDevoirSurveille() {
-        return courseRepository.findByCategorie("Devoirs surveillés").stream()
-                .map(course -> new CourseDTO(
-                        course.getId(),
-                        course.getTitre(),
-                        course.getNiveau(),
-                        course.getCategorie(),
-                        course.getMatiere(),
-                        course.getOrdre(),
-                        course.getMiniature(),
-                        course.getUnite(),
-                        course.getPdf_fichier(),
-                        course.getUser().getPrenom() + " " + course.getUser().getNom()
-                ))
-                .collect(Collectors.toList());
+    @GetMapping("/etudiant/license")
+    public List<CourseDTO> getAllLicenseCourses() {
+        return getCoursesByEtape("Licence"); // you can change "Lycée" dynamically
     }
-
-    @GetMapping("/etudiant/documentsPedagogiques")
-    public List<CourseDTO> getAllDocumentsPedagogiques() {
-        return courseRepository.findByCategorie("Documents pédagogiques").stream()
-                .map(course -> new CourseDTO(
-                        course.getId(),
-                        course.getTitre(),
-                        course.getNiveau(),
-                        course.getCategorie(),
-                        course.getMatiere(),
-                        course.getOrdre(),
-                        course.getMiniature(),
-                        course.getUnite(),
-                        course.getPdf_fichier(),
-                        course.getUser().getPrenom() + " " + course.getUser().getNom()
-                ))
-                .collect(Collectors.toList());
-    }
-
-    @GetMapping("/etudiant/examensNationaux")
-    public List<CourseDTO> getAllExamensNationaux() {
-        return courseRepository.findByCategorie("Examens Nationaux").stream()
-                .map(course -> new CourseDTO(
-                        course.getId(),
-                        course.getTitre(),
-                        course.getNiveau(),
-                        course.getCategorie(),
-                        course.getMatiere(),
-                        course.getOrdre(),
-                        course.getMiniature(),
-                        course.getUnite(),
-                        course.getPdf_fichier(),
-                        course.getUser().getPrenom() + " " + course.getUser().getNom()
-                ))
-                .collect(Collectors.toList());
-    }
-
 
 
 }

@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./style/List-cours_style.css";
+import "./style/List-videos_style.css";
 import { Link } from "react-router-dom";
 
-const ListCours = () => {
-  const [courses, setCourses] = useState([]);
+const ListVideo = () => {
+  const [videos, setVideos] = useState([]);
   const [filter, setFilter] = useState("all"); // cours/exercices/activités
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   const userId = sessionStorage.getItem("userId"); // logged-in user ID
 
-  // Fetch courses for this user
+  // Fetch videos for this user
   useEffect(() => {
-    const fetchCourses = async () => {
+    const fetchVideos = async () => {
       if (!userId) {
         setError("Utilisateur non connecté");
         setLoading(false);
@@ -21,57 +21,56 @@ const ListCours = () => {
       }
 
       try {
-        const response = await axios.get(`https://api.pcdirac.com/api/courses?userId=${userId}`);
-        setCourses(response.data);
+        const response = await axios.get(`https://api.pcdirac.com/api/videos?userId=${userId}`);
+        setVideos(response.data);
       } catch (err) {
         console.error(err);
-        setError("Erreur lors de la récupération des cours");
+        setError("Erreur lors de la récupération des vidéos");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchCourses();
+    fetchVideos();
   }, [userId]);
 
   // Appliquer les filtres (catégorie + unité)
-  const filteredCourses = courses.filter((course) => {
-  const matchCategorie =
-    filter === "all" ||
-    course.categorie.toLowerCase() === filter.toLowerCase();
-  return matchCategorie;
+  const filteredVideos = videos.filter((course) => {
+  const cat = course.categorie?.toLowerCase().trim();
+  const filt = filter.toLowerCase().trim();
+  return filt === "all" || cat === filt;
 });
 
 
-  if (loading) return <p>Chargement des cours...</p>;
+  if (loading) return <p>Chargement des vidéos...</p>;
   if (error) return <p>{error}</p>;
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Voulez-vous vraiment supprimer ce cours ?")) return;
+    if (!window.confirm("Voulez-vous vraiment supprimer cette vidéo ?")) return;
 
     try {
-      await axios.delete(`https://api.pcdirac.com/api/courses/${id}`);
-      setCourses(courses.filter((course) => course.id !== id)); // remove from UI
+      await axios.delete(`https://api.pcdirac.com/api/videos/${id}`);
+      setVideos(videos.filter((video) => video.id !== id)); // remove from UI
     } catch (err) {
       console.error(err);
-      setError("Erreur lors de la suppression du cours");
+      setError("Erreur lors de la suppression de la vidéo");
     }
   };
 
   return (
-    <div className="coursListContent">
+    <div className="videoListContent">
       <div className="container">
         {/* Header */}
         <header>
-          <h1>Liste des Fichiers</h1>
-          <Link to="/addCours" className="add-course-btn">
-            Ajouter un Nouveau Fichier
+          <h1>Liste des vidéos</h1>
+          <Link to="/addVideo" className="add-video-btn">
+            Ajouter une Nouvelle Vidéo
           </Link>
         </header>
 
         {/* Filters Section */}
         <div className="filter-section">
-          <label htmlFor="category-filter">Filtrer par catégorie:</label>
+          <label htmlFor="category-filter">Filtrer par catégorie :</label>
           <select
             id="category-filter"
             value={filter}
@@ -96,10 +95,10 @@ const ListCours = () => {
         </div>
 
         {/* Table */}
-        <table className="course-table">
+        <table className="video-table">
           <thead>
             <tr>
-              <th>Titre du fichier</th>
+              <th>Titre de la vidéo</th>
               <th>Niveau</th>
               <th>Unité</th>
               <th>Catégorie</th>
@@ -107,36 +106,36 @@ const ListCours = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredCourses.length > 0 ? (
-              filteredCourses.map((course) => (
-                <tr key={course.id}>
-                  <td>{course.titre}</td>
-                  <td>{course.niveau}</td>
-                  <td>{course.unite || "—"}</td>
-                  <td>{course.categorie}</td>
+            {filteredVideos.length > 0 ? (
+              filteredVideos.map((video) => (
+                <tr key={video.id}>
+                  <td>{video.titre}</td>
+                  <td>{video.niveau || "—"}</td>
+                  <td>{video.unite || "—"}</td>
+                  <td>{video.categorie}</td>
                   <td>
-                    {course.pdf_fichier ? (
+                    {video.lien ? (
                       <a
-                        href={`http://localhost:8080${course.pdf_fichier}`}
+                        href={video.lien}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="see_pdf"
+                        className="see_video"
                       >
-                        Voir PDF
+                        Voir Vidéo
                       </a>
                     ) : (
-                      "Pas de PDF"
+                      "Pas de vidéo"
                     )}
                     <br />
                     <button
-                      className="btn editCours"
-                      onClick={() => (window.location.href = `/editCours/${course.id}`)}
+                      className="btn editVideo"
+                      onClick={() => (window.location.href = `/editVideo/${video.id}`)}
                     >
                       Modifier
                     </button>
                     <button
-                      className="btn deleteCours"
-                      onClick={() => handleDelete(course.id)}
+                      className="btn deleteVideo"
+                      onClick={() => handleDelete(video.id)}
                     >
                       Supprimer
                     </button>
@@ -145,7 +144,7 @@ const ListCours = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="5">Aucun fichier trouvé</td>
+                <td colSpan="5">Aucune vidéo trouvée</td>
               </tr>
             )}
           </tbody>
@@ -155,4 +154,4 @@ const ListCours = () => {
   );
 };
 
-export default ListCours;
+export default ListVideo;

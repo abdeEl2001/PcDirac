@@ -31,23 +31,17 @@ const Navbar = () => {
         <Link to="/acceuil" className="menuItem" onClick={() => setIsOpen(false)}>
           <span>Acceuil</span>
         </Link>
-        <Link to="/cours" className="menuItem" onClick={() => setIsOpen(false)}>
-          <span>Cours</span>
+        <Link to="/videos" className="menuItem" onClick={() => setIsOpen(false)}>
+          <span>Videos</span>
         </Link>
-        <Link to="/exercices" className="menuItem" onClick={() => setIsOpen(false)}>
-          <span>Exercices</span>
+        <Link to="/lycee" className="menuItem" onClick={() => setIsOpen(false)}>
+          <span>Lycée</span>
         </Link>
-        <Link to="/activities" className="menuItem" onClick={() => setIsOpen(false)}>
-          <span>Activités</span>
+        <Link to="/licence" className="menuItem" onClick={() => setIsOpen(false)}>
+          <span>Licence</span>
         </Link>
-        <Link to="/devoirSurveille" className="menuItem" onClick={() => setIsOpen(false)}>
-          <span>Devoirs surveillés</span>
-        </Link>
-        <Link to="/documentsPedagogiques" className="menuItem" onClick={() => setIsOpen(false)}>
-          <span>Documents pédagogiques</span>
-        </Link>
-        <Link to="/examensNationaux" className="menuItem" onClick={() => setIsOpen(false)}>
-          <span>Examens Nationaux</span>
+        <Link to="/agregation" className="menuItem" onClick={() => setIsOpen(false)}>
+          <span>Agrégation</span>
         </Link>
       </nav>
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./style/FormCours_style.css";
+import "./style/FormVideo_style.css";
 
 // ----------------- DATA -----------------
 const lyceeData = {
@@ -157,6 +157,7 @@ const licenceChimieUnites = [
   "Cinétique et catalyse"
 ];
 
+// Agrégation categories requested
 const agregationCategories = [
   "Concours d'entrée",
   "Concours de sortie",
@@ -166,6 +167,7 @@ const agregationCategories = [
   "Montage physique"
 ];
 
+// Filière mapping (Agrégation added)
 const filiereData = {
   Lycée: lyceeData,
   Licence: { Physique: licencePhysiqueUnites, Chimie: licenceChimieUnites },
@@ -173,7 +175,7 @@ const filiereData = {
 };
 
 // ----------------- COMPONENT -----------------
-const EditCourseForm = () => {
+const EditVideoForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -186,19 +188,18 @@ const EditCourseForm = () => {
     categorie: "Cours",
     ordre: "",
     miniature: null,
-    pdf_fichier: null,
+    lien: "",
   });
 
   const [miniatureFile, setMiniatureFile] = useState(null);
-  const [pdfFile, setPdfFile] = useState(null);
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
 
-  // fetch existing course
+  // fetch existing video
   useEffect(() => {
-    const fetchCourse = async () => {
+    const fetchVideo = async () => {
       try {
-        const response = await axios.get(`https://api.pcdirac.com/api/courses/${id}`);
+        const response = await axios.get(`https://api.pcdirac.com/api/videos/${id}`);
         const data = response.data;
         setFormData({
           etape: data.etape || "",
@@ -209,50 +210,28 @@ const EditCourseForm = () => {
           categorie: data.categorie || "Cours",
           ordre: data.ordre || "",
           miniature: data.miniature || null,
-          pdf_fichier: data.pdf_fichier || null,
+          lien: data.lien || "",
         });
       } catch (err) {
         console.error(err);
-        setError("Erreur lors du chargement du cours");
+        setError("Erreur lors du chargement de la vidéo");
       }
     };
-    fetchCourse();
+    fetchVideo();
   }, [id]);
 
-  // ----------------- HANDLE CHANGE -----------------
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    if (name === "etape") {
-      setFormData((prev) => ({
-        ...prev,
-        etape: value,
-        niveau: "",
-        matiere: "",
-        unite: "",
-        titre: "",
-        categorie: "Cours"
-      }));
-    } else if (name === "categorie" && value === "Examens Nationaux") {
-      setFormData((prev) => ({
-        ...prev,
-        categorie: value,
-        niveau: "2éme Année Bac", // forçage si Examens Nationaux
-        matiere: "",
-        unite: ""
-      }));
-    } else if (name === "niveau") {
-      setFormData((prev) => ({ ...prev, niveau: value, matiere: "", unite: "", titre: "" }));
-    } else if (name === "matiere") {
-      setFormData((prev) => ({ ...prev, matiere: value, unite: "", titre: "" }));
-    } else if (name === "unite") {
-      setFormData((prev) => ({ ...prev, unite: value, titre: "" }));
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
-    }
+    setFormData(prev => ({
+      ...prev,
+      [name]: value,
+      ...(name === "etape" ? { niveau: "", matiere: "", unite: "", titre: "" } : {}),
+      ...(name === "niveau" ? { matiere: "", unite: "", titre: "" } : {}),
+      ...(name === "matiere" ? { unite: "", titre: "" } : {}),
+      ...(name === "unite" ? { titre: "" } : {})
+    }));
   };
 
-  // ----------------- HANDLE SUBMIT -----------------
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -264,17 +243,16 @@ const EditCourseForm = () => {
         if (value !== null && value !== undefined) form.append(key, value);
       });
       if (miniatureFile) form.append("miniature", miniatureFile);
-      if (pdfFile) form.append("pdf_fichier", pdfFile);
 
-      await axios.put(`https://api.pcdirac.com/api/courses/${id}`, form, {
+      await axios.put(`https://api.pcdirac.com/api/videos/${id}`, form, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      setSuccess("Cours modifié avec succès !");
-      setTimeout(() => navigate("/list-cours"), 1500);
+      setSuccess("Vidéo modifiée avec succès !");
+      setTimeout(() => navigate("/list-videos"), 1500);
     } catch (err) {
       console.error(err);
-      setError("Erreur lors de la modification du cours");
+      setError("Erreur lors de la modification de la vidéo");
     }
   };
 
@@ -301,14 +279,14 @@ const EditCourseForm = () => {
 
   return (
     <div className="container_Form_cours">
-      <h1>Modifier le Cours</h1>
+      <h1>Modifier la Vidéo</h1>
 
       {error && <div className="alert alert-danger">{error}</div>}
       {success && <div className="alert alert-success">{success}</div>}
 
       <form onSubmit={handleSubmit} encType="multipart/form-data">
         {/* Étape */}
-        <div className="form-group-cours">
+        <div className="form-group-video">
           <label>Étape :</label>
           <select name="etape" value={formData.etape ?? ""} onChange={handleChange} required>
             <option value="">-- Sélectionner Étape --</option>
@@ -317,9 +295,9 @@ const EditCourseForm = () => {
             ))}
           </select>
         </div>
-        {/* Niveau*/}
+         {/* Niveau */}
             {formData.etape === "Lycée" && (
-              <div className="form-group-cours">
+              <div className="form-group-video">
                 <label>Niveau :</label>
                 <select name="niveau" value={formData.niveau ?? ""} onChange={handleChange} required>
                   <option value="">-- Sélectionner Niveau --</option>
@@ -327,40 +305,46 @@ const EditCourseForm = () => {
                 </select>
               </div>
             )}
-        {/* Catégorie */}
-        <div className="form-group-cours">
-          <label>Catégorie :</label>
-          <select
-            name="categorie"
-            value={formData.categorie ?? "Cours"}
-            onChange={handleChange}
-            required
-          >
-            {formData.etape === "Agrégation"
-              ? agregationCategories.map(cat => <option key={cat} value={cat}>{cat}</option>)
-              : formData.etape === "Licence"
-              ? ["Cours Licence", "Travaux dirigés"].map(cat => <option key={cat} value={cat}>{cat}</option>)
-              : (
-                <>
-                  <option value="Cours">Cours</option>
-                  <option value="Exercices">Exercices</option>
-                  <option value="Activités">Activités</option>
-                  <option value="Devoirs surveillés">Devoirs surveillés</option>
-                  <option value="Documents pédagogiques">Documents pédagogiques</option>
-                  {/* Examens Nationaux uniquement si niveau = 2éme Année Bac */}
-                  {formData.niveau === "2éme Année Bac" && (
-                    <option value="Examens Nationaux">Examens Nationaux</option>
-                  )}
-                </>
-              )
-            }
-          </select>
-        </div>
-           {/*Matière, Unité → hide for Examens Nationaux */}
+         {/* Catégorie */}
+          <div className="form-group-video">
+            <label>Catégorie :</label>
+            <select
+              name="categorie"
+              value={formData.categorie ?? "Cours"}
+              onChange={handleChange}
+              required
+            >
+              {formData.etape === "Agrégation"
+                ? agregationCategories.map(cat => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))
+                : formData.etape === "Licence"
+                ? ["Cours Licence", "Travaux dirigés"].map(cat => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))
+                : (
+                  <>
+                    <option value="Cours">Cours</option>
+                    <option value="Exercices">Exercices</option>
+                    <option value="Activités">Activités</option>
+                    <option value="Devoirs surveillés">Devoirs surveillés</option>
+                    <option value="Documents pédagogiques">Documents pédagogiques</option>
+                    {/* Examens Nationaux uniquement si 2éme Année Bac */}
+                    {formData.niveau === "2éme Année Bac" && (
+                      <option value="Examens Nationaux">Examens Nationaux</option>
+                    )}
+                  </>
+                )
+              }
+            </select>
+          </div>
+
+           
+            {/* Matière, Unité → hide for Examens Nationaux */}
             {formData.categorie !== "Examens Nationaux" && (
           <>
             {formData.etape && (
-              <div className="form-group-cours">
+              <div className="form-group-video">
                 <label>Matière :</label>
                 <select
                   name="matiere"
@@ -377,13 +361,13 @@ const EditCourseForm = () => {
             )}
 
             {(formData.etape === "Lycée" || formData.etape === "Licence") && (
-              <div className="form-group-cours">
+              <div className="form-group-video">
                 <label>Unité :</label>
                 <select
                   name="unite"
                   value={formData.unite ?? ""}
                   onChange={handleChange}
-                  required={formData.etape !== "Agrégation"}
+                  required
                   disabled={formData.etape === "Lycée" ? (!formData.matiere || !formData.niveau) : !formData.matiere}
                 >
                   <option value="">-- Sélectionner Unité --</option>
@@ -395,7 +379,7 @@ const EditCourseForm = () => {
         )}
 
         {/* Titre */}
-        <div className="form-group-cours">
+        <div className="form-group-video">
           <label>Titre :</label>
           {formData.categorie !== "Examens Nationaux" && formData.etape === "Lycée" ? (
             <select
@@ -420,27 +404,31 @@ const EditCourseForm = () => {
         </div>
 
         {/* Ordre */}
-        <div className="form-group-cours">
+        <div className="form-group-video">
           <label>Ordre :</label>
           <input type="text" name="ordre" value={formData.ordre ?? ""} onChange={handleChange} required />
         </div>
 
+        {/* Lien Vidéo */}
+        <div className="form-group-video">
+          <label>Lien Vidéo :</label>
+          <input
+            type="url"
+            name="lien"
+            value={formData.lien ?? ""}
+            onChange={handleChange}
+            placeholder="https://..."
+            required
+          />
+        </div>
+
         {/* Miniature */}
-        <div className="form-group-cours">
+        <div className="form-group-video-edit-video">
           <label>Miniature actuelle :</label>
           {formData.miniature ? (
             <img src={`https://api.pcdirac.com${formData.miniature}`} alt="Miniature" width="120" />
           ) : <p>Aucune miniature</p>}
           <input type="file" accept="image/*" onChange={(e) => setMiniatureFile(e.target.files[0])} />
-        </div>
-
-        {/* PDF */}
-        <div className="form-group-cours">
-          <label>PDF actuel :</label>
-          {formData.pdf_fichier ? (
-            <a href={`https://api.pcdirac.com${formData.pdf_fichier}`} target="_blank" rel="noopener noreferrer">Voir PDF</a>
-          ) : <p>Aucun PDF</p>}
-          <input type="file" accept="application/pdf" onChange={(e) => setPdfFile(e.target.files[0])} />
         </div>
 
         <button type="submit" className="add-course-btn">Sauvegarder les modifications</button>
@@ -449,4 +437,4 @@ const EditCourseForm = () => {
   );
 };
 
-export default EditCourseForm;
+export default EditVideoForm;

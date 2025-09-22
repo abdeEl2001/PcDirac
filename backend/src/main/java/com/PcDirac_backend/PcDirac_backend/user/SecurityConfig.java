@@ -52,18 +52,18 @@ public class SecurityConfig {
                                 "/api/auth/login",
                                 "/api/courses",
                                 "/api/courses/{id}",
-                                "/api/users/header/{id}",
-                                "/uploads/**",
+                                "/api/users/header/{id}",   // notice I fixed "api" → "/api"
+                                "/uploads/**" ,
                                 "/api/users/update/{id}",
-                                "/api/users/profileInformation/{userId}",
+                                "api/users/profileInformation/{userId}",
                                 "/api/auth/forgot-password",
                                 "/api/auth/reset-password",
-                                "/api/courses/etudiant/cours",
-                                "/api/courses/etudiant/exercice",
-                                "/api/courses/etudiant/activitie",
-                                "/api/courses/etudiant/devoirSurveille",
-                                "/api/courses/etudiant/documentsPedagogiques",
-                                "/api/courses/etudiant/examensNationaux"
+                                "/api/courses/etudiant/lycee",
+                                "/api/courses/etudiant/agregation",
+                                "/api/courses/etudiant/license",
+                                "/api/videos",
+                                "/api/videos/{id}",
+                                "/api/videos/all"// <-- add this line
                         ).permitAll()
                         .anyRequest().authenticated()
                 );

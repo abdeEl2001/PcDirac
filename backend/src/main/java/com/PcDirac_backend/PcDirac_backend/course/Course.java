@@ -16,6 +16,7 @@ public class Course {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    private String etape;
     private String titre;
     @Column(nullable = true)
     private String niveau;
@@ -36,6 +37,7 @@ public class Course {
 
     public Course(Long id,
                   User user,
+                  String etape,
                   String titre,
                   String niveau,
                   String categorie,
@@ -48,6 +50,7 @@ public class Course {
                   LocalDateTime mise_a_jour_le) {
         this.id = id;
         this.user = user;
+        this.etape=etape;
         this.titre = titre;
         this.niveau = niveau;
         this.categorie = categorie;
@@ -61,6 +64,7 @@ public class Course {
     }
 
     public Course(User user,
+                  String etape,
                   String titre,
                   String categorie,
                   String niveau,
@@ -72,6 +76,7 @@ public class Course {
                   LocalDateTime cree_le,
                   LocalDateTime mise_a_jour_le) {
         this.user = user;
+        this.etape=etape;
         this.titre = titre;
         this.categorie = categorie;
         this.niveau = niveau;
@@ -98,6 +103,14 @@ public class Course {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getEtape() {
+        return etape;
+    }
+
+    public void setEtape(String etape) {
+        this.etape = etape;
     }
 
     public String getTitre() {

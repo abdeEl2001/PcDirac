@@ -1,14 +1,11 @@
 // App.js
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./Navbar";
-import Footer from "./Footer";
 import Acceuil from "./pages/Acceuil";
-import Cours from "./pages/Cours";
-import Exercices from "./pages/Exercices";
-import Activities from "./pages/Activities";
-import DevoirSurveille from "./pages/DevoirSurveille";
-import DocumentsPedagogiques from "./pages/DocumentsPedagogiques";
-import ExamensNationaux from "./pages/ExamensNationaux";
+import Videos from "./pages/videos";
+import Lycce from "./pages/Lycee";
+import Licence from "./pages/Licence";
+import Agregation from "./pages/Agregation";
 
 function App() {
   return (
@@ -20,17 +17,12 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/acceuil" replace />} />
           <Route path="/acceuil" element={<Acceuil />} />
-          <Route path="/cours" element={<Cours />} />
-          <Route path="/exercices" element={<Exercices />} />
-          <Route path="/activities" element={<Activities />} />
-          <Route path="/devoirSurveille" element={<DevoirSurveille/>}/>
-          <Route path="/documentsPedagogiques" element={<DocumentsPedagogiques/>}/>
-          <Route path="/examensNationaux" element={<ExamensNationaux/>}/>
+          <Route path="/videos" element={<Videos/>}/>
+          <Route path="/lycee" element={<Lycce />} />
+          <Route path="/licence" element={<Licence/>}/>
+          <Route path="/agregation" element={<Agregation/>}/>
         </Routes>
       </main>
-      <footer>
-        <Footer />
-      </footer>
     </Router>
   );
 }

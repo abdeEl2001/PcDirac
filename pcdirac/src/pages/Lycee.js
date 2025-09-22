@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import "./style/Fichier_style.css"; // generic reusable CSS
+import "./style/Fichier_style.css";
 
 const BACKEND_URL = "https://api.pcdirac.com";
+
 const coursesData = {
   "Tronc Commun": {
     Physique: {
@@ -138,241 +139,265 @@ const coursesData = {
 };
 
 const normalize = (s) => (s ? String(s).trim().toLowerCase() : "");
-
 const uniqueSorted = (arr) =>
   Array.from(new Set(arr.filter(Boolean).map((s) => (typeof s === "string" ? s.trim() : s))))
     .sort((a, b) => a.localeCompare(b));
 
-const Cours = () => {
-  const [Courses, setCourses] = useState([]);
+const Lycee = () => {
+  const [Lycee, setLycee] = useState([]);
   const [niveauFilter, setNiveauFilter] = useState("");
+  const [categorieFilter, setCategorieFilter] = useState("");
   const [matiereFilter, setMatiereFilter] = useState("");
   const [uniteFilter, setUniteFilter] = useState("");
-  const [coursTitreFilter, setCoursTitreFilter] = useState("");
+  const [lyceeTitreFilter, setLyceeTitreFilter] = useState("");
   const [professeurFilter, setProfesseurFilter] = useState("");
   const [loading, setLoading] = useState(true);
 
-  // Fetch from API
+  // Save filters in localStorage
   useEffect(() => {
-    const fetchCourses = async () => {
+    sessionStorage.setItem(
+      "lyceeFilters",
+      JSON.stringify({
+        niveau: niveauFilter,
+        categorie: categorieFilter,
+        matiere: matiereFilter,
+        unite: uniteFilter,
+        lyceeTitre: lyceeTitreFilter,
+        professeur: professeurFilter
+      })
+    );
+  }, [niveauFilter, categorieFilter, matiereFilter, uniteFilter, lyceeTitreFilter, professeurFilter]);
+
+  // Fetch courses from backend
+  useEffect(() => {
+    const fetchLycee = async () => {
       try {
-        const response = await fetch(`${BACKEND_URL}/api/courses/etudiant/cours`);
-        if (!response.ok) throw new Error("Erreur réseau");
+        const response = await fetch(`${BACKEND_URL}/api/courses/etudiant/lycee`);
         const data = await response.json();
-        setCourses(Array.isArray(data) ? data : []);
+        const lyceeArray = Array.isArray(data) ? data : [];
+        setLycee(lyceeArray);
+
+        // Force default selections
+        const defaultNiveau = lyceeArray.find(c => normalize(c.niveau) === "tronc commun");
+        const defaultMatiere =
+          defaultNiveau?.matiere && normalize(defaultNiveau.matiere) === "physique"
+            ? defaultNiveau.matiere
+            : defaultNiveau?.matiere || "Physique";
+        let defaultCategorie =
+          defaultNiveau?.categorie && normalize(defaultNiveau.categorie) === "cours"
+            ? defaultNiveau.categorie
+            : defaultNiveau?.categorie || "Cours";
+
+        if (defaultCategorie === "Examens Nationaux" && defaultNiveau?.niveau !== "2éme Année Bac") {
+          defaultCategorie = "Cours";
+        }
+
+        setNiveauFilter(defaultNiveau?.niveau || "Tronc Commun");
+        setMatiereFilter(defaultMatiere);
+        setCategorieFilter(defaultCategorie);
+
+        // Reset others
+        setUniteFilter("");
+        setLyceeTitreFilter("");
+        setProfesseurFilter("");
       } catch (error) {
         console.error("Erreur lors du chargement des données:", error);
-        setCourses([]);
+        setLycee([]);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchCourses();
+    fetchLycee();
   }, []);
 
-  // ----------------------------
-  // Build dropdown options:
-  // prefer backend values (from Courses) but fallback to static coursesData if backend has none
-  // ----------------------------
+  // Category options
+  const categorieOptions = uniqueSorted(Lycee.map((c) => c.categorie))
+    .filter(cat => !(niveauFilter !== "2éme Année Bac" && cat === "Examens Nationaux"));
+  const orderedCategorieOptions = ["Cours", ...categorieOptions.filter((cat) => cat !== "Cours")];
 
-  // Matieres: from backend given selected niveau
+  // Matière options
   const matieresFromBackend = uniqueSorted(
-    Courses
-      .filter(c => !niveauFilter || normalize(c.niveau) === normalize(niveauFilter))
-      .map(c => c.matiere)
-  );
-
-  const matieresStatic = niveauFilter && coursesData[niveauFilter]
-    ? Object.keys(coursesData[niveauFilter])
-    : [];
-
-  const matieresOptions = uniqueSorted([
-  ...matieresFromBackend,
-  ...matieresStatic
-]);
-
-  // Unites: from backend given selected niveau + matiere
-  const unitesFromBackend = uniqueSorted(
-    Courses
-      .filter(c =>
-        (!niveauFilter || normalize(c.niveau) === normalize(niveauFilter)) &&
-        (!matiereFilter || normalize(c.matiere) === normalize(matiereFilter))
+    Lycee
+      .filter(
+        (c) =>
+          (!niveauFilter || normalize(c.niveau) === normalize(niveauFilter)) &&
+          (!categorieFilter || normalize(c.categorie) === normalize(categorieFilter))
       )
-      .map(c => c.unite)
+      .map((c) => c.matiere)
   );
+  const matieresStatic = niveauFilter && coursesData[niveauFilter] ? Object.keys(coursesData[niveauFilter]) : [];
+  const matieresOptions = uniqueSorted([...matieresFromBackend, ...matieresStatic]);
 
+  // Unité options
+  const unitesFromBackend = uniqueSorted(
+    Lycee
+      .filter(
+        (c) =>
+          (!niveauFilter || normalize(c.niveau) === normalize(niveauFilter)) &&
+          (!categorieFilter || normalize(c.categorie) === normalize(categorieFilter)) &&
+          (!matiereFilter || normalize(c.matiere) === normalize(matiereFilter))
+      )
+      .map((c) => c.unite)
+  );
   const unitesStatic =
     niveauFilter && matiereFilter && coursesData[niveauFilter] && coursesData[niveauFilter][matiereFilter]
       ? Object.keys(coursesData[niveauFilter][matiereFilter])
       : [];
+  const unitesOptions = uniqueSorted([...unitesFromBackend, ...unitesStatic]);
 
-  const unitesOptions = uniqueSorted([
-    ...unitesFromBackend ,
-    ...unitesStatic
-  ])
-
-  // Titres: from backend given niveau + matiere + unite
+  // Titres options
   const titresFromBackend = uniqueSorted(
-  Courses
-    .filter(c =>
-      (!niveauFilter || normalize(c.niveau) === normalize(niveauFilter)) &&
-      (!matiereFilter || normalize(c.matiere) === normalize(matiereFilter)) &&
-      (!uniteFilter || normalize(c.unite) === normalize(uniteFilter))
-    )
-    .map(c => c.titre)   // <-- change cours_titre → titre
-);
-
+    Lycee
+      .filter(
+        (c) =>
+          (!niveauFilter || normalize(c.niveau) === normalize(niveauFilter)) &&
+          (!categorieFilter || normalize(c.categorie) === normalize(categorieFilter)) &&
+          (!matiereFilter || normalize(c.matiere) === normalize(matiereFilter)) &&
+          (!uniteFilter || normalize(c.unite) === normalize(uniteFilter))
+      )
+      .map((c) => c.cours)
+  );
   const titresStatic =
-    niveauFilter && matiereFilter && uniteFilter &&
+    niveauFilter &&
+    matiereFilter &&
+    uniteFilter &&
     coursesData[niveauFilter] &&
     coursesData[niveauFilter][matiereFilter] &&
     coursesData[niveauFilter][matiereFilter][uniteFilter]
       ? coursesData[niveauFilter][matiereFilter][uniteFilter]
       : [];
-
   const titresOptions = titresFromBackend.length ? titresFromBackend : uniqueSorted(titresStatic);
-  
 
+  // Professeurs
+  const uniqueProfs = uniqueSorted(Lycee.map((c) => c.professeur));
 
-  // Professors
-  const uniqueProfs = uniqueSorted(Courses.map(c => c.professeur));
-
-  // Filter displayed items — use normalized compare to avoid spaces/case mismatch
-  const displayedItems = Courses.filter(item => {
+  // Displayed items
+  const displayedItems = Lycee.filter((item) => {
     return (
       (niveauFilter === "" || normalize(item.niveau) === normalize(niveauFilter)) &&
+      (categorieFilter === "" || normalize(item.categorie) === normalize(categorieFilter)) &&
       (matiereFilter === "" || normalize(item.matiere) === normalize(matiereFilter)) &&
       (uniteFilter === "" || normalize(item.unite) === normalize(uniteFilter)) &&
-      (coursTitreFilter === "" || normalize(item.titre) === normalize(coursTitreFilter)) &&
+      (lyceeTitreFilter === "" || normalize(item.titre) === normalize(lyceeTitreFilter)) &&
       (professeurFilter === "" || normalize(item.professeur) === normalize(professeurFilter))
     );
   });
 
-  // handlers that reset dependent filters (like AddCourseForm)
+  // Handlers
   const handleNiveauChange = (val) => {
     setNiveauFilter(val);
+    setCategorieFilter("");
     setMatiereFilter("");
     setUniteFilter("");
-    setCoursTitreFilter("");
+    setLyceeTitreFilter("");
+  };
+  const handleCategorieChange = (val) => {
+    setCategorieFilter(val);
+    setMatiereFilter("");
+    setUniteFilter("");
+    setLyceeTitreFilter("");
   };
   const handleMatiereChange = (val) => {
     setMatiereFilter(val);
     setUniteFilter("");
-    setCoursTitreFilter("");
+    setLyceeTitreFilter("");
   };
   const handleUniteChange = (val) => {
     setUniteFilter(val);
-    setCoursTitreFilter("");
+    setLyceeTitreFilter("");
+  };
+  const getButtonLabel = (categorie) => {
+    switch (categorie) {
+      case "Cours":
+        return "Voir le cour";
+      case "Exercices":
+        return "Voir l'exercice";
+      case "Activités":
+        return "Voir l'activité";
+      case "Devoirs surveillés":
+        return "Voir le Devoir";
+      case "Documents pédagogiques":
+        return "Voir le Document";
+      case "Examens Nationaux":
+        return "Voir l'examen";
+      default:
+        return "Voir le fichier";
+    }
   };
 
   return (
     <div className="contentPage">
-      <h1 className="pageTitle">Nos Cours</h1>
-
+      <h1 className="pageTitle">Lycée</h1>
       {loading ? (
-        <p className="loadingText">Chargement des cours...</p>
+        <p className="loadingText">Chargement des fichiers...</p>
       ) : (
         <>
-          {/* Filters Section */}
           <div className="filtersSection">
-            {/* Niveau (from static keys or backend if you prefer) */}
-            <select
-              value={niveauFilter}
-              onChange={(e) => handleNiveauChange(e.target.value)}
-              className="filterSelect"
-            >
+            <select value={niveauFilter} onChange={(e) => handleNiveauChange(e.target.value)} className="filterSelect">
               <option value="">Tous les niveaux</option>
-              {/* keep options consistent: use union of backend values + static keys */}
-              {[...new Set([
-                ...Courses.map(c => c.niveau).filter(Boolean).map(s => s.trim()),
-                ...Object.keys(coursesData)
-              ])].map((lvl, idx) => (
+              {[...new Set([...Lycee.map((c) => c.niveau).filter(Boolean).map((s) => s.trim()), ...Object.keys(coursesData)])].map((lvl, idx) => (
                 <option key={idx} value={lvl}>{lvl}</option>
               ))}
             </select>
 
-            {/* Matière (dependent) */}
-            <select
-              value={matiereFilter}
-              onChange={(e) => handleMatiereChange(e.target.value)}
-              className="filterSelect"
-            >
-              <option value="">Matière</option>
-              {matieresOptions.map((m, idx) => (
-                <option key={idx} value={m}>{m}</option>
+            <select value={categorieFilter} onChange={(e) => handleCategorieChange(e.target.value)} className="filterSelect">
+              <option value="">Toutes les catégories</option>
+              {orderedCategorieOptions.map((cat, idx) => (
+                <option key={idx} value={cat}>{cat}</option>
               ))}
             </select>
 
-            {/* Unité (dependent) */}
-            <select
-              value={uniteFilter}
-              onChange={(e) => handleUniteChange(e.target.value)}
-              className="filterSelect"
-            >
-              <option value="">Unité</option>
-              {unitesOptions.map((u, idx) => (
-                <option key={idx} value={u}>{u}</option>
-              ))}
-            </select>
+            {categorieFilter !== "Examens Nationaux" && (
+              <>
+                <select value={matiereFilter} onChange={(e) => handleMatiereChange(e.target.value)} className="filterSelect">
+                  <option value="">Matière</option>
+                  {matieresOptions.map((m, idx) => (<option key={idx} value={m}>{m}</option>))}
+                </select>
 
-            {/* Titre spécifique (dependent) */}
-            <select
-              value={coursTitreFilter}
-              onChange={(e) => setCoursTitreFilter(e.target.value)}
-              className="filterSelect"
-            >
-              <option value="">Titre de Cours</option>
-              {titresOptions.map((t, idx) => (
-                <option key={idx} value={t}>{t}</option>
-              ))}
-            </select>
+                <select value={uniteFilter} onChange={(e) => handleUniteChange(e.target.value)} className="filterSelect">
+                  <option value="">Unité</option>
+                  {unitesOptions.map((u, idx) => (<option key={idx} value={u}>{u}</option>))}
+                </select>
 
-            {/* Professeur */}
-            <select
-              value={professeurFilter}
-              onChange={(e) => setProfesseurFilter(e.target.value)}
-              className="filterSelect"
-            >
+                <select value={lyceeTitreFilter} onChange={(e) => setLyceeTitreFilter(e.target.value)} className="filterSelect">
+                  <option value="">Titre</option>
+                  {titresOptions.map((t, idx) => (<option key={idx} value={t}>{t}</option>))}
+                </select>
+              </>
+            )}
+
+            <select value={professeurFilter} onChange={(e) => setProfesseurFilter(e.target.value)} className="filterSelect">
               <option value="">Tous les professeurs</option>
-              {uniqueProfs.map((prof, idx) => (
-                <option key={idx} value={prof}>{prof}</option>
-              ))}
+              {uniqueProfs.map((prof, idx) => (<option key={idx} value={prof}>{prof}</option>))}
             </select>
           </div>
 
-          {/* Items Grid */}
           <div className="itemsGrid">
             {displayedItems.length > 0 ? (
               displayedItems.map((item) => (
                 <div key={item.id} className="itemCard">
-                  {item.miniature && (
-                    <img
-                      src={`${BACKEND_URL}${item.miniature}`}
-                      alt={item.titre}
-                      className="itemThumbnail"
-                    />
-                  )}
+                  {item.miniature && <img src={`${BACKEND_URL}${item.miniature}`} alt={item.titre} className="itemThumbnail" />}
                   <h3 className="itemTitle">{item.titre}</h3>
-                  <p className="itemInfo"><strong>Niveau:</strong> {item.niveau}</p>
-                  <p className="itemInfo"><strong>Matière:</strong> {item.matiere}</p>
-                  <p className="itemInfo"><strong>Unité:</strong> {item.unite}</p>
+                  <p className="itemInfo"><strong>Catégorie:</strong> {item.categorie}</p>
+                  {item.categorie !== "Examens Nationaux" && (
+                    <>
+                      <p className="itemInfo"><strong>Niveau:</strong> {item.niveau}</p>
+                      <p className="itemInfo"><strong>Matière:</strong> {item.matiere}</p>
+                      <p className="itemInfo"><strong>Unité:</strong> {item.unite}</p>
+                    </>
+                  )}
                   <p className="itemInfo"><strong>Professeur:</strong> {item.professeur}</p>
                   <p className="itemDescription">{item.description}</p>
                   {item.pdf_fichier && (
-                    <a
-                      href={`${BACKEND_URL}${item.pdf_fichier}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="linkAction"
-                    >
-                      <button className="btnAction">Voir le cours</button>
+                    <a href={`${BACKEND_URL}${item.pdf_fichier}`} target="_blank" rel="noopener noreferrer">
+                      <button className="btnAction">{getButtonLabel(item.categorie)}</button>
                     </a>
                   )}
                 </div>
               ))
             ) : (
-              <p className="noItemsText">Aucun cours trouvé pour ces filtres.</p>
+              <p className="noItemsText">Aucun fichier trouvé pour ces filtres.</p>
             )}
           </div>
         </>
@@ -381,4 +406,4 @@ const Cours = () => {
   );
 };
 
-export default Cours;
+export default Lycee;

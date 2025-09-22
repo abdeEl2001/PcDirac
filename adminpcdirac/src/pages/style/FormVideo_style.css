@@ -3,7 +3,7 @@
     padding: 0px;
     box-sizing: border-box;
 }
-.coursFormContent{
+.videoFormContent{
     width: 100%;
     height: 100%;
 }
@@ -17,9 +17,12 @@ body, h1, label, input, select, button {
 body {
     background-color: #f4f4f4;
 }
+.container_Form_video h1{
+    padding: 30px 10px;
+}
 
 /* Conteneur principal */
-.container_Form_cours {
+.container_Form_video {
     width: 50%;
     margin: 40px auto;
     padding: 30px;
@@ -33,34 +36,30 @@ body {
 }
 
 /* Style de l'en-tête */
-.container_Form_cours header {
+.container_Form_video header {
     text-align: center;
     margin-bottom: 30px;
 }
 
-.container_Form_cours header h1 {
+.container_Form_video header h1 {
     font-size: 26px;
     color: #333333;
 }
-.container_Form_cours h1{
-     padding: 30px 10px;
-}
+
 /* Style du formulaire */
-.container_Form_cours form {
+.container_Form_video form {
     display: flex;
     flex-direction: column;
     width: 100%;
 }
 
 /* Groupe de formulaire */
-.container_Form_cours .form-group-cours {
+.container_Form_video .form-group-video {
     margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
 }
 
 /* Style des labels */
-.container_Form_cours label {
+.container_Form_video label {
     display: block;
     margin-bottom: 8px;
     font-size: 16px;
@@ -68,7 +67,7 @@ body {
 }
 
 /* Style des champs de saisie */
-.container_Form_cours .inputAddCourse[type="text"], .inputAddCourse[type="file"], select {
+.container_Form_video .inputAddVideo[type="text"], .inputAddVideo[type="file"], select {
     width: 100%;
     padding: 12px;
     font-size: 14px;
@@ -78,13 +77,13 @@ body {
 }
 
 /* Effet focus pour les champs de saisie */
-.container_Form_cours input[type="text"]:focus, input[type="file"]:focus, select:focus {
+.container_Form_video input[type="text"]:focus, input[type="file"]:focus, select:focus {
     border-color: #4CAF50;
     outline: none;
 }
 
 /* Style des boutons */
-.container_Form_cours button.add-course-btn {
+.container_Form_video button.add-video-btn {
     display: inline-block;
     padding: 14px 20px;
     font-size: 16px;
@@ -97,34 +96,34 @@ body {
 }
 
 /* Effet hover et active pour les boutons */
-.container_Form_cours button.add-course-btn:hover {
+.container_Form_video button.add-video-btn:hover {
     background-color: #45a049;
 }
 
-.container_Form_cours button.add-course-btn:active {
+.container_Form_video button.add-video-btn:active {
     transform: scale(0.98);
 }
 
 /* Espacement entre les éléments */
-.container_Form_cours .form-group-cours label,
-.form-group-cours input,
-.form-group-cours select {
+.container_Form_video .form-group-video label,
+.form-group-video input,
+.form-group-video select {
     margin-bottom: 8px;
 }
 
 /* Style pour les erreurs de validation (facultatif) */
-.container_Form_cours input:invalid {
+.container_Form_video input:invalid {
     border-color: #e74c3c;
 }
 
 /* Style pour le champ de téléchargement de fichier */
-.container_Form_cours input[type="file"] {
+.container_Form_video input[type="file"] {
     border: none;
     background-color: #f9f9f9;
     padding: 12px 0;
 }
 
-.container_Form_cours input[type="file"]::file-selector-button {
+.container_Form_video input[type="file"]::file-selector-button {
     padding: 8px 16px;
     background-color: #4CAF50;
     color: white;
@@ -135,11 +134,12 @@ body {
 }
 
 /* Style du bouton pour télécharger le fichier */
-.container_Form_cours input[type="file"]::file-selector-button:hover {
+.container_Form_video input[type="file"]::file-selector-button:hover {
     background-color: #45a049;
 }
-.form-group-cours input[type="text"],
-.form-group-cours input[type="url"] {
+
+.form-group-video input[type="text"],
+.form-group-video input[type="url"] {
     width: 100%;
     padding: 12px;
     font-size: 14px;
@@ -149,34 +149,35 @@ body {
     transition: border-color 0.3s;
 }
 
-.form-group-cours input[type="text"]:focus,
-.form-group-cours input[type="url"]:focus {
+.form-group-video input[type="text"]:focus,
+.form-group-video input[type="url"]:focus {
     border-color: #1ABC9C;
     outline: none;
 }
 
 /* Style responsive pour les petits écrans */
 @media (max-width: 768px) {
-    .container_Form_cours {
+    .container_Form_video {
         width: 90%;
     }
 
-    .container_Form_cours header h1 {
+    .container_Form_video header h1 {
         font-size: 22px;
     }
 
-    .container_Form_cours button.add-course-btn {
+    .container_Form_video button.add-video-btn {
         width: 100%;
     }
 }
+
 /* Style pour le champ de téléchargement d'image miniature */
-.container_Form_cours .form-group-cours input[type="file"] {
+.container_Form_video .form-group-video input[type="file"] {
     border: none;
     background-color: #f9f9f9;
     padding: 12px 0;
 }
 
-.container_Form_cours input[type="file"]::file-selector-button {
+.container_Form_video input[type="file"]::file-selector-button {
     padding: 8px 16px;
     background-color: #4CAF50;
     color: white;
@@ -186,32 +187,17 @@ body {
     transition: background-color 0.3s;
 }
 
-.container_Form_cours input[type="file"]::file-selector-button:hover {
+.container_Form_video input[type="file"]::file-selector-button:hover {
     background-color: #45a049;
 }
 
 /* Espacement supplémentaire pour le champ d'image */
-.container_Form_cours .form-group-cours label[for="miniature"] {
+.container_Form_video .form-group-video label[for="miniature"] {
     margin-top: 20px;
     font-weight: bold;
 }
 
 /* Largeur maximale de l'image miniature dans le formulaire */
-.container_Form_cours .form-group-cours input#thumbnail {
+.container_Form_video .form-group-video input#thumbnail {
     padding: 10px 0;
-}
-
-/* Style responsive pour les petits écrans */
-@media (max-width: 768px) {
-    .container_Form_cours {
-        width: 90%;
-    }
-
-    .container_Form_cours header h1 {
-        font-size: 22px;
-    }
-
-    .container_Form_cours button.add-course-btn {
-        width: 100%;
-    }
 }
