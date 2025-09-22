@@ -2,7 +2,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import Acceuil from "./pages/Acceuil";
-import Videos from "./pages/videos";
+import Videos from "./pages/Videos";
 import Lycce from "./pages/Lycee";
 import Licence from "./pages/Licence";
 import Agregation from "./pages/Agregation";
