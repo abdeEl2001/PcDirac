@@ -40,6 +40,21 @@ const Navbar = () => {
           </div>
         </div>
 
+        {/* Videos */}
+        <div className="videoSection">
+          <div className="videoTitle">
+            <Link to="/list-video">
+              <img
+                src="/images/youtube.png"
+                alt="Fichiers"
+                className="iconsMenu"
+              />
+              Liste des Videos
+            </Link>
+          </div>
+        </div>
+
+
         {/* Profile */}
         <div className="profilSection">
           <div className="profilTitle">

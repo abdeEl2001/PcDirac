@@ -3,12 +3,15 @@ import Navbar from "./Navbar";
 import HeaderAdmin from "./HeaderAdmin";
 import Dashboard from "./pages/Dashboard";
 import ListCours from "./pages/List-cours";
+import ListVideo from "./pages/List-videos";
 import Profil from "./pages/ProfileForm";
 import AddCourseForm from "./pages/AddCourseForm";
+import AddVideoForm from "./pages/AddVideosForm";
 import Login from "./pages/Login";
 import PrivateRoute from "./PrivateRoute";
 import Inscription from "./pages/Inscription";
 import EditCourseForm from "./pages/EditFormCourse";
+import EditVideoForm from "./pages/EditFormVideos";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import "./MenuStyle.css";
@@ -50,9 +53,13 @@ function App() {
                       <Route path="/" element={<Dashboard />} />
                       <Route path="/dashboard" element={<Dashboard />} />
                       <Route path="/list-cours" element={<ListCours />} />
+                      <Route path="/list-video" element={<ListVideo/>}/>
                       <Route path="/profil" element={<Profil />} />
                       <Route path="/addCours" element={<AddCourseForm />} />
-                      <Route path="/editCours/:id" element={<EditCourseForm />}/>                    </Routes>
+                      <Route path="/addVideo" element={<AddVideoForm/>}/>
+                      <Route path="/editCours/:id" element={<EditCourseForm />}/>
+                      <Route path="/editVideo/:id" element={<EditVideoForm/>}/>
+                    </Routes>
                   </div>
                 </div>
               </div>
