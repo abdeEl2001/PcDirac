@@ -20,27 +20,30 @@ public class CourseController {
     private final CourseService courseService;
     private final UserRepository userRepository;
     private final CourseRepository courseRepository;
-    private final String basePath = "/var/www/PcDirac/backend/uploads/";
+
+    // Base upload directory
+    private final String UPLOAD_DIR = "/var/www/PcDirac/backend/uploads/";
 
     public CourseController(CourseService courseService,
                             UserRepository userRepository,
                             CourseRepository courseRepository) {
         this.courseService = courseService;
         this.userRepository = userRepository;
-        this.courseRepository=courseRepository;
+        this.courseRepository = courseRepository;
     }
 
+    // ================= ADD COURSE =================
     @PostMapping
     public ResponseEntity<?> addCourse(
             @RequestParam("etape") String etape,
             @RequestParam("titre") String titre,
-            @RequestParam(value = "niveau",required = false) String niveau,
+            @RequestParam(value = "niveau", required = false) String niveau,
             @RequestParam("categorie") String categorie,
-            @RequestParam(value = "matiere",required = false) String matiere,
+            @RequestParam(value = "matiere", required = false) String matiere,
             @RequestParam("ordre") String ordre,
-            @RequestParam(value = "unite" ,required = false) String unite,
+            @RequestParam(value = "unite", required = false) String unite,
             @RequestParam("miniature") MultipartFile miniature,
-            @RequestParam("pdf_fichier") MultipartFile pdf_fichier,
+            @RequestParam("pdf_fichier") MultipartFile pdfFile,
             @RequestParam("userId") Long userId
     ) {
         try {
@@ -57,22 +60,123 @@ public class CourseController {
             course.setUnite(unite);
             course.setUser(user);
 
-            // Save course and files
-            courseService.saveCourse(course, miniature, pdf_fichier);
+            // Save files
+            if (miniature != null && !miniature.isEmpty()) {
+                File miniatureDir = new File(UPLOAD_DIR + "miniature/");
+                if (!miniatureDir.exists()) miniatureDir.mkdirs();
+                String miniaturePath = UPLOAD_DIR + "miniature/" + miniature.getOriginalFilename();
+                miniature.transferTo(new File(miniaturePath));
+                course.setMiniature("/uploads/miniature/" + miniature.getOriginalFilename());
+            }
 
-            // Return simple success message
+            if (pdfFile != null && !pdfFile.isEmpty()) {
+                File pdfDir = new File(UPLOAD_DIR + "courses/");
+                if (!pdfDir.exists()) pdfDir.mkdirs();
+                String pdfPath = UPLOAD_DIR + "courses/" + pdfFile.getOriginalFilename();
+                pdfFile.transferTo(new File(pdfPath));
+                course.setPdf_fichier("/uploads/courses/" + pdfFile.getOriginalFilename());
+            }
+
+            courseRepository.save(course);
+
             Map<String, String> response = new HashMap<>();
             response.put("message", "Cours ajouté avec succès !");
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
             e.printStackTrace();
-            // Only return the error if the file/database saving failed
-            return ResponseEntity.badRequest()
-                    .body("Erreur lors de l'ajout du cours : " + e.getMessage());
+            return ResponseEntity.badRequest().body("Erreur lors de l'ajout du cours : " + e.getMessage());
         }
     }
 
+    // ================= UPDATE COURSE =================
+    @PutMapping("/{id}")
+    public ResponseEntity<Course> updateCourse(
+            @PathVariable Long id,
+            @RequestParam("etape") String etape,
+            @RequestParam("titre") String titre,
+            @RequestParam(value = "niveau", required = false) String niveau,
+            @RequestParam("categorie") String categorie,
+            @RequestParam(value = "matiere", required = false) String matiere,
+            @RequestParam("ordre") String ordre,
+            @RequestParam(value = "unite", required = false) String unite,
+            @RequestParam(value = "miniature", required = false) MultipartFile miniature,
+            @RequestParam(value = "pdf_fichier", required = false) MultipartFile pdfFile
+    ) throws IOException {
+
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+
+        // Update text fields
+        course.setEtape(etape);
+        course.setTitre(titre);
+        course.setNiveau(niveau);
+        course.setCategorie(categorie);
+        course.setMatiere(matiere);
+        course.setOrdre(ordre);
+        course.setUnite(unite);
+
+        // Update miniature
+        if (miniature != null && !miniature.isEmpty()) {
+            if (course.getMiniature() != null) {
+                File oldMiniature = new File(UPLOAD_DIR + "miniature/" + new File(course.getMiniature()).getName());
+                if (oldMiniature.exists()) oldMiniature.delete();
+            }
+            File miniatureDir = new File(UPLOAD_DIR + "miniature/");
+            if (!miniatureDir.exists()) miniatureDir.mkdirs();
+            String miniaturePath = UPLOAD_DIR + "miniature/" + miniature.getOriginalFilename();
+            miniature.transferTo(new File(miniaturePath));
+            course.setMiniature("/uploads/miniature/" + miniature.getOriginalFilename());
+        }
+
+        // Update PDF
+        if (pdfFile != null && !pdfFile.isEmpty()) {
+            if (course.getPdf_fichier() != null) {
+                File oldPdf = new File(UPLOAD_DIR + "courses/" + new File(course.getPdf_fichier()).getName());
+                if (oldPdf.exists()) oldPdf.delete();
+            }
+            File pdfDir = new File(UPLOAD_DIR + "courses/");
+            if (!pdfDir.exists()) pdfDir.mkdirs();
+            String pdfPath = UPLOAD_DIR + "courses/" + pdfFile.getOriginalFilename();
+            pdfFile.transferTo(new File(pdfPath));
+            course.setPdf_fichier("/uploads/courses/" + pdfFile.getOriginalFilename());
+        }
+
+        return ResponseEntity.ok(courseRepository.save(course));
+    }
+
+    // ================= DELETE COURSE =================
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteCourse(@PathVariable Long id) {
+        try {
+            Course course = courseRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Course not found"));
+
+            // Delete miniature
+            if (course.getMiniature() != null) {
+                File miniatureFile = new File(UPLOAD_DIR + "miniature/" + new File(course.getMiniature()).getName());
+                if (miniatureFile.exists()) miniatureFile.delete();
+            }
+
+            // Delete PDF
+            if (course.getPdf_fichier() != null) {
+                File pdfFile = new File(UPLOAD_DIR + "courses/" + new File(course.getPdf_fichier()).getName());
+                if (pdfFile.exists()) pdfFile.delete();
+            }
+
+            courseRepository.delete(course);
+
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Cours supprimé avec succès !");
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Erreur lors de la suppression du cours : " + e.getMessage());
+        }
+    }
+
+    // ================= GET COURSES =================
     @GetMapping
     public ResponseEntity<?> getCoursesByUser(@RequestParam("userId") Long userId) {
         try {
@@ -95,103 +199,12 @@ public class CourseController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Course> updateCourse(
-            @PathVariable Long id,
-            @RequestParam("etape") String etape,
-            @RequestParam("titre") String titre,
-            @RequestParam(value = "niveau",required = false) String niveau,
-            @RequestParam("categorie") String categorie,
-            @RequestParam(value = "matiere",required = false) String matiere,
-            @RequestParam("ordre") String ordre,
-            @RequestParam(value = "unite" ,required = false) String unite,
-            @RequestParam(value = "miniature", required = false) MultipartFile miniature,
-            @RequestParam(value = "pdf_fichier", required = false) MultipartFile pdfFile
-    ) throws IOException {
-        Course course = courseRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Course not found"));
-
-        // update text fields
-        course.setEtape(etape);
-        course.setTitre(titre);
-        course.setNiveau(niveau);
-        course.setCategorie(categorie);
-        course.setMatiere(matiere);
-        course.setOrdre(ordre);
-        course.setUnite(unite);
-
-        // ✅ Handle miniature update
-        if (miniature != null && !miniature.isEmpty()) {
-            // delete old miniature
-            if (course.getMiniature() != null) {
-                File oldMiniature = new File("/var/www/PcDirac/backend/" + course.getMiniature());
-                if (oldMiniature.exists()) {
-                    oldMiniature.delete();
-                }
-            }
-            // save new miniature
-            String miniaturePath = "/var/www/PcDirac/backend/uploads/miniature/" + miniature.getOriginalFilename();
-            miniature.transferTo(new File(miniaturePath));
-            course.setMiniature("/uploads/miniature/" + miniature.getOriginalFilename());
-        }
-
-        // ✅ Handle pdf update
-        if (pdfFile != null && !pdfFile.isEmpty()) {
-            // delete old pdf
-            if (course.getPdf_fichier() != null) {
-                File oldPdf = new File("/var/www/PcDirac/backend" + course.getPdf_fichier());
-                if (oldPdf.exists()) {
-                    oldPdf.delete();
-                }
-            }
-            // save new pdf
-            String pdfPath = "/var/www/PcDirac/backend/uploads/courses/" + pdfFile.getOriginalFilename();
-            pdfFile.transferTo(new File(pdfPath));
-            course.setPdf_fichier("/uploads/courses/" + pdfFile.getOriginalFilename());
-        }
-
-        return ResponseEntity.ok(courseRepository.save(course));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCourse(@PathVariable Long id) {
-        try {
-            Course course = courseRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Course not found"));
-
-            // ✅ Delete miniature if exists
-            if (course.getMiniature() != null) {
-                File miniatureFile = new File("C:/Users/abdel" + course.getMiniature());
-                if (miniatureFile.exists()) {
-                    miniatureFile.delete();
-                }
-            }
-
-            // ✅ Delete pdf if exists
-            if (course.getPdf_fichier() != null) {
-                File pdfFile = new File("C:/Users/abdel" + course.getPdf_fichier());
-                if (pdfFile.exists()) {
-                    pdfFile.delete();
-                }
-            }
-
-            // ✅ Delete course from DB
-            courseRepository.delete(course);
-
-            Map<String, String> response = new HashMap<>();
-            response.put("message", "Cours supprimé avec succès !");
-            return ResponseEntity.ok(response);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body("Erreur lors de la suppression du cours : " + e.getMessage());
-        }
-    }
+    // ================= COURSES BY ETAPE =================
     private CourseDTO mapToDTO(Course course) {
         return new CourseDTO(
                 course.getId(),
                 course.getEtape(),
-                course.getTitre(),      // ✅ This should be the course title// <-- Etape
+                course.getTitre(),
                 course.getNiveau(),
                 course.getCategorie(),
                 course.getMatiere(),
@@ -201,27 +214,27 @@ public class CourseController {
                 course.getPdf_fichier(),
                 course.getUser().getPrenom() + " " + course.getUser().getNom()
         );
-
     }
+
     public List<CourseDTO> getCoursesByEtape(String etape) {
         return courseRepository.findByEtape(etape).stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
+
     @GetMapping("/etudiant/lycee")
     public List<CourseDTO> getAllLyceeCourses() {
-        return getCoursesByEtape("Lycée"); // you can change "Lycée" dynamically
+        return getCoursesByEtape("Lycée");
     }
 
     @GetMapping("/etudiant/agregation")
     public List<CourseDTO> getAllCollegeCourses() {
-        return getCoursesByEtape("Agrégation"); // you can change "Lycée" dynamically
+        return getCoursesByEtape("Agrégation");
     }
 
     @GetMapping("/etudiant/license")
     public List<CourseDTO> getAllLicenseCourses() {
-        return getCoursesByEtape("Licence"); // you can change "Lycée" dynamically
+        return getCoursesByEtape("Licence");
     }
-
 
 }
