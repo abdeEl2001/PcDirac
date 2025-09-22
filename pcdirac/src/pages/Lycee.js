@@ -79,15 +79,16 @@ const Lycee = () => {
 
   // Filtered displayed items
   const displayedItems = courses.filter((item) => {
-    return (
-      (niveauFilter === "" || normalize(item.niveau) === normalize(niveauFilter)) &&
-      (categorieFilter === "" || normalize(item.categorie) === normalize(categorieFilter)) &&
-      (matiereFilter === "" || normalize(item.matiere) === normalize(matiereFilter)) &&
-      (uniteFilter === "" || normalize(item.unite) === normalize(uniteFilter)) &&
-      (titreFilter === "" || normalize(item.titre) === normalize(titreFilter)) &&
-      (professeurFilter === "" || normalize(item.user) === normalize(professeurFilter))
-    );
-  });
+  return (
+    (niveauFilter === "" || normalize(item.niveau) === normalize(niveauFilter)) &&
+    (categorieFilter === "" || normalize(item.categorie) === normalize(categorieFilter)) &&
+    (matiereFilter === "" || normalize(item.matiere) === normalize(matiereFilter)) &&
+    (uniteFilter === "" || normalize(item.unite) === normalize(uniteFilter)) &&
+    (titreFilter === "" || normalize(item.titre) === normalize(titreFilter)) &&
+    (professeurFilter === "" || normalize(item.user) === normalize(professeurFilter))
+  );
+});
+
 
   const getButtonLabel = (categorie) => {
     switch (categorie) {
