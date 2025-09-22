@@ -1,4 +1,6 @@
 package com.PcDirac_backend.PcDirac_backend.video;
+
+import com.PcDirac_backend.PcDirac_backend.utils.FileStorageService;
 import com.PcDirac_backend.PcDirac_backend.user.User;
 import com.PcDirac_backend.PcDirac_backend.user.UserRepository;
 import org.springframework.http.ResponseEntity;
@@ -19,23 +21,26 @@ public class VideoController {
     private final VideoService videoService;
     private final UserRepository userRepository;
     private final VideoRepository videoRepository;
-    private final String basePath = "/var/www/PcDirac/backend/uploads/";
+    private final FileStorageService fileStorageService;
 
     public VideoController(VideoService videoService,
                            UserRepository userRepository,
-                           VideoRepository videoRepository) {
+                           VideoRepository videoRepository,
+                           FileStorageService fileStorageService) {
         this.videoService = videoService;
         this.userRepository = userRepository;
         this.videoRepository = videoRepository;
+        this.fileStorageService = fileStorageService;
     }
 
+    // ================= ADD VIDEO =================
     @PostMapping
     public ResponseEntity<?> addVideo(
             @RequestParam("etape") String etape,
             @RequestParam("titre") String titre,
             @RequestParam(value = "niveau", required = false) String niveau,
             @RequestParam("categorie") String categorie,
-            @RequestParam(value = "matiere",required = false) String matiere,
+            @RequestParam(value = "matiere", required = false) String matiere,
             @RequestParam("ordre") int ordre,
             @RequestParam(value = "unite", required = false) String unite,
             @RequestParam("miniature") MultipartFile miniature,
@@ -57,8 +62,13 @@ public class VideoController {
             video.setUser(user);
             video.setLien(lien);
 
-            // Save video and files
-            videoService.saveVideo(video, miniature,lien);
+            // Sauvegarde miniature dans dossier perso
+            if (miniature != null && !miniature.isEmpty()) {
+                String miniaturePath = fileStorageService.saveUserFile(user, miniature, "videos_miniature");
+                video.setMiniature(miniaturePath);
+            }
+
+            videoRepository.save(video);
 
             Map<String, String> response = new HashMap<>();
             response.put("message", "Vidéo ajoutée avec succès !");
@@ -71,10 +81,11 @@ public class VideoController {
         }
     }
 
+    // ================= GET VIDEOS =================
     @GetMapping
     public ResponseEntity<List<Video>> getVideosByUser(@RequestParam("userId") Long userId) {
         try {
-            User user = userRepository.findById(userId)
+            userRepository.findById(userId)
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
             List<Video> videos = videoService.getVideosByUser(userId);
@@ -93,6 +104,7 @@ public class VideoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // ================= UPDATE VIDEO =================
     @PutMapping("/{id}")
     public ResponseEntity<Video> updateVideo(
             @PathVariable Long id,
@@ -100,7 +112,7 @@ public class VideoController {
             @RequestParam("titre") String titre,
             @RequestParam(value = "niveau", required = false) String niveau,
             @RequestParam("categorie") String categorie,
-            @RequestParam(value = "matiere",required = false) String matiere,
+            @RequestParam(value = "matiere", required = false) String matiere,
             @RequestParam("ordre") int ordre,
             @RequestParam(value = "unite", required = false) String unite,
             @RequestParam(value = "miniature", required = false) MultipartFile miniature,
@@ -118,19 +130,20 @@ public class VideoController {
         video.setUnite(unite);
         video.setLien(lien);
 
+        // Update miniature
         if (miniature != null && !miniature.isEmpty()) {
             if (video.getMiniature() != null) {
-                File oldMini = new File(basePath + video.getMiniature());
+                File oldMini = new File(video.getMiniature());
                 if (oldMini.exists()) oldMini.delete();
             }
-            String miniPath = basePath + "miniature/" + miniature.getOriginalFilename();
-            miniature.transferTo(new File(miniPath));
-            video.setMiniature("/uploads/miniature/" + miniature.getOriginalFilename());
+            String miniaturePath = fileStorageService.saveUserFile(video.getUser(), miniature, "videos_miniature");
+            video.setMiniature(miniaturePath);
         }
 
         return ResponseEntity.ok(videoRepository.save(video));
     }
 
+    // ================= DELETE VIDEO =================
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteVideo(@PathVariable Long id) {
         try {
@@ -138,7 +151,7 @@ public class VideoController {
                     .orElseThrow(() -> new RuntimeException("Video not found"));
 
             if (video.getMiniature() != null) {
-                File mini = new File(basePath + video.getMiniature());
+                File mini = new File(video.getMiniature());
                 if (mini.exists()) mini.delete();
             }
 
@@ -154,6 +167,7 @@ public class VideoController {
         }
     }
 
+    // ================= FILTER VIDEOS =================
     @GetMapping("/all")
     public ResponseEntity<List<Video>> getAllVideos(
             @RequestParam(value = "etape", required = false) String etape,
@@ -203,6 +217,4 @@ public class VideoController {
             return ResponseEntity.badRequest().build();
         }
     }
-
-
 }

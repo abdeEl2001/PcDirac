@@ -32,6 +32,22 @@ public class CourseController {
         this.courseRepository = courseRepository;
     }
 
+    // Utility: create user folders
+    private String[] createUserFolders(User user) {
+        String userFolderName = user.getNom() + "_" + user.getPrenom();
+        String basePath = UPLOAD_DIR + userFolderName;
+
+        String profileDir = basePath + "/profile_" + userFolderName;
+        String miniatureDir = basePath + "/miniatures_" + userFolderName;
+        String filesDir = basePath + "/files_" + userFolderName;
+
+        new File(profileDir).mkdirs();
+        new File(miniatureDir).mkdirs();
+        new File(filesDir).mkdirs();
+
+        return new String[]{profileDir, miniatureDir, filesDir};
+    }
+
     // ================= ADD COURSE =================
     @PostMapping
     public ResponseEntity<?> addCourse(
@@ -60,21 +76,24 @@ public class CourseController {
             course.setUnite(unite);
             course.setUser(user);
 
-            // Save files
+            // Create user folders
+            String[] userFolders = createUserFolders(user);
+            String miniatureDir = userFolders[1];
+            String filesDir = userFolders[2];
+            String userFolderName = user.getNom() + "_" + user.getPrenom();
+
+            // Save miniature
             if (miniature != null && !miniature.isEmpty()) {
-                File miniatureDir = new File(UPLOAD_DIR + "miniature/");
-                if (!miniatureDir.exists()) miniatureDir.mkdirs();
-                String miniaturePath = UPLOAD_DIR + "miniature/" + miniature.getOriginalFilename();
+                String miniaturePath = miniatureDir + "/" + miniature.getOriginalFilename();
                 miniature.transferTo(new File(miniaturePath));
-                course.setMiniature("/uploads/miniature/" + miniature.getOriginalFilename());
+                course.setMiniature("/uploads/" + userFolderName + "/miniatures_" + userFolderName + "/" + miniature.getOriginalFilename());
             }
 
+            // Save PDF
             if (pdfFile != null && !pdfFile.isEmpty()) {
-                File pdfDir = new File(UPLOAD_DIR + "courses/");
-                if (!pdfDir.exists()) pdfDir.mkdirs();
-                String pdfPath = UPLOAD_DIR + "courses/" + pdfFile.getOriginalFilename();
+                String pdfPath = filesDir + "/" + pdfFile.getOriginalFilename();
                 pdfFile.transferTo(new File(pdfPath));
-                course.setPdf_fichier("/uploads/courses/" + pdfFile.getOriginalFilename());
+                course.setPdf_fichier("/uploads/" + userFolderName + "/files_" + userFolderName + "/" + pdfFile.getOriginalFilename());
             }
 
             courseRepository.save(course);
@@ -107,7 +126,13 @@ public class CourseController {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
 
-        // Update text fields
+        User user = course.getUser();
+        String[] userFolders = createUserFolders(user);
+        String miniatureDir = userFolders[1];
+        String filesDir = userFolders[2];
+        String userFolderName = user.getNom() + "_" + user.getPrenom();
+
+        // Update fields
         course.setEtape(etape);
         course.setTitre(titre);
         course.setNiveau(niveau);
@@ -119,27 +144,23 @@ public class CourseController {
         // Update miniature
         if (miniature != null && !miniature.isEmpty()) {
             if (course.getMiniature() != null) {
-                File oldMiniature = new File(UPLOAD_DIR + "miniature/" + new File(course.getMiniature()).getName());
+                File oldMiniature = new File(miniatureDir + "/" + new File(course.getMiniature()).getName());
                 if (oldMiniature.exists()) oldMiniature.delete();
             }
-            File miniatureDir = new File(UPLOAD_DIR + "miniature/");
-            if (!miniatureDir.exists()) miniatureDir.mkdirs();
-            String miniaturePath = UPLOAD_DIR + "miniature/" + miniature.getOriginalFilename();
+            String miniaturePath = miniatureDir + "/" + miniature.getOriginalFilename();
             miniature.transferTo(new File(miniaturePath));
-            course.setMiniature("/uploads/miniature/" + miniature.getOriginalFilename());
+            course.setMiniature("/uploads/" + userFolderName + "/miniatures_" + userFolderName + "/" + miniature.getOriginalFilename());
         }
 
         // Update PDF
         if (pdfFile != null && !pdfFile.isEmpty()) {
             if (course.getPdf_fichier() != null) {
-                File oldPdf = new File(UPLOAD_DIR + "courses/" + new File(course.getPdf_fichier()).getName());
+                File oldPdf = new File(filesDir + "/" + new File(course.getPdf_fichier()).getName());
                 if (oldPdf.exists()) oldPdf.delete();
             }
-            File pdfDir = new File(UPLOAD_DIR + "courses/");
-            if (!pdfDir.exists()) pdfDir.mkdirs();
-            String pdfPath = UPLOAD_DIR + "courses/" + pdfFile.getOriginalFilename();
+            String pdfPath = filesDir + "/" + pdfFile.getOriginalFilename();
             pdfFile.transferTo(new File(pdfPath));
-            course.setPdf_fichier("/uploads/courses/" + pdfFile.getOriginalFilename());
+            course.setPdf_fichier("/uploads/" + userFolderName + "/files_" + userFolderName + "/" + pdfFile.getOriginalFilename());
         }
 
         return ResponseEntity.ok(courseRepository.save(course));
@@ -152,15 +173,20 @@ public class CourseController {
             Course course = courseRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("Course not found"));
 
+            User user = course.getUser();
+            String[] userFolders = createUserFolders(user);
+            String miniatureDir = userFolders[1];
+            String filesDir = userFolders[2];
+
             // Delete miniature
             if (course.getMiniature() != null) {
-                File miniatureFile = new File(UPLOAD_DIR + "miniature/" + new File(course.getMiniature()).getName());
+                File miniatureFile = new File(miniatureDir + "/" + new File(course.getMiniature()).getName());
                 if (miniatureFile.exists()) miniatureFile.delete();
             }
 
             // Delete PDF
             if (course.getPdf_fichier() != null) {
-                File pdfFile = new File(UPLOAD_DIR + "courses/" + new File(course.getPdf_fichier()).getName());
+                File pdfFile = new File(filesDir + "/" + new File(course.getPdf_fichier()).getName());
                 if (pdfFile.exists()) pdfFile.delete();
             }
 
@@ -236,5 +262,4 @@ public class CourseController {
     public List<CourseDTO> getAllLicenseCourses() {
         return getCoursesByEtape("Licence");
     }
-
 }
