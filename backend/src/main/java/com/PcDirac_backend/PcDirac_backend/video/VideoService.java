@@ -75,7 +75,7 @@ public class VideoService {
 
         return videoRepository.save(video);
     }
-    private final String basePath = "C:/Users/abdel/uploads/";
+    private final String basePath = "/var/www/PcDirac/backend/uploads/";
 
     public VideoService(VideoRepository videoRepository) {
         this.videoRepository = videoRepository;
