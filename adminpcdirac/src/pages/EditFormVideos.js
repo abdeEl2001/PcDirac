@@ -249,7 +249,7 @@ const EditVideoForm = () => {
       });
 
       setSuccess("Vidéo modifiée avec succès !");
-      setTimeout(() => navigate("/list-videos"), 1500);
+      setTimeout(() => navigate("/list-video"), 1500);
     } catch (err) {
       console.error(err);
       setError("Erreur lors de la modification de la vidéo");
