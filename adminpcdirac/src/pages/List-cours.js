@@ -78,9 +78,9 @@ const ListCours = () => {
             onChange={(e) => setFilter(e.target.value)}
           >
             <option value="all">Tous</option>
-            <option value="cours">Cours</option>
-            <option value="exercices">Exercices</option>
-            <option value="activities">Activités</option>
+            <option value="Cours">Cours</option>
+            <option value="Exercices">Exercices</option>
+            <option value="Activités">Activités</option>
             <option value="Devoirs surveillés">Devoirs surveillés</option>
             <option value="Documents pédagogiques">Documents pédagogiques</option>
             <option value="Examens Nationaux">Examens Nationaux</option>
