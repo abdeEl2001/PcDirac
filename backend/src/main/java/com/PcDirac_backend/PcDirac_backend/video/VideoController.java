@@ -1,5 +1,6 @@
 package com.PcDirac_backend.PcDirac_backend.video;
 
+import com.PcDirac_backend.PcDirac_backend.course.Course;
 import com.PcDirac_backend.PcDirac_backend.utils.FileStorageService;
 import com.PcDirac_backend.PcDirac_backend.user.User;
 import com.PcDirac_backend.PcDirac_backend.user.UserRepository;
@@ -147,7 +148,27 @@ public class VideoController {
             return ResponseEntity.badRequest().body("Erreur lors de la suppression de la vidéo : " + e.getMessage());
         }
     }
+    @GetMapping
+    public ResponseEntity<?> getVideosByUser(@RequestParam("userId") Long userId) {
+        try {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
 
+            List<Video> videos = videoService.getVideosByUser(user.getId());
+            return ResponseEntity.ok(videos);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Erreur lors de la récupération des videos : " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Video> getVideoById(@PathVariable Long id) {
+        return videoRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
     // ================= FILTER VIDEOS =================
     @GetMapping("/all")
     public ResponseEntity<List<Video>> getAllVideos(
