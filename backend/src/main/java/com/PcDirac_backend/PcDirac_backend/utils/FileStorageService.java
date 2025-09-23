@@ -16,6 +16,10 @@ public class FileStorageService {
         this.fileStorageUtil = fileStorageUtil;
     }
 
+    public FileStorageUtil getFileStorageUtil() {
+        return this.fileStorageUtil;
+    }
+
     /**
      * Save a file to the correct user folder
      *
@@ -26,7 +30,7 @@ public class FileStorageService {
      * @return relative public path
      */
     public String saveUserFile(User user, MultipartFile file, String type, String category) throws IOException {
-        // Ensure all folders exist
+        // Ensure all folders exist (already creates main + category folders)
         String userFolder = fileStorageUtil.createUserFolders(user.getId(), user.getNom(), user.getPrenom());
         String userFolderName = user.getId() + "_" + user.getNom() + "_" + user.getPrenom();
 
@@ -39,15 +43,14 @@ public class FileStorageService {
             default -> throw new IllegalArgumentException("Invalid file type: " + type);
         };
 
-        // Build target directory (include category if applicable)
-        File targetDir;
+        // Target directory (category only if it exists and type is not profile)
+        File targetDir = new File(userFolder + File.separator + mainFolder);
         if (category != null && !category.isBlank() && !type.equals("profile")) {
-            targetDir = new File(userFolder + File.separator + mainFolder + File.separator + category);
-        } else {
-            targetDir = new File(userFolder + File.separator + mainFolder);
+            File categoryDir = new File(targetDir, category);
+            if (categoryDir.exists()) { // Only use existing category folder
+                targetDir = categoryDir;
+            }
         }
-
-        if (!targetDir.exists()) targetDir.mkdirs();
 
         // Save the file
         String originalFilename = file.getOriginalFilename();
@@ -63,4 +66,9 @@ public class FileStorageService {
                 .replace(fileStorageUtil.getBaseUploadDir(), "/uploads")
                 .replace("\\", "/");
     }
+    public String getFileAbsolutePath(String relativePath) {
+        return relativePath.replace("/uploads", fileStorageUtil.getBaseUploadDir()).replace("/", File.separator);
+    }
+
+
 }

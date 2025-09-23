@@ -51,6 +51,9 @@ public class VideoController {
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
+            // Ensure user folder structure exists
+            fileStorageService.getFileStorageUtil().createUserFolders(user.getId(), user.getNom(), user.getPrenom());
+
             Video video = new Video();
             video.setEtape(etape);
             video.setTitre(titre);
@@ -62,10 +65,10 @@ public class VideoController {
             video.setUser(user);
             video.setLien(lien);
 
-            // Sauvegarde miniature dans dossier perso
+            // Save miniature
             if (miniature != null && !miniature.isEmpty()) {
-                String miniaturePath = fileStorageService.saveUserFile(user, miniature, "videos_miniature",categorie);
-                video.setMiniature(miniaturePath);
+                String path = fileStorageService.saveUserFile(user, miniature, "videos_miniature", categorie);
+                video.setMiniature(path);
             }
 
             videoRepository.save(video);
@@ -79,29 +82,6 @@ public class VideoController {
             return ResponseEntity.badRequest()
                     .body("Erreur lors de l'ajout de la vidéo : " + e.getMessage());
         }
-    }
-
-    // ================= GET VIDEOS =================
-    @GetMapping
-    public ResponseEntity<List<Video>> getVideosByUser(@RequestParam("userId") Long userId) {
-        try {
-            userRepository.findById(userId)
-                    .orElseThrow(() -> new RuntimeException("User not found"));
-
-            List<Video> videos = videoService.getVideosByUser(userId);
-            return ResponseEntity.ok(videos);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().build();
-        }
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Video> getVideoById(@PathVariable Long id) {
-        return videoRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
     }
 
     // ================= UPDATE VIDEO =================
@@ -133,11 +113,11 @@ public class VideoController {
         // Update miniature
         if (miniature != null && !miniature.isEmpty()) {
             if (video.getMiniature() != null) {
-                File oldMini = new File(video.getMiniature());
+                File oldMini = new File(fileStorageService.getFileAbsolutePath(video.getMiniature()));
                 if (oldMini.exists()) oldMini.delete();
             }
-            String miniaturePath = fileStorageService.saveUserFile(video.getUser(), miniature, "videos_miniature",categorie);
-            video.setMiniature(miniaturePath);
+            String path = fileStorageService.saveUserFile(video.getUser(), miniature, "videos_miniature", categorie);
+            video.setMiniature(path);
         }
 
         return ResponseEntity.ok(videoRepository.save(video));
@@ -151,7 +131,7 @@ public class VideoController {
                     .orElseThrow(() -> new RuntimeException("Video not found"));
 
             if (video.getMiniature() != null) {
-                File mini = new File(video.getMiniature());
+                File mini = new File(fileStorageService.getFileAbsolutePath(video.getMiniature()));
                 if (mini.exists()) mini.delete();
             }
 
@@ -167,51 +147,16 @@ public class VideoController {
         }
     }
 
-    // ================= FILTER VIDEOS =================
+    // ================= GET VIDEOS =================
     @GetMapping("/all")
-    public ResponseEntity<List<Video>> getAllVideos(
-            @RequestParam(value = "etape", required = false) String etape,
-            @RequestParam(value = "niveau", required = false) String niveau,
-            @RequestParam(value = "categorie", required = false) String categorie,
-            @RequestParam(value = "matiere", required = false) String matiere,
-            @RequestParam(value = "unite", required = false) String unite,
-            @RequestParam(value = "titre", required = false) String titre
-    ) {
+    public ResponseEntity<List<Video>> getVideosByUser(@RequestParam("userId") Long userId) {
         try {
-            List<Video> videos = videoRepository.findAll();
+            userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
 
-            if (etape != null && !etape.isEmpty()) {
-                videos = videos.stream()
-                        .filter(v -> v.getEtape() != null && etape.equalsIgnoreCase(v.getEtape()))
-                        .collect(Collectors.toList());
-            }
-            if (niveau != null && !niveau.isEmpty()) {
-                videos = videos.stream()
-                        .filter(v -> v.getNiveau() != null && niveau.equalsIgnoreCase(v.getNiveau()))
-                        .collect(Collectors.toList());
-            }
-            if (categorie != null && !categorie.isEmpty()) {
-                videos = videos.stream()
-                        .filter(v -> v.getCategorie() != null && categorie.equalsIgnoreCase(v.getCategorie()))
-                        .collect(Collectors.toList());
-            }
-            if (matiere != null && !matiere.isEmpty()) {
-                videos = videos.stream()
-                        .filter(v -> v.getMatiere() != null && matiere.equalsIgnoreCase(v.getMatiere()))
-                        .collect(Collectors.toList());
-            }
-            if (unite != null && !unite.isEmpty()) {
-                videos = videos.stream()
-                        .filter(v -> v.getUnite() != null && unite.equalsIgnoreCase(v.getUnite()))
-                        .collect(Collectors.toList());
-            }
-            if (titre != null && !titre.isEmpty()) {
-                videos = videos.stream()
-                        .filter(v -> v.getTitre() != null && titre.equalsIgnoreCase(v.getTitre()))
-                        .collect(Collectors.toList());
-            }
-
+            List<Video> videos = videoService.getVideosByUser(userId);
             return ResponseEntity.ok(videos);
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
