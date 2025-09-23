@@ -1,28 +1,35 @@
 package com.PcDirac_backend.PcDirac_backend.utils;
 
 import java.io.File;
+import java.io.IOException;
 
 public class FileStorageUtil {
 
     public static String createUserFolders(String basePath, String nom, String prenom) {
-        String userFolderName = nom + "_" + prenom;  // e.g. "imtki_hicham"
+        // Normalize user folder name to avoid spaces / special chars
+        String userFolderName = (nom + "_" + prenom).toLowerCase().replaceAll("\\s+", "_");
         String userFolderPath = basePath + File.separator + userFolderName;
 
         File userFolder = new File(userFolderPath);
-        if (!userFolder.exists()) {
-            userFolder.mkdirs();
+        if (!userFolder.exists() && !userFolder.mkdirs()) {
+            throw new RuntimeException("❌ Failed to create user folder: " + userFolderPath);
         }
 
-        // Subfolders
-        String profileFolder = userFolderPath + File.separator + "profile_" + userFolderName;
-        String miniatureFolder = userFolderPath + File.separator + "miniatures_" + userFolderName;
-        String filesFolder = userFolderPath + File.separator + "files_" + userFolderName;
-        String videosMiniatureFolder = userFolderPath + File.separator + "videos_miniature_" + userFolderName;
+        // Define subfolder names
+        String[] subFolders = {
+                "profile_" + userFolderName,
+                "miniatures_" + userFolderName,
+                "files_" + userFolderName,
+                "videos_miniature_" + userFolderName
+        };
 
-        new File(profileFolder).mkdirs();
-        new File(miniatureFolder).mkdirs();
-        new File(filesFolder).mkdirs();
-        new File(videosMiniatureFolder).mkdirs();
+        // Create each subfolder
+        for (String folder : subFolders) {
+            File subFolder = new File(userFolderPath, folder);
+            if (!subFolder.exists() && !subFolder.mkdirs()) {
+                throw new RuntimeException("❌ Failed to create subfolder: " + subFolder.getAbsolutePath());
+            }
+        }
 
         return userFolderPath;
     }
