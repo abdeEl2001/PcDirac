@@ -14,7 +14,6 @@ import java.io.IOException;
         origins = {"https://pcdirac.com", "https://admin.pcdirac.com", "https://api.pcdirac.com"},
         allowCredentials = "true"
 )
-
 @RequestMapping("/api/users/update")
 public class UserProfileUpdateController {
 
@@ -57,6 +56,15 @@ public class UserProfileUpdateController {
             File uploadDir = new File(uploadsDir);
             if (!uploadDir.exists()) uploadDir.mkdirs();
 
+            // ✅ Delete old profile photo if exists
+            if (user.getPhotoprofile() != null) {
+                File oldFile = new File(uploadsDir, user.getPhotoprofile());
+                if (oldFile.exists()) {
+                    oldFile.delete();
+                }
+            }
+
+            // Save new file
             String filename = System.currentTimeMillis() + "_" + photoProfil.getOriginalFilename();
             File file = new File(uploadDir, filename);
             try {
