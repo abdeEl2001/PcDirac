@@ -6,8 +6,8 @@ import java.io.IOException;
 public class FileStorageUtil {
 
     public static String createUserFolders(String basePath, String nom, String prenom) {
-        // Normalize user folder name to avoid spaces / special chars
-        String userFolderName = (nom + "_" + prenom).toLowerCase().replaceAll("\\s+", "_");
+        // Keep original capitalization, replace spaces with underscores
+        String userFolderName = (nom + "_" + prenom).replaceAll("\\s+", "_");
         String userFolderPath = basePath + File.separator + userFolderName;
 
         File userFolder = new File(userFolderPath);
