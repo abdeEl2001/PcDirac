@@ -250,6 +250,10 @@ const Videos = () => {
         return "Voir la vidéo";
     }
   };
+  const getImageUrl = (path) => {
+  if (!path) return "";
+  return path.startsWith("http") ? path : `${BACKEND_URL}${path}`;
+};
 
   return (
     <div className="contentPage">
@@ -354,7 +358,7 @@ const Videos = () => {
         {displayedItems.length > 0 ? (
           displayedItems.map((v) => (
             <div key={v.id} className="itemCard">
-              {v.miniature && <img src={`${BACKEND_URL}${v.miniature}`} alt={v.titre} className="itemThumbnail" />}
+              {v.miniature && <img src={getImageUrl(v.miniature)} alt={v.titre} className="itemThumbnail" />}
               <h3 className="itemTitle">{v.titre}</h3>
               <p className="itemInfo"><strong>Catégorie:</strong> {v.categorie}</p>
               {v.niveau && <p className="itemInfo"><strong>Niveau:</strong> {v.niveau}</p>}
