@@ -254,6 +254,7 @@ const Videos = () => {
   
 
   return (
+    <div className="pageContainer">
     <div className="contentPage">
       <h1 className="pageTitle">Vidéos</h1>
 
@@ -377,7 +378,8 @@ const Videos = () => {
           <p className="noItemsText">Aucune vidéo trouvée pour ces filtres.</p>
         )}
       </div>
-      <Footer/>
+    </div>
+    <Footer/>
     </div>
   );
 };

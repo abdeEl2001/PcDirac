@@ -329,6 +329,7 @@ const Lycee = () => {
   };
 
   return (
+    <div className="pageContainer">
     <div className="contentPage">
       <h1 className="pageTitle">Lycée</h1>
       {loading ? (
@@ -404,7 +405,8 @@ const Lycee = () => {
           </div>
         </>
       )}
-      <Footer/>
+    </div>
+    <Footer/>
     </div>
   );
 };

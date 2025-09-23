@@ -121,6 +121,7 @@ const Licence = () => {
   };
 
   return (
+    <div className="pageContainer">
     <div className="contentPage">
       <h1 className="pageTitle">Licence</h1>
 
@@ -233,7 +234,8 @@ const Licence = () => {
           </div>
         </>
       )}
-      <Footer/>
+    </div>
+    <Footer/>
     </div>
   );
 };

@@ -117,6 +117,7 @@ const Agregation = () => {
   };
 
   return (
+    <div className="pageContainer">
     <div className="contentPage">
       <h1 className="pageTitle">Agrégation</h1>
 
@@ -215,7 +216,9 @@ const Agregation = () => {
           </div>
         </>
       )}
-      <Footer/>
+      
+    </div>
+    <Footer/>
     </div>
   );
 };

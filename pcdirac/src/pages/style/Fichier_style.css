@@ -1,9 +1,14 @@
 /* Content Page */
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* full viewport height */
+}
 .contentPage {
   font-family: Arial, sans-serif;
   padding: 90px 8%;
   background-color: #f9fafb;
-  min-height: 100vh;
+  flex: 1;
 }
 
 .pageTitle {
