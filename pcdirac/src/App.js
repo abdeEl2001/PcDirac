@@ -6,6 +6,7 @@ import Videos from "./pages/Videos";
 import Lycce from "./pages/Lycee";
 import Licence from "./pages/Licence";
 import Agregation from "./pages/Agregation";
+import Footer from "./Footer";
 
 function App() {
   return (
@@ -23,6 +24,9 @@ function App() {
           <Route path="/agregation" element={<Agregation/>}/>
         </Routes>
       </main>
+      <footer>
+        <Route path="/footer" element={<Footer/>}></Route>
+      </footer>
     </Router>
   );
 }
