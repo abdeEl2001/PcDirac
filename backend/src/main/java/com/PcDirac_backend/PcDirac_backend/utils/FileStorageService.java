@@ -21,38 +21,38 @@ public class FileStorageService {
     /**
      * Save user file and return a public relative path (to be used on frontend)
      */
-    public String saveUserFile(User user, MultipartFile file, String type) throws IOException {
+    public String saveUserFile(User user, MultipartFile file, String type, String category) throws IOException {
+        Long userId = user.getId();
         String nom = user.getNom();
         String prenom = user.getPrenom();
 
-        // Create personal folders if not already created
-        String userFolder = FileStorageUtil.createUserFolders(baseUploadDir, nom, prenom);
-        String userFolderName = nom + "_" + prenom;
+        // Create user folders (with ID)
+        String userFolder = FileStorageUtil.createUserFolders(userId, nom, prenom);
+        String userFolderName = userId + "_" + nom + "_" + prenom;
 
-        // Build target folder path
+        // Determine target directory
         String targetDir = switch (type) {
             case "profile" -> userFolder + File.separator + "profile_" + userFolderName;
-            case "miniature" -> userFolder + File.separator + "miniatures_" + userFolderName;
-            case "file" -> userFolder + File.separator + "files_" + userFolderName;
-            case "videos_miniature" -> userFolder + File.separator + "videos_miniature_" + userFolderName;
+            case "miniature" -> userFolder + File.separator + "miniatures_" + userFolderName + File.separator + category;
+            case "file" -> userFolder + File.separator + "files_" + userFolderName + File.separator + category;
+            case "videos_miniature" -> userFolder + File.separator + "videos_miniature_" + userFolderName + File.separator + category;
             default -> throw new IllegalArgumentException("Invalid file type: " + type);
         };
 
-        // Ensure directory exists
         File dir = new File(targetDir);
         if (!dir.exists()) dir.mkdirs();
 
-        // Save file
         String originalFilename = file.getOriginalFilename();
         if (originalFilename == null) originalFilename = "file_" + System.currentTimeMillis();
         File dest = new File(dir, originalFilename);
         file.transferTo(dest);
 
-        // Build **relative public path** (frontend can use BACKEND_URL + relative path)
+        // Return relative path for frontend
         String relativePath = dest.getAbsolutePath()
-                .replace(baseUploadDir, "/uploads") // remove server path, replace with public folder
-                .replace("\\", "/"); // for Windows compatibility
+                .replace(baseUploadDir, "/uploads")
+                .replace("\\", "/");
 
         return relativePath;
     }
 }
+

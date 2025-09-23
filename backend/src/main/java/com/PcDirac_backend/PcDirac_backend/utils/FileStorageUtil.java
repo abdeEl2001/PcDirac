@@ -1,33 +1,71 @@
 package com.PcDirac_backend.PcDirac_backend.utils;
 
-import java.io.File;
-import java.io.IOException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+import java.io.File;
+import java.util.List;
+
+@Component
 public class FileStorageUtil {
 
-    public static String createUserFolders(String basePath, String nom, String prenom) {
-        // Keep original capitalization, replace spaces with underscores
-        String userFolderName = (nom + "_" + prenom).replaceAll("\\s+", "_");
-        String userFolderPath = basePath + File.separator + userFolderName;
+    @Value("${file.upload-dir}")
+    private String baseUploadDir;
+
+    // Default categories
+    private static final List<String> CATEGORIES = List.of(
+            "Cours",
+            "Exercices",
+            "Activités",
+            "Devoirs Surveillés",
+            "Documents Pédagogiques",
+            "Examens Nationaux",
+            "Cours Licence",
+            "Travaux dirigés",
+            "Concours d'entrée",
+            "Concours de sortie",
+            "Rapport de jury",
+            "Leçons physique",
+            "Leçons chimie",
+            "Montage physique"
+    );
+
+    /**
+     * Create user folder structure: ID_NOM_PRENOM
+     */
+    public String createUserFolders(Long userId, String nom, String prenom) {
+        // Normalize user folder name
+        String userFolderName = (userId + "_" + nom + "_" + prenom).replaceAll("\\s+", "_");
+        String userFolderPath = baseUploadDir + File.separator + userFolderName;
 
         File userFolder = new File(userFolderPath);
         if (!userFolder.exists() && !userFolder.mkdirs()) {
             throw new RuntimeException("❌ Failed to create user folder: " + userFolderPath);
         }
 
-        // Define subfolder names
-        String[] subFolders = {
+        // Main folders
+        String[] mainFolders = {
                 "profile_" + userFolderName,
                 "miniatures_" + userFolderName,
                 "files_" + userFolderName,
                 "videos_miniature_" + userFolderName
         };
 
-        // Create each subfolder
-        for (String folder : subFolders) {
-            File subFolder = new File(userFolderPath, folder);
-            if (!subFolder.exists() && !subFolder.mkdirs()) {
-                throw new RuntimeException("❌ Failed to create subfolder: " + subFolder.getAbsolutePath());
+        // Create main folders and category subfolders
+        for (String mainFolder : mainFolders) {
+            File folder = new File(userFolderPath, mainFolder);
+            if (!folder.exists() && !folder.mkdirs()) {
+                throw new RuntimeException("❌ Failed to create folder: " + folder.getAbsolutePath());
+            }
+
+            // Skip profile folder for category subfolders
+            if (!mainFolder.startsWith("profile_")) {
+                for (String cat : CATEGORIES) {
+                    File catFolder = new File(folder, cat);
+                    if (!catFolder.exists() && !catFolder.mkdirs()) {
+                        throw new RuntimeException("❌ Failed to create category folder: " + catFolder.getAbsolutePath());
+                    }
+                }
             }
         }
 
