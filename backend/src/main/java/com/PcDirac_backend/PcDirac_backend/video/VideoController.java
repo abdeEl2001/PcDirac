@@ -64,7 +64,7 @@ public class VideoController {
 
             // Sauvegarde miniature dans dossier perso
             if (miniature != null && !miniature.isEmpty()) {
-                String miniaturePath = fileStorageService.saveUserFile(user, miniature, "videos_miniature");
+                String miniaturePath = fileStorageService.saveUserFile(user, miniature, "videos_miniature",categorie);
                 video.setMiniature(miniaturePath);
             }
 
@@ -136,7 +136,7 @@ public class VideoController {
                 File oldMini = new File(video.getMiniature());
                 if (oldMini.exists()) oldMini.delete();
             }
-            String miniaturePath = fileStorageService.saveUserFile(video.getUser(), miniature, "videos_miniature");
+            String miniaturePath = fileStorageService.saveUserFile(video.getUser(), miniature, "videos_miniature",video.getCategorie());
             video.setMiniature(miniaturePath);
         }
 
