@@ -138,7 +138,7 @@ export default function Accueil() {
           </a>
         </motion.div>
         <motion.img
-          src="/images/contact.jpg"
+          src="/images/Cours En Ligne.png"
           alt="Contact"
           className="sectionImage"
           variants={fadeInUp}
