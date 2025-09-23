@@ -12,30 +12,22 @@ import java.io.IOException;
 @Service
 public class FileStorageService {
 
-    @Value("${file.upload-dir}")
-    private String baseUploadDir; // e.g., /var/www/PcDirac/backend/uploads/
+    private final FileStorageUtil fileStorageUtil;
 
-    @Value("${spring.web.resources.static-locations}")
-    private String staticLocation; // e.g., file:/var/www/PcDirac/backend/uploads/
+    public FileStorageService(FileStorageUtil fileStorageUtil) {
+        this.fileStorageUtil = fileStorageUtil;
+    }
 
-    /**
-     * Save user file and return a public relative path (to be used on frontend)
-     */
-    public String saveUserFile(User user, MultipartFile file, String type, String category) throws IOException {
-        Long userId = user.getId();
-        String nom = user.getNom();
-        String prenom = user.getPrenom();
+    public String saveUserFile(User user, MultipartFile file, String type) throws IOException {
+        // Use the instance to create folders
+        String userFolder = fileStorageUtil.createUserFolders(user.getId(), user.getNom(), user.getPrenom());
+        String userFolderName = user.getId() + "_" + user.getNom() + "_" + user.getPrenom();
 
-        // Create user folders (with ID)
-        String userFolder = FileStorageUtil.createUserFolders(userId, nom, prenom);
-        String userFolderName = userId + "_" + nom + "_" + prenom;
-
-        // Determine target directory
         String targetDir = switch (type) {
             case "profile" -> userFolder + File.separator + "profile_" + userFolderName;
-            case "miniature" -> userFolder + File.separator + "miniatures_" + userFolderName + File.separator + category;
-            case "file" -> userFolder + File.separator + "files_" + userFolderName + File.separator + category;
-            case "videos_miniature" -> userFolder + File.separator + "videos_miniature_" + userFolderName + File.separator + category;
+            case "miniature" -> userFolder + File.separator + "miniatures_" + userFolderName;
+            case "file" -> userFolder + File.separator + "files_" + userFolderName;
+            case "videos_miniature" -> userFolder + File.separator + "videos_miniature_" + userFolderName;
             default -> throw new IllegalArgumentException("Invalid file type: " + type);
         };
 
@@ -43,16 +35,17 @@ public class FileStorageService {
         if (!dir.exists()) dir.mkdirs();
 
         String originalFilename = file.getOriginalFilename();
-        if (originalFilename == null) originalFilename = "file_" + System.currentTimeMillis();
+        if (originalFilename == null || originalFilename.isBlank()) {
+            originalFilename = "file_" + System.currentTimeMillis();
+        }
+
         File dest = new File(dir, originalFilename);
         file.transferTo(dest);
 
-        // Return relative path for frontend
-        String relativePath = dest.getAbsolutePath()
-                .replace(baseUploadDir, "/uploads")
+        return dest.getAbsolutePath()
+                .replace(fileStorageUtil.getBaseUploadDir(), "/uploads")
                 .replace("\\", "/");
-
-        return relativePath;
     }
 }
+
 

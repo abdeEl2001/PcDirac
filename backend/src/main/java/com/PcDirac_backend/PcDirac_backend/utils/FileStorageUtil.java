@@ -71,4 +71,8 @@ public class FileStorageUtil {
 
         return userFolderPath;
     }
+    public String getBaseUploadDir() {
+        return baseUploadDir;
+    }
+
 }
