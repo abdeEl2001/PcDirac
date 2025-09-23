@@ -133,7 +133,7 @@
   color: #ff6600; /* même couleur que le bouton orange */
   border: 2px solid #ff6600;
   padding: 12px 24px;
-  border-radius: 20px;
+  border-radius: 50px;
   font-weight: bold;
   text-decoration: none;
   transition: all 0.3s ease;

@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import "./style/Acceuil_style.css";
 import { Link } from "react-router-dom";
+import Footer from "../Footer";
 
 export default function Accueil() {
   // Animation variants
@@ -149,9 +150,7 @@ export default function Accueil() {
       </section>
 
       {/* Footer */}
-      <footer className="footer">
-        <p>© {new Date().getFullYear()} PcDirac. Tous droits réservés.</p>
-      </footer>
+      <Footer/>
     </div>
   );
 }
