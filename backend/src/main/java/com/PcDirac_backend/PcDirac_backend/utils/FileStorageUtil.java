@@ -12,7 +12,6 @@ public class FileStorageUtil {
     @Value("${file.upload-dir}")
     private String baseUploadDir;
 
-    // Default categories
     private static final List<String> CATEGORIES = List.of(
             "Cours",
             "Exercices",
@@ -30,11 +29,7 @@ public class FileStorageUtil {
             "Montage physique"
     );
 
-    /**
-     * Create user folder structure: ID_NOM_PRENOM
-     */
     public String createUserFolders(Long userId, String nom, String prenom) {
-        // Normalize user folder name
         String userFolderName = (userId + "_" + nom + "_" + prenom).replaceAll("\\s+", "_");
         String userFolderPath = baseUploadDir + File.separator + userFolderName;
 
@@ -51,7 +46,6 @@ public class FileStorageUtil {
                 "videos_miniature_" + userFolderName
         };
 
-        // Create main folders and category subfolders
         for (String mainFolder : mainFolders) {
             File folder = new File(userFolderPath, mainFolder);
             if (!folder.exists() && !folder.mkdirs()) {
