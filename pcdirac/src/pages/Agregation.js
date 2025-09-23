@@ -98,10 +98,18 @@ const Agregation = () => {
 
   const getButtonLabel = (categorie) => {
     switch (categorie) {
-      case "Cours Agrégation":
-        return "Voir le cours";
-      case "Travaux dirigés":
-        return "Voir le TD";
+      case "Concours d'entrée":
+        return "Voir le concour";
+      case "Concours de sortie":
+        return "Voir le concour";
+      case "Rapport de jury":
+        return "Voir le rapport";
+      case "Leçons physique":
+        return "Voir le leçon";
+      case "Leçons Chimie":
+        return "Voir le leçon";
+      case "Montage physique":
+        return "Voir le montage";
       default:
         return "Voir le fichier";
     }
@@ -109,10 +117,10 @@ const Agregation = () => {
 
   return (
     <div className="contentPage">
-      <h1 className="pageTitle">Nos Cours Agrégation</h1>
+      <h1 className="pageTitle">Agrégation</h1>
 
       {loading ? (
-        <p className="loadingText">Chargement des cours...</p>
+        <p className="loadingText">Chargement des fichiers...</p>
       ) : (
         <>
           {/* Filters Section */}
@@ -201,7 +209,7 @@ const Agregation = () => {
                 </div>
               ))
             ) : (
-              <p className="noItemsText">Aucun cours trouvé pour ces filtres.</p>
+              <p className="noItemsText">Aucun fichier trouvé pour ces filtres.</p>
             )}
           </div>
         </>

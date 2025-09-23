@@ -121,10 +121,10 @@ const Licence = () => {
 
   return (
     <div className="contentPage">
-      <h1 className="pageTitle">Nos Cours Licence</h1>
+      <h1 className="pageTitle">Licence</h1>
 
       {loading ? (
-        <p className="loadingText">Chargement des cours...</p>
+        <p className="loadingText">Chargement des fichiers...</p>
       ) : (
         <>
           {/* Filters Section */}
@@ -227,7 +227,7 @@ const Licence = () => {
                 </div>
               ))
             ) : (
-              <p className="noItemsText">Aucun cours trouvé pour ces filtres.</p>
+              <p className="noItemsText">Aucun fichier trouvé pour ces filtres.</p>
             )}
           </div>
         </>

@@ -311,7 +311,7 @@ const Lycee = () => {
   const getButtonLabel = (categorie) => {
     switch (categorie) {
       case "Cours":
-        return "Voir le cour";
+        return "Voir le cours";
       case "Exercices":
         return "Voir l'exercice";
       case "Activités":

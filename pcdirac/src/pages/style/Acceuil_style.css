@@ -128,7 +128,73 @@
   text-align: center;
   padding: 30px 10px;
 }
+.btnWhite {
+  background-color: #ffffff;
+  color: #ff6600; /* même couleur que le bouton orange */
+  border: 2px solid #ff6600;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  margin-left: 15px;
+}
 
+.btnWhite:hover {
+  background-color: #ff6600;
+  color: #ffffff;
+}
+
+/* ✅ Section Contact */
+.section.contact {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 60px 20px;
+  background-color: #f9f9f9;
+  text-align: center;
+}
+
+.contactContent {
+  max-width: 500px;
+}
+
+.contactContent h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #222;
+}
+
+/* ✅ Lien WhatsApp */
+.whatsappLink {
+  display: inline-flex;
+  align-items: center;
+  background: #25d366;
+  color: #fff;
+  font-weight: bold;
+  padding: 12px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 0.3s ease;
+  font-size: 18px;
+}
+
+.whatsappLink:hover {
+  background: #1ebe5d;
+}
+
+.whatsappIcon {
+  width: 28px;
+  height: 28px;
+  margin-right: 10px;
+}
+
+/* ✅ Image Contact */
+.section.contact .sectionImage {
+  max-width: 350px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
 
 
 /* --- Responsive Design --- */
@@ -175,6 +241,14 @@
 
   .section p {
     font-size: 1rem;
+  }
+  .section.contact {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .section.contact .sectionImage {
+    margin-top: 20px;
   }
 }
 
