@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./style/Fichier_style.css"; // generic reusable CSS
+import Footer from "../Footer";
 
 const BACKEND_URL = "https://api.pcdirac.com";
 
@@ -232,6 +233,7 @@ const Licence = () => {
           </div>
         </>
       )}
+      <Footer/>
     </div>
   );
 };

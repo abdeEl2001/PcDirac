@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./style/Fichier_style.css";
+import Footer from "../Footer";
 
 const BACKEND_URL = "https://api.pcdirac.com";
 
@@ -376,6 +377,7 @@ const Videos = () => {
           <p className="noItemsText">Aucune vidéo trouvée pour ces filtres.</p>
         )}
       </div>
+      <Footer/>
     </div>
   );
 };
