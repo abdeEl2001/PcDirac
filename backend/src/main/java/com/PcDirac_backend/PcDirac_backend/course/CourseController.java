@@ -141,6 +141,9 @@ public class CourseController {
         return ResponseEntity.ok(courseRepository.save(course));
     }
 
+
+
+    // ================= DELETE COURSE =================
     // ================= DELETE COURSE =================
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCourse(@PathVariable Long id) {
@@ -173,7 +176,6 @@ public class CourseController {
             return ResponseEntity.badRequest().body("Erreur lors de la suppression du cours : " + e.getMessage());
         }
     }
-
     // ================= GET COURSES =================
     @GetMapping
     public ResponseEntity<?> getCoursesByUser(@RequestParam("userId") Long userId) {
@@ -195,5 +197,43 @@ public class CourseController {
         return courseRepository.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    // ================= COURSES BY ETAPE =================
+    private CourseDTO mapToDTO(Course course) {
+        return new CourseDTO(
+                course.getId(),
+                course.getEtape(),
+                course.getTitre(),
+                course.getNiveau(),
+                course.getCategorie(),
+                course.getMatiere(),
+                course.getOrdre(),
+                course.getMiniature(),
+                course.getUnite(),
+                course.getPdf_fichier(),
+                course.getUser().getPrenom() + " " + course.getUser().getNom()
+        );
+    }
+
+    public List<CourseDTO> getCoursesByEtape(String etape) {
+        return courseRepository.findByEtape(etape).stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/etudiant/lycee")
+    public List<CourseDTO> getAllLyceeCourses() {
+        return getCoursesByEtape("Lycée");
+    }
+
+    @GetMapping("/etudiant/agregation")
+    public List<CourseDTO> getAllCollegeCourses() {
+        return getCoursesByEtape("Agrégation");
+    }
+
+    @GetMapping("/etudiant/license")
+    public List<CourseDTO> getAllLicenseCourses() {
+        return getCoursesByEtape("Licence");
     }
 }

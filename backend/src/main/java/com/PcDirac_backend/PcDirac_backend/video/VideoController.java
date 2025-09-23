@@ -123,6 +123,7 @@ public class VideoController {
         return ResponseEntity.ok(videoRepository.save(video));
     }
 
+
     // ================= DELETE VIDEO =================
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteVideo(@PathVariable Long id) {
@@ -131,7 +132,7 @@ public class VideoController {
                     .orElseThrow(() -> new RuntimeException("Video not found"));
 
             if (video.getMiniature() != null) {
-                File mini = new File(fileStorageService.getFileAbsolutePath(video.getMiniature()));
+                File mini = new File(video.getMiniature());
                 if (mini.exists()) mini.delete();
             }
 
@@ -147,16 +148,51 @@ public class VideoController {
         }
     }
 
-    // ================= GET VIDEOS =================
+    // ================= FILTER VIDEOS =================
     @GetMapping("/all")
-    public ResponseEntity<List<Video>> getVideosByUser(@RequestParam("userId") Long userId) {
+    public ResponseEntity<List<Video>> getAllVideos(
+            @RequestParam(value = "etape", required = false) String etape,
+            @RequestParam(value = "niveau", required = false) String niveau,
+            @RequestParam(value = "categorie", required = false) String categorie,
+            @RequestParam(value = "matiere", required = false) String matiere,
+            @RequestParam(value = "unite", required = false) String unite,
+            @RequestParam(value = "titre", required = false) String titre
+    ) {
         try {
-            userRepository.findById(userId)
-                    .orElseThrow(() -> new RuntimeException("User not found"));
+            List<Video> videos = videoRepository.findAll();
 
-            List<Video> videos = videoService.getVideosByUser(userId);
+            if (etape != null && !etape.isEmpty()) {
+                videos = videos.stream()
+                        .filter(v -> v.getEtape() != null && etape.equalsIgnoreCase(v.getEtape()))
+                        .collect(Collectors.toList());
+            }
+            if (niveau != null && !niveau.isEmpty()) {
+                videos = videos.stream()
+                        .filter(v -> v.getNiveau() != null && niveau.equalsIgnoreCase(v.getNiveau()))
+                        .collect(Collectors.toList());
+            }
+            if (categorie != null && !categorie.isEmpty()) {
+                videos = videos.stream()
+                        .filter(v -> v.getCategorie() != null && categorie.equalsIgnoreCase(v.getCategorie()))
+                        .collect(Collectors.toList());
+            }
+            if (matiere != null && !matiere.isEmpty()) {
+                videos = videos.stream()
+                        .filter(v -> v.getMatiere() != null && matiere.equalsIgnoreCase(v.getMatiere()))
+                        .collect(Collectors.toList());
+            }
+            if (unite != null && !unite.isEmpty()) {
+                videos = videos.stream()
+                        .filter(v -> v.getUnite() != null && unite.equalsIgnoreCase(v.getUnite()))
+                        .collect(Collectors.toList());
+            }
+            if (titre != null && !titre.isEmpty()) {
+                videos = videos.stream()
+                        .filter(v -> v.getTitre() != null && titre.equalsIgnoreCase(v.getTitre()))
+                        .collect(Collectors.toList());
+            }
+
             return ResponseEntity.ok(videos);
-
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
