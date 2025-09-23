@@ -156,21 +156,12 @@
 
 /* Tablet */
 @media screen and (max-width: 992px) {
-  .headerNavbar{
-    padding: 20px 10px;
-  }
-  .menuComposition {
-    gap: 0px;
-  }
-  .menuItem{
+ menuItem{
     padding: 5px 5px;
     font-size: 14px;
   }
   .acceuilContent h2 {
     font-size: 1.8rem;
-  }
-  .navbar-icons {
-    display: none; /* hide in header */
   }
   .footerSection .footer-icons {
     display: flex; /* show in footer */
