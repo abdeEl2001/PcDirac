@@ -12,6 +12,7 @@ public class FileStorageUtil {
     @Value("${file.upload-dir}")
     private String baseUploadDir;
 
+    // List of categories
     private static final List<String> CATEGORIES = List.of(
             "Cours",
             "Exercices",
@@ -29,6 +30,22 @@ public class FileStorageUtil {
             "Montage physique"
     );
 
+    /**
+     * Create user folder structure with categories
+     * Example:
+     * 1_El_Abdelhadi/
+     * ├─ profile_1_El_Abdelhadi/
+     * ├─ miniatures_1_El_Abdelhadi/
+     * │  ├─ Cours/
+     * │  ├─ Exercices/
+     * │  └─ ...
+     * ├─ files_1_El_Abdelhadi/
+     * │  ├─ Cours/
+     * │  └─ ...
+     * └─ videos_miniature_1_El_Abdelhadi/
+     *    ├─ Cours/
+     *    └─ ...
+     */
     public String createUserFolders(Long userId, String nom, String prenom) {
         String userFolderName = (userId + "_" + nom + "_" + prenom).replaceAll("\\s+", "_");
         String userFolderPath = baseUploadDir + File.separator + userFolderName;
@@ -52,7 +69,7 @@ public class FileStorageUtil {
                 throw new RuntimeException("❌ Failed to create folder: " + folder.getAbsolutePath());
             }
 
-            // Skip profile folder for category subfolders
+            // Only add categories to miniatures, files, and videos_miniature
             if (!mainFolder.startsWith("profile_")) {
                 for (String cat : CATEGORIES) {
                     File catFolder = new File(folder, cat);
@@ -65,8 +82,8 @@ public class FileStorageUtil {
 
         return userFolderPath;
     }
+
     public String getBaseUploadDir() {
         return baseUploadDir;
     }
-
 }
