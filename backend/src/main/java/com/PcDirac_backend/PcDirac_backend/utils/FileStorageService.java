@@ -25,29 +25,28 @@ public class FileStorageService {
      *
      * @param user     the user
      * @param file     the file to save
-     * @param type     main folder type: profile, miniature, file, videos_miniature
-     * @param category optional category (ignored for profile)
+     * @param type     main folder type: miniature, file, videos_miniature
+     * @param category optional category
      * @return relative public path
      */
     public String saveUserFile(User user, MultipartFile file, String type, String category) throws IOException {
-        // Ensure all folders exist (already creates main + category folders)
+        // Ensure all folders exist
         String userFolder = fileStorageUtil.createUserFolders(user.getId(), user.getNom(), user.getPrenom());
         String userFolderName = user.getId() + "_" + user.getNom() + "_" + user.getPrenom();
 
-        // Determine main folder
+        // Determine main folder (no more profile!)
         String mainFolder = switch (type) {
-            case "profile" -> "profile_" + userFolderName;
             case "miniature" -> "miniatures_" + userFolderName;
             case "file" -> "files_" + userFolderName;
             case "videos_miniature" -> "videos_miniature_" + userFolderName;
             default -> throw new IllegalArgumentException("Invalid file type: " + type);
         };
 
-        // Target directory (category only if it exists and type is not profile)
+        // Target directory (category if exists)
         File targetDir = new File(userFolder + File.separator + mainFolder);
-        if (category != null && !category.isBlank() && !type.equals("profile")) {
+        if (category != null && !category.isBlank()) {
             File categoryDir = new File(targetDir, category);
-            if (categoryDir.exists()) { // Only use existing category folder
+            if (categoryDir.exists()) {
                 targetDir = categoryDir;
             }
         }
@@ -58,6 +57,10 @@ public class FileStorageService {
             originalFilename = "file_" + System.currentTimeMillis();
         }
 
+        if (!targetDir.exists()) {
+            targetDir.mkdirs();
+        }
+
         File dest = new File(targetDir, originalFilename);
         file.transferTo(dest);
 
@@ -66,9 +69,8 @@ public class FileStorageService {
                 .replace(fileStorageUtil.getBaseUploadDir(), "/uploads")
                 .replace("\\", "/");
     }
+
     public String getFileAbsolutePath(String relativePath) {
         return relativePath.replace("/uploads", fileStorageUtil.getBaseUploadDir()).replace("/", File.separator);
     }
-
-
 }

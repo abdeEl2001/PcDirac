@@ -34,7 +34,6 @@ public class FileStorageUtil {
      * Create user folder structure with categories
      * Example:
      * 1_El_Abdelhadi/
-     * ├─ profile_1_El_Abdelhadi/
      * ├─ miniatures_1_El_Abdelhadi/
      * │  ├─ Cours/
      * │  ├─ Exercices/
@@ -55,9 +54,8 @@ public class FileStorageUtil {
             throw new RuntimeException("❌ Failed to create user folder: " + userFolderPath);
         }
 
-        // Main folders
+        // Main folders (profile removed ✅)
         String[] mainFolders = {
-                "profile_" + userFolderName,
                 "miniatures_" + userFolderName,
                 "files_" + userFolderName,
                 "videos_miniature_" + userFolderName
@@ -69,13 +67,11 @@ public class FileStorageUtil {
                 throw new RuntimeException("❌ Failed to create folder: " + folder.getAbsolutePath());
             }
 
-            // Only add categories to miniatures, files, and videos_miniature
-            if (!mainFolder.startsWith("profile_")) {
-                for (String cat : CATEGORIES) {
-                    File catFolder = new File(folder, cat);
-                    if (!catFolder.exists() && !catFolder.mkdirs()) {
-                        throw new RuntimeException("❌ Failed to create category folder: " + catFolder.getAbsolutePath());
-                    }
+            // Add categories
+            for (String cat : CATEGORIES) {
+                File catFolder = new File(folder, cat);
+                if (!catFolder.exists() && !catFolder.mkdirs()) {
+                    throw new RuntimeException("❌ Failed to create category folder: " + catFolder.getAbsolutePath());
                 }
             }
         }
@@ -86,5 +82,4 @@ public class FileStorageUtil {
     public String getBaseUploadDir() {
         return baseUploadDir;
     }
-
 }
