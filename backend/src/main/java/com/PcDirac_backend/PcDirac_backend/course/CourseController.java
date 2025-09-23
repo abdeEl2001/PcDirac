@@ -1,5 +1,5 @@
 package com.PcDirac_backend.PcDirac_backend.course;
-
+import com.PcDirac_backend.PcDirac_backend.utils.FileStorageService;
 import com.PcDirac_backend.PcDirac_backend.user.User;
 import com.PcDirac_backend.PcDirac_backend.user.UserRepository;
 import org.springframework.http.ResponseEntity;
@@ -20,16 +20,19 @@ public class CourseController {
     private final CourseService courseService;
     private final UserRepository userRepository;
     private final CourseRepository courseRepository;
+    private final FileStorageService fileStorageService;
 
     // Base upload directory
     private final String UPLOAD_DIR = "/var/www/PcDirac/backend/uploads/";
 
     public CourseController(CourseService courseService,
                             UserRepository userRepository,
-                            CourseRepository courseRepository) {
+                            CourseRepository courseRepository,
+                            FileStorageService fileStorageService) {
         this.courseService = courseService;
         this.userRepository = userRepository;
         this.courseRepository = courseRepository;
+        this.fileStorageService=fileStorageService;
     }
 
     // Utility: create user folders
@@ -76,24 +79,16 @@ public class CourseController {
             course.setUnite(unite);
             course.setUser(user);
 
-            // Create user folders
-            String[] userFolders = createUserFolders(user);
-            String miniatureDir = userFolders[1];
-            String filesDir = userFolders[2];
-            String userFolderName = user.getNom() + "_" + user.getPrenom();
-
-            // Save miniature
+            // Save miniature using FileStorageService (will create all folders + categories)
             if (miniature != null && !miniature.isEmpty()) {
-                String miniaturePath = miniatureDir + "/" + miniature.getOriginalFilename();
-                miniature.transferTo(new File(miniaturePath));
-                course.setMiniature("/uploads/" + userFolderName + "/miniatures_" + userFolderName + "/" + miniature.getOriginalFilename());
+                String miniaturePath = fileStorageService.saveUserFile(user, miniature, "miniature", categorie);
+                course.setMiniature(miniaturePath);
             }
 
-            // Save PDF
+            // Save PDF using FileStorageService (will create all folders + categories)
             if (pdfFile != null && !pdfFile.isEmpty()) {
-                String pdfPath = filesDir + "/" + pdfFile.getOriginalFilename();
-                pdfFile.transferTo(new File(pdfPath));
-                course.setPdf_fichier("/uploads/" + userFolderName + "/files_" + userFolderName + "/" + pdfFile.getOriginalFilename());
+                String pdfPath = fileStorageService.saveUserFile(user, pdfFile, "file", categorie);
+                course.setPdf_fichier(pdfPath);
             }
 
             courseRepository.save(course);
@@ -107,6 +102,7 @@ public class CourseController {
             return ResponseEntity.badRequest().body("Erreur lors de l'ajout du cours : " + e.getMessage());
         }
     }
+
 
     // ================= UPDATE COURSE =================
     @PutMapping("/{id}")
