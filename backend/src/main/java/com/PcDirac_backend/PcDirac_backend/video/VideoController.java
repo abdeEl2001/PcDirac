@@ -136,7 +136,7 @@ public class VideoController {
                 File oldMini = new File(video.getMiniature());
                 if (oldMini.exists()) oldMini.delete();
             }
-            String miniaturePath = fileStorageService.saveUserFile(video.getUser(), miniature, "videos_miniature",video.getCategorie());
+            String miniaturePath = fileStorageService.saveUserFile(video.getUser(), miniature, "videos_miniature",categorie);
             video.setMiniature(miniaturePath);
         }
 
