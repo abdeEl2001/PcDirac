@@ -233,24 +233,7 @@ const Videos = () => {
     setTitreFilter("");
   };
 
-  const getButtonLabel = (categorie) => {
-    switch (normalize(categorie)) {
-      case "cours":
-        return "Voir le cours";
-      case "exercices":
-        return "Voir l'exercice";
-      case "activités":
-        return "Voir l'activité";
-      case "devoirs surveillés":
-        return "Voir le Devoir";
-      case "documents pédagogiques":
-        return "Voir le Document";
-      case "examens nationaux":
-        return "Voir l'examen";
-      default:
-        return "Voir la vidéo";
-    }
-  };
+  
   
 
   return (
@@ -369,7 +352,7 @@ const Videos = () => {
               <p className="itemDescription">{v.description}</p>
               {v.lien && (
                 <a href={v.lien} target="_blank" rel="noopener noreferrer">
-                  <button className="btnAction">{getButtonLabel(v.categorie)}</button>
+                  <button className="btnAction">Voir la video</button>
                 </a>
               )}
             </div>
