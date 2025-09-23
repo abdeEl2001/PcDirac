@@ -41,7 +41,7 @@ export default function Accueil() {
           transition={{ delay: 1, duration: 0.8 }}
           className="heroButtons"
         >
-          <Link to="/cours" className="btn btnOrange">
+          <Link to="/lycee" className="btn btnOrange">
             Découvrir les cours
           </Link>
 
