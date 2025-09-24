@@ -166,6 +166,9 @@
   .itemCard {
     padding: 15px;
   }
+  .noItemsText{
+    width: 400px;
+  }
 
 }
 

@@ -135,7 +135,7 @@ export default function Accueil() {
               alt="WhatsApp"
               className="whatsappIcon"
             />
-            +212 6 09 86 15 58
+            Whatsapp
           </a>
         </motion.div>
         <motion.img
