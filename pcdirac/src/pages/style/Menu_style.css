@@ -155,50 +155,29 @@
 /* ------------------- Responsive ------------------- */
 
 /* Tablet */
-/* ------------------- Mobile full-screen slide-in menu ------------------- */
 @media screen and (max-width: 900px) {
-  /* Overlay behind the menu */
-  .menuOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0,0,0,0.5); /* semi-transparent */
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.4s ease;
-    z-index: 900;
-  }
-
-  .menuOverlay.show {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  /* Full-screen menu sliding from right */
   .menuComposition {
     flex-direction: column;
-    position: fixed;
+    position: fixed;      /* fixed so it covers the whole screen */
     top: 0;
-    right: -100%;       /* off-screen start */
-    width: 80vw;        /* width of menu */
-    max-width: 400px;   /* optional max width */
+    right: -100%;         /* start off-screen */
+    width: 100vw;
     height: 100vh;
-    background: #ffffff;
+    background: #ffffff;  /* full screen background */
     justify-content: center;
     align-items: center;
     gap: 2rem;
     z-index: 1000;
-    padding: 2rem;
-    transition: right 0.4s ease-in-out;
+    transition: right 0.4s ease-in-out;  /* smooth slide */
+    padding: 0;
   }
 
+  /* open state */
   .menuComposition.open {
-    right: 0;           /* slide in */
+    right: 0;             /* slide in */
   }
 
-  /* Bigger menu items for mobile */
+  /* Menu items bigger for full-screen menu */
   .menuItem {
     font-size: 1.8rem;
     padding: 10px 20px;
@@ -209,22 +188,9 @@
     display: flex;
   }
 
-  /* Optional: hide desktop social icons when menu opens */
+  /* optional: hide social icons when menu opens */
   .social-media {
     display: none;
-  }
-
-  /* Hamburger animation to X */
-  .hamburger.open .bar:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
-  }
-
-  .hamburger.open .bar:nth-child(2) {
-    opacity: 0;
-  }
-
-  .hamburger.open .bar:nth-child(3) {
-    transform: rotate(-45deg) translate(5px, -5px);
   }
 }
 

@@ -27,21 +27,24 @@ const Navbar = () => {
       </button>
 
 
-      {/* Overlay */}
-<div 
-  className={`menuOverlay ${isOpen ? "show" : ""}`} 
-  onClick={toggleMenu}
-/>
-
-{/* Menu */}
-<nav className={`menuComposition ${isOpen ? "open" : ""}`}>
-  <Link to="/acceuil" className="menuItem" onClick={() => setIsOpen(false)}>Acceuil</Link>
-  <Link to="/videos" className="menuItem" onClick={() => setIsOpen(false)}>Videos</Link>
-  <Link to="/lycee" className="menuItem" onClick={() => setIsOpen(false)}>Lycée</Link>
-  <Link to="/licence" className="menuItem" onClick={() => setIsOpen(false)}>Licence</Link>
-  <Link to="/agregation" className="menuItem" onClick={() => setIsOpen(false)}>Agrégation</Link>
-</nav>
-
+      {/* Menu */}
+      <nav className={`menuComposition ${isOpen ? "open" : ""}`}>
+        <Link to="/acceuil" className="menuItem" onClick={() => setIsOpen(false)}>
+          <span>Acceuil</span>
+        </Link>
+        <Link to="/videos" className="menuItem" onClick={() => setIsOpen(false)}>
+          <span>Videos</span>
+        </Link>
+        <Link to="/lycee" className="menuItem" onClick={() => setIsOpen(false)}>
+          <span>Lycée</span>
+        </Link>
+        <Link to="/licence" className="menuItem" onClick={() => setIsOpen(false)}>
+          <span>Licence</span>
+        </Link>
+        <Link to="/agregation" className="menuItem" onClick={() => setIsOpen(false)}>
+          <span>Agrégation</span>
+        </Link>
+      </nav>
 
       {/* Social icons (desktop only, hidden under 992px) */}
       <div className="social-media navbar-icons">
