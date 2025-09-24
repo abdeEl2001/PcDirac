@@ -167,7 +167,7 @@
     padding: 15px;
   }
   .noItemsText{
-    width: 400px;
+    width: inherit;
   }
 
 }
@@ -202,8 +202,5 @@
   .itemThumbnail {
     display: none;
     height: 120px;
-  }
-  .noItemsText{
-    width: 0;
   }
 }
