@@ -240,7 +240,7 @@
     overflow: hidden;
     opacity: 0;
     transition: max-height 0.4s ease, opacity 0.4s ease;
-    width: 100%;
+    width: 0;
 
     /* hidden by default */
     max-height: 0;
@@ -251,8 +251,9 @@
 
   /* open state */
   .menuComposition.open {
-    max-height: 500px; /* large enough for all links */
+    max-height: 100vh; /* large enough for all links */
     opacity: 1;
+    max-width: 100vw;
   }
 
   /* Hamburger visible */
