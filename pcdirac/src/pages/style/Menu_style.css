@@ -155,18 +155,42 @@
 /* ------------------- Responsive ------------------- */
 
 /* Tablet */
-@media screen and (max-width: 992px) {
- menuItem{
-    padding: 5px 5px;
-    font-size: 14px;
-  }
-  .acceuilContent h2 {
-    font-size: 1.8rem;
-  }
-  .footerSection .footer-icons {
-    display: flex; /* show in footer */
+@media screen and (max-width: 900px) {
+  .menuComposition {
+    flex-direction: column;
+    position: fixed;      /* fixed so it covers the whole screen */
+    top: 0;
+    right: -100%;         /* start off-screen */
+    width: 100vw;
+    height: 100vh;
+    background: #ffffff;  /* full screen background */
     justify-content: center;
-    gap: 15px;
+    align-items: center;
+    gap: 2rem;
+    z-index: 1000;
+    transition: right 0.4s ease-in-out;  /* smooth slide */
+    padding: 0;
+  }
+
+  /* open state */
+  .menuComposition.open {
+    right: 0;             /* slide in */
+  }
+
+  /* Menu items bigger for full-screen menu */
+  .menuItem {
+    font-size: 1.8rem;
+    padding: 10px 20px;
+  }
+
+  /* Hamburger visible */
+  .hamburger {
+    display: flex;
+  }
+
+  /* optional: hide social icons when menu opens */
+  .social-media {
+    display: none;
   }
 }
 

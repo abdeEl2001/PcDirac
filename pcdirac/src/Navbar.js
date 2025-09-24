@@ -20,11 +20,12 @@ const Navbar = () => {
       </div>
 
       {/* Hamburger button (only shows on mobile) */}
-      <button className="hamburger" onClick={toggleMenu}>
+      <button className={`hamburger ${isOpen ? "open" : ""}`} onClick={toggleMenu}>
         <span className="bar"></span>
         <span className="bar"></span>
         <span className="bar"></span>
       </button>
+
 
       {/* Menu */}
       <nav className={`menuComposition ${isOpen ? "open" : ""}`}>
