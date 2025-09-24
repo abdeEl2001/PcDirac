@@ -203,4 +203,7 @@
     display: none;
     height: 120px;
   }
+  .noItemsText{
+    width: 0;
+  }
 }
