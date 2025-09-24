@@ -19,6 +19,14 @@ const Navbar = () => {
         </h1>
       </div>
 
+      {/* Hamburger button (only shows on mobile) */}
+      <button className={`hamburger ${isOpen ? "open" : ""}`} onClick={toggleMenu}>
+        <span className="bar"></span>
+        <span className="bar"></span>
+        <span className="bar"></span>
+      </button>
+
+
       {/* Overlay */}
 <div 
   className={`menuOverlay ${isOpen ? "show" : ""}`} 
