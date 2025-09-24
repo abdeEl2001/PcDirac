@@ -29,7 +29,10 @@ public class SecurityConfig {
         config.setAllowedOrigins(List.of(
                 "https://pcdirac.com",
                 "https://admin.pcdirac.com",
-                "https://api.pcdirac.com"
+                "https://api.pcdirac.com",
+                "https://www.pcdirac.com",
+                "https://www.admin.pcdirac.com",
+                "https://www.api.pcdirac.com"
         ));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
