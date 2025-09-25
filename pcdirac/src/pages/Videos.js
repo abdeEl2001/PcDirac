@@ -17,6 +17,21 @@ const pickDefault = (desired, options = [], fallback = "") => {
   return found ?? options[0];
 };
 
+const sortItems = (items) => {
+  return [...items].sort((a, b) => {
+    // If both have ordre → sort numerically
+    if (a.ordre != null && b.ordre != null) {
+      return a.ordre - b.ordre;
+    }
+    // If only one has ordre → prioritize it
+    if (a.ordre != null) return -1;
+    if (b.ordre != null) return 1;
+
+    // Fallback: alphabetical by titre
+    return (a.titre || "").localeCompare(b.titre || "");
+  });
+};
+
 const Videos = () => {
   const [etape, setEtape] = useState(""); // Lycée, Licence, Agrégation
   const [videos, setVideos] = useState([]);
@@ -196,14 +211,14 @@ const Videos = () => {
   );
 
   // Final displayed items: apply selected filters
-  const displayedItems = videos.filter((v) => {
+  const displayedItems = sortItems(videos.filter((v) => {
     if (niveauFilter && normalize(v.niveau) !== normalize(niveauFilter)) return false;
     if (categorieFilter && normalize(v.categorie) !== normalize(categorieFilter)) return false;
     if (matiereFilter && normalize(v.matiere) !== normalize(matiereFilter)) return false;
     if (uniteFilter && normalize(v.unite) !== normalize(uniteFilter)) return false;
     if (titreFilter && normalize(v.titre) !== normalize(titreFilter)) return false;
     return true;
-  });
+  }));
 
   // Handlers that also reset dependent filters
   const handleEtapeChange = (val) => {

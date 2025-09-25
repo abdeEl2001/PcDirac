@@ -10,6 +10,21 @@ const uniqueSorted = (arr) =>
     new Set(arr.filter(Boolean).map((s) => (typeof s === "string" ? s.trim() : s)))
   ).sort((a, b) => a.localeCompare(b));
 
+const sortItems = (items) => {
+  return [...items].sort((a, b) => {
+    // If both have ordre → sort numerically
+    if (a.ordre != null && b.ordre != null) {
+      return a.ordre - b.ordre;
+    }
+    // If only one has ordre → prioritize it
+    if (a.ordre != null) return -1;
+    if (b.ordre != null) return 1;
+
+    // Fallback: alphabetical by titre
+    return (a.titre || "").localeCompare(b.titre || "");
+  });
+};
+
 const Agregation = () => {
   const [Agregation, setAgregation] = useState([]);
   const [categorieFilter, setCategorieFilter] = useState("");
@@ -73,7 +88,7 @@ const Agregation = () => {
   const uniqueProfs = uniqueSorted(Agregation.map((c) => c.professeur));
 
   // Filtered items displayed
-  const displayedItems = Agregation.filter((item) => {
+  const displayedItems =sortItems( Agregation.filter((item) => {
     return (
       (categorieFilter === "" || normalize(item.categorie) === normalize(categorieFilter)) &&
       (matiereFilter === "" || normalize(item.matiere) === normalize(matiereFilter)) &&
@@ -81,7 +96,7 @@ const Agregation = () => {
       (agregationTitreFilter === "" || normalize(item.titre) === normalize(agregationTitreFilter)) &&
       (professeurFilter === "" || normalize(item.professeur) === normalize(professeurFilter))
     );
-  });
+  }));
 
   // Handlers
   const handleCategorieChange = (val) => {
