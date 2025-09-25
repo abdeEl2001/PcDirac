@@ -146,17 +146,17 @@ const uniqueSorted = (arr) =>
 
 const sortItems = (items) => {
   return [...items].sort((a, b) => {
-    // If both have order → sort numerically
-    if (a.order != null && b.order != null) {
-      return a.order - b.order;
+    // If both have ordre → sort numerically
+    if (a.ordre != null && b.ordre != null) {
+      return a.ordre - b.ordre;
     }
-    // If only one has order → prioritize it
-    if (a.order != null) return -1;
-    if (b.order != null) return 1;
+    // If only one has ordre → prioritize it
+    if (a.ordre != null) return -1;
+    if (b.ordre != null) return 1;
 
     // Fallback: alphabetical by titre
     return (a.titre || "").localeCompare(b.titre || "");
-      });
+  });
 };
 const Lycee = () => {
   const [Lycee, setLycee] = useState([]);
