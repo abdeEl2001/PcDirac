@@ -100,9 +100,9 @@ const Agregation = () => {
   const getButtonLabel = (categorie) => {
     switch (categorie) {
       case "Concours d'entrée":
-        return "Voir le concour";
+        return "Voir le concours";
       case "Concours de sortie":
-        return "Voir le concour";
+        return "Voir le concours";
       case "Rapport de jury":
         return "Voir le rapport";
       case "Leçons physique":
