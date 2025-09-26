@@ -27,7 +27,11 @@ const FilesPage = ({ endpoint, title, filters, buttonLabels }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeFilters, setActiveFilters] = useState({});
-
+useEffect(() => {
+  const initialFilters = {};
+  filters.forEach(({ key }) => (initialFilters[key] = ""));
+  setActiveFilters(initialFilters);
+}, [filters]);
   // Fetch data
   useEffect(() => {
     const fetchData = async () => {
@@ -52,19 +56,19 @@ const FilesPage = ({ endpoint, title, filters, buttonLabels }) => {
 
   // build options dynamically per filter
   const getOptions = (key) => {
-    return uniqueSorted(
-      data
-        .filter((item) =>
-          Object.entries(activeFilters).every(
-            ([filterKey, filterValue]) =>
-              filterKey === key ||
-              filterValue === "" ||
-              normalize(item[filterKey]) === normalize(filterValue)
-          )
-        )
-        .map((item) => item[key])
-    );
-  };
+  return uniqueSorted(
+    data
+      .filter((item) => {
+        return filters.every(({ key: fKey }) => {
+          if (fKey === key) return true; // skip current filter
+          const value = activeFilters[fKey] || "";
+          return value === "" || normalize(item[fKey]) === normalize(value);
+        });
+      })
+      .map((item) => item[key])
+  );
+    };
+
 
   // filter displayed items
   const displayedItems = sortItems(
