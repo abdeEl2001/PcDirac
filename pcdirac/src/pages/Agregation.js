@@ -49,7 +49,6 @@ const Agregation = () => {
           setCategorieFilter(agregationArray[0].categorie || "");
           setMatiereFilter(agregationArray[0].matiere || "");
           setUniteFilter(agregationArray[0].unite || "");
-          setAgregationTitreFilter(agregationArray[0].titre || "");
           setProfesseurFilter(agregationArray[0].professeur || "");
         }
       } catch (error) {
