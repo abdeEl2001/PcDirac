@@ -173,10 +173,11 @@ const Agregation = () => {
               onChange={(e) => setAgregationTitreFilter(e.target.value)}
               className="filterSelect"
             >
-              {titresOptions.map((t, idx) => (
-                <option key={idx} value={t}>
-                  {t}
-                </option>
+               <option value="">Tous les titres</option> {/* 👈 this keeps it empty initially */}
+                {titresOptions.map((t, idx) => (
+                  <option key={idx} value={t}>
+                    {t}
+                  </option>
               ))}
             </select>
 
