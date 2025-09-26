@@ -8,8 +8,8 @@ export default function Lycee() {
       title="Lycée"
       filters={[
         {key:"niveau",label:"Tronc Commun"},
-        { key: "categorie", label: "Toutes les catégories" },
-        { key: "matiere", label: "Toutes les matières" },
+        { key: "categorie", label: "Cours" },
+        { key: "matiere", label: "Physique" },
         { key: "unite", label: "Toutes les unités" },
         { key: "titre", label: "Tous les titres" },
         { key: "professeur", label: "Tous les professeurs" }
