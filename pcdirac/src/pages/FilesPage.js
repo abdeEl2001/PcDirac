@@ -28,12 +28,12 @@ const FilesPage = ({ endpoint, title, filters, buttonLabels }) => {
   const [loading, setLoading] = useState(true);
   const [activeFilters, setActiveFilters] = useState({});
     useEffect(() => {
-    const initialFilters = {};
-    filters.forEach(({ key, defaultValue }) => {
-        initialFilters[key] = defaultValue ? defaultValue.trim() : "";
-    });
-    setActiveFilters(initialFilters);
-    }, [filters]);
+  const initialFilters = {};
+  filters.forEach(({ key, defaultValue }) => {
+    initialFilters[key] = defaultValue || "";
+  });
+  setActiveFilters(initialFilters);
+}, [filters]);
 
 
   // Fetch data
@@ -59,22 +59,20 @@ const FilesPage = ({ endpoint, title, filters, buttonLabels }) => {
   };
 
   // build options dynamically per filter
- const getOptions = (key) => {
-  const seen = new Set();
-  return data
-    .filter(item =>
+const getOptions = (key) => {
+  const map = {};
+  data
+    .filter((item) =>
       Object.entries(activeFilters).every(
         ([filterKey, filterValue]) =>
-          filterKey === key || filterValue === "" || normalize(item[filterKey]) === normalize(filterValue)
+          filterKey === key || !filterValue || normalize(item[filterKey]) === normalize(filterValue)
       )
     )
-    .map(item => normalize(item[key]))
-    .filter(opt => {
-      if (seen.has(opt) || !opt) return false;
-      seen.add(opt);
-      return true;
-    })
-    .sort((a, b) => a.localeCompare(b));
+    .forEach((item) => {
+      const norm = normalize(item[key]);
+      if (norm && !map[norm]) map[norm] = item[key]; // preserve first encountered case
+    });
+  return Object.values(map).sort((a, b) => a.localeCompare(b));
 };
 
 
