@@ -7,12 +7,12 @@ export default function Lycee() {
       endpoint="/api/courses/etudiant/lycee"
       title="Lycée"
       filters={[
-        {key:"niveau",label:"Tronc Commun"},
-        { key: "categorie", label: "Cours" },
-        { key: "matiere", label: "Physique" },
-        { key: "unite", label: "Toutes les unités" },
-        { key: "titre", label: "Tous les titres" },
-        { key: "professeur", label: "Tous les professeurs" }
+        { key: "niveau", label: "Tronc Commun", defaultValue: "Tronc Commun" },
+        { key: "categorie", label: "Cours", defaultValue: "Cours" },
+        { key: "matiere", label: "Physique", defaultValue: "Physique" },
+        { key: "unite", label: "Toutes les unités", defaultValue: "" },
+        { key: "titre", label: "Tous les titres", defaultValue: "" },
+        { key: "professeur", label: "Tous les professeurs", defaultValue: "" }
       ]}
       buttonLabels={{
         "Cours": "Voir le cours",

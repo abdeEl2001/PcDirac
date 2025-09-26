@@ -29,9 +29,12 @@ const FilesPage = ({ endpoint, title, filters, buttonLabels }) => {
   const [activeFilters, setActiveFilters] = useState({});
 useEffect(() => {
   const initialFilters = {};
-  filters.forEach(({ key }) => (initialFilters[key] = ""));
+  filters.forEach(({ key, defaultValue }) => {
+    initialFilters[key] = defaultValue || "";
+  });
   setActiveFilters(initialFilters);
 }, [filters]);
+
   // Fetch data
   useEffect(() => {
     const fetchData = async () => {
@@ -72,13 +75,13 @@ useEffect(() => {
 
   // filter displayed items
   const displayedItems = sortItems(
-    data.filter((item) =>
-      Object.entries(activeFilters).every(
-        ([key, value]) =>
-          value === "" || normalize(item[key]) === normalize(value)
-      )
+  data.filter((item) =>
+    Object.entries(activeFilters).every(
+      ([key, value]) => value === "" || normalize(item[key]) === normalize(value)
     )
-  );
+  )
+);
+
 
   const getButtonLabel = (categorie) =>
     buttonLabels[categorie] || "Voir le fichier";
