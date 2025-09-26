@@ -136,7 +136,7 @@ const getOptions = (key) => {
                     <p className="itemInfo">
                       <strong>Matière:</strong> {item.matiere}
                     </p>
-                    {item.etape?.toLowerCase() !== "agregation" && (
+                    {item.etape?.toLowerCase() !== "agrégation" && (
                     <p className="itemInfo">
                     <strong>Unité:</strong> {item.unite}
                     </p>
