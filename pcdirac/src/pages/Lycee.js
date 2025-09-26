@@ -7,6 +7,7 @@ export default function Lycee() {
       endpoint="/api/courses/etudiant/lycee"
       title="Lycée"
       filters={[
+        {key:"niveau",label:"Tronc Commun"},
         { key: "categorie", label: "Toutes les catégories" },
         { key: "matiere", label: "Toutes les matières" },
         { key: "unite", label: "Toutes les unités" },
