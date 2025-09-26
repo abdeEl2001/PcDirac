@@ -8,7 +8,9 @@ export default function Licence() {
       title="Licence"
       filters={[
         { key: "categorie", label: "Toutes les catégories" },
-        { key: "matiere", label: "Toutes les matières" }
+        { key: "matiere", label: "Toutes les matières" },
+        { key: "unite", label: "Toutes les unités", defaultValue: "" },
+        { key: "titre", label: "Tous les titres", defaultValue: "" }
       ]}
       buttonLabels={{
         "Cours Licence": "Voir le cours",
