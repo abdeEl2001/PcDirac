@@ -13,8 +13,12 @@ export default function Agregation() {
         { key: "professeur", label: "Tous les professeurs" },
       ]}
       buttonLabels={{
-        "Cours": "Voir le cours",
-        "Exercices": "Voir l'exercice"
+        "Concours d'entrée": "Voir le concours",
+        "Concours de sortie": "Voir le concours",
+        "Rapport de jury":"Voir le rapport",
+        "Leçons physique":"Voir le leçon",
+        "Leçons chimie":"Voir le leçon",
+        "Montage physique":"Voir le montage"
       }}
     />
   );

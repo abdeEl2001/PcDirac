@@ -1,5 +1,4 @@
 // Licence.js
-import { defaultValueTypes } from "framer-motion";
 import FilesPage from "./FilesPage";
 
 export default function Licence() {

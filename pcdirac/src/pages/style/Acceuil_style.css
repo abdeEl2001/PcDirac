@@ -254,8 +254,9 @@
 
 @media screen and (max-width: 480px) {
   .hero {
-    padding: 60px 10px;
+    padding: 90px 10px;
   }
+  
 
   .heroTitle {
     font-size: 1.6rem;
