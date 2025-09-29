@@ -37,7 +37,7 @@ public class PasswordResetController {
         userRepository.save(user);
 
         // lien de réinitialisation
-        String resetLink = "http://pcdirac.com/reset-password?token=" + token;
+        String resetLink = "http://admin.pcdirac.com/reset-password?token=" + token;
 
         // envoyer l'email
         SimpleMailMessage message = new SimpleMailMessage();
